@@ -1,4 +1,5 @@
-var app = require('express')();
+var express = require('express');
+var app = express();
 var path = require('path');
 var bodyParser = require('body-parser');
 var server = require('http').Server(app);
@@ -18,10 +19,15 @@ app.set('view engine', 'ejs');
 app.set('port', process.env.PORT || 8888);
 
 //serve static files in the public folder
-app.use('/public', require('express').static(path.join(__dirname + '/public')));
+app.use('/public', express.static(path.join(__dirname + '/public')));
 
 // redirect CSS bootstrap
-app.use('/css', require('express').static(__dirname + '/node_modules/bootstrap/dist/css')); 
+app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css')); 
+//server js bootstrap
+app.use('/js', express.static(__dirname + '/node_modules/bootstrap/dist/js')); 
+// redirect JS jQuery
+app.use('/js', express.static(__dirname + '/node_modules/jquery/dist')); 
+
 
 
 //middleware for passing data bewteen routes
