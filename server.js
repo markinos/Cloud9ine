@@ -4,7 +4,7 @@ var bodyParser = require('body-parser');
 var server = require('http').Server(app);
 var mysql = require('mysql');
 
-//connect to heroku database
+//setup heroku database
 var pool = mysql.createPool({
   	host     : 'us-cdbr-iron-east-04.cleardb.net',
   	user     : 'b888ca48365de9',
