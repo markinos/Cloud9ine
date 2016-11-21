@@ -20,6 +20,10 @@ app.set('port', process.env.PORT || 8888);
 //serve static files in the public folder
 app.use('/public', require('express').static(path.join(__dirname + '/public')));
 
+// redirect CSS bootstrap
+app.use('/css', require('express').static(__dirname + '/node_modules/bootstrap/dist/css')); 
+
+
 //middleware for passing data bewteen routes
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -34,6 +38,7 @@ server.listen(app.get('port'), function() {
 app.get('/', function (req, res) {
   	res.render('login.ejs');
 });
+
 app.post('/login', function(req, res) {
 	 var email = req.body.email;
     var password = req.body.password;
