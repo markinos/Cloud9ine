@@ -139,7 +139,25 @@ app.get('/graduates', function(req, res) {
 });
 
 //report
-app.get('/report', function(req, res) {
+app.get('/report', function (req, res) {
+    // connect and insert into database
+    pool.getConnection(function (err, connection) {
+        connection.query("INSERT INTO graduates (firstName, lastName) VALUES ('Mr/Ms','Student')", function (err, rows) {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log(rows);
+                console.log("User was successfully registered")
+                res.redirect('/'); // once registered redirect to login page
+            }
+
+            // verify user doesnt already have an account
+            // verify it is a valid email address
+            // verify @ and .com/.edu/.net/.org included aka it is a complete email
+            connection.release();
+        });
+
+    });
 	res.render('report.ejs');
 });
 
