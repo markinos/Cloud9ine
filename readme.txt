@@ -5,8 +5,23 @@ Install Instructions:
 
 app is found at localhost:8888
 
-server.js has all the backend logic
-view folder has all the frontend gui
+server.js has all the backend logic and containes ROUTES. 
 
-Right now, you can see a query being done when the user types localhost:8888/graduates
+A route is when the user types a specific web link.
+For example: localhost:8888/ is our default route, localhost:8888/login is our login route
+So far the routes i have created are:
+	-Login route
+	-register route
+	-survey route
+	-graudate route (example query being done here)
+	-report route
+	
+
+
+
+view folder has all the frontend gui
+graduates.ejs has some code to display data
+
+
+
 
