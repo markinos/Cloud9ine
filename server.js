@@ -4,7 +4,7 @@ var bodyParser = require('body-parser');
 var server = require('http').Server(app);
 var mysql = require('mysql');
 
-//connect to heroku database
+//setup heroku database
 var pool = mysql.createPool({
   	host     : 'us-cdbr-iron-east-04.cleardb.net',
   	user     : 'b888ca48365de9',
@@ -19,6 +19,10 @@ app.set('port', process.env.PORT || 8888);
 
 //serve static files in the public folder
 app.use('/public', require('express').static(path.join(__dirname + '/public')));
+
+// redirect CSS bootstrap
+app.use('/css', require('express').static(__dirname + '/node_modules/bootstrap/dist/css')); 
+
 
 //middleware for passing data bewteen routes
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -35,11 +39,6 @@ app.get('/', function (req, res) {
   	res.render('login.ejs');
 });
 
-app.get('/login', function(req,res) {
-	  	res.render('login.ejs');
-
-
-});
 app.post('/login', function(req, res) {
 	 var email = req.body.email;
     var password = req.body.password;
@@ -145,7 +144,25 @@ app.get('/graduates', function(req, res) {
 });
 
 //report
-app.get('/report', function(req, res) {
-	res.render('report.ejs');
+app.get('/report', function (req, res) {
+    // connect and insert into database
+    pool.getConnection(function (err, connection) {
+        connection.query("INSERT INTO graduate (firstName, lastName) VALUES ('Mr/Ms','Student')", function (err, rows) {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log(rows);
+                console.log("User was successfully registered")
+                //res.redirect('/'); // once registered redirect to login page
+            }
+
+            // verify user doesnt already have an account
+            // verify it is a valid email address
+            // verify @ and .com/.edu/.net/.org included aka it is a complete email
+            connection.release();
+            res.render('report.ejs');
+        });
+
+    });
 });
 
