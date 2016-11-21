@@ -28,6 +28,8 @@ server.listen(app.get('port'), function() {
 	console.log('listening on port:', app.get('port'));
 });
 
+
+
 //login page
 app.get('/', function (req, res) {
   	res.render('login.ejs');
@@ -36,28 +38,28 @@ app.post('/login', function(req, res) {
 	 var email = req.body.email;
     var password = req.body.password;
 
-    // pool.getConnection(function(err, connection) {
-    //     connection.query("SELECT * FROM faculty WHERE faculty.email = " + "'" + email + "'" + "AND faculty.password = " + "'" + password + "'", function(err, rows) {
-    //         if (err) {
-    //             console.log(err);
-    //         } else {
-    //             console.log(rows);
-    //         }
+    pool.getConnection(function(err, connection) {
+        connection.query("SELECT * FROM faculty WHERE faculty.email = " + "'" + email + "'" + "AND faculty.password = " + "'" + password + "'", function(err, rows) {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log(rows);
+            }
 
-    //         //user found
-    //         if (rows.length) {
-    //             console.log('user found');
-    //             req.session.userId = rows[0].id;
-    //             console.log(req.session.userId);
+            //user found
+            if (rows.length) {
+                console.log('user found');
+                // req.session.userId = rows[0].id;
+                // console.log(req.session.userId);
                
-    //             res.redirect('/homepage');
-    //         } else {
-    //             console.log('user not found');
-    //             res.send('error user not found');
-    //         }
+                res.redirect('/homepage');
+            } else {
+                console.log('user not found');
+                res.send('error user not found');
+            }
 
-    //     });
-    // });
+        });
+    });
 
 });
 
@@ -97,6 +99,11 @@ app.post('/register', function(req, res) {
     });
 });
 
+//homepage
+app.get('/homepage', function(req, res) {
+	res.render('homepage.ejs');
+
+});
 //survey page
 app.get('/survey', function(req, res) {
 	res.render('survey.ejs');
