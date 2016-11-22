@@ -41,8 +41,11 @@ app.get('/', function (req, res) {
 });
 
 app.post('/login', function(req, res) {
-	 var email = req.body.email;
+	var email = req.body.email;
     var password = req.body.password;
+
+    console.log(email);
+    console.log(password);
 
     pool.getConnection(function(err, connection) {
         connection.query("SELECT * FROM faculty WHERE faculty.email = " + "'" + email + "'" + "AND faculty.password = " + "'" + password + "'", function(err, rows) {
@@ -58,15 +61,13 @@ app.post('/login', function(req, res) {
                 // req.session.userId = rows[0].id;
                 // console.log(req.session.userId);
                
-                res.redirect('/homepage');
+                res.redirect('/dashboard');
             } else {
                 console.log('user not found');
                 res.send('error user not found');
             }
-
         });
     });
-
 });
 
 //register page
@@ -86,7 +87,7 @@ app.post('/register', function(req, res) {
 	var password = req.body.password;
 
 	// connect and insert into database
-	 pool.getConnection(function(err, connection) {
+	pool.getConnection(function(err, connection) {
         connection.query("INSERT INTO faculty (email, password) VALUES ('" + email + "'" + "," + "'" + password + "'" + ")", function(err, rows) {
             if (err) {
                 console.log(err);
@@ -106,8 +107,8 @@ app.post('/register', function(req, res) {
 });
 
 //homepage
-app.get('/homepage', function(req, res) {
-	res.render('homepage.ejs');
+app.get('/dashboard', function(req, res) {
+	res.render('dashboard.ejs');
 
 });
 //survey page
