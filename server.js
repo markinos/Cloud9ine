@@ -3,6 +3,7 @@ var app = express();
 var bodyParser = require('body-parser');
 var server = require('http').Server(app);
 var mysql = require('mysql');
+var session = require('express-session');
 
 //setup heroku database
 var pool = mysql.createPool({
