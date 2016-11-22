@@ -17,9 +17,25 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.set('port', process.env.PORT || 8888);
 
-//serve static css and js files in the public folder
+//serve static css, image, and js files in the public folder
 app.use('/css', express.static(__dirname + '/public/css'));
 app.use('/js', express.static(__dirname + '/public/js'));
+app.use('/js/pages', express.static(__dirname + '/js/pages'));
+app.use('/img', express.static(__dirname + '/public/img'));
+app.use('/fonts', express.static(__dirname + '/public/fonts'));
+
+app.use('/plugins/iCheck/flat/', express.static(__dirname + '/plugins/iCheck/flat/'));
+app.use('/plugins/morris', express.static(__dirname + '/plugins/morris'));
+app.use('/plugins/jvectormap', express.static(__dirname + '/plugins/jvectormap'));
+app.use('/plugins/datepicker', express.static(__dirname + '/plugins/datepicker'));
+app.use('/plugins/daterangepicker', express.static(__dirname + '/plugins/daterangepicker'));
+app.use('/plugins/bootstrap-wysihtml5', express.static(__dirname + '/plugins/bootstrap-wysihtml5'));
+app.use('/plugins/sparkline', express.static(__dirname + '/plugins/sparkline'));
+app.use('/plugins/knob', express.static(__dirname + '/plugins/knob'));
+app.use('/plugins/slimScroll', express.static(__dirname + '/plugins/slimScroll'));
+app.use('/plugins/fastclick', express.static(__dirname + '/plugins/fastclick'));
+app.use('/plugins/chartjs', express.static(__dirname + '/plugins/chartjs'));
+
 
 // serve bootstrap css/javascript and jquery
 app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css')); 
@@ -147,24 +163,6 @@ app.get('/graduates', function(req, res) {
 
 //report
 app.get('/report', function (req, res) {
-    // connect and insert into database
-    pool.getConnection(function (err, connection) {
-        connection.query("INSERT INTO graduate (firstName, lastName) VALUES ('Mr/Ms','Student')", function (err, rows) {
-            if (err) {
-                console.log(err);
-            } else {
-                console.log(rows);
-                console.log("User was successfully registered")
-                //res.redirect('/'); // once registered redirect to login page
-            }
-
-            // verify user doesnt already have an account
-            // verify it is a valid email address
-            // verify @ and .com/.edu/.net/.org included aka it is a complete email
-            connection.release();
-            res.render('report.ejs');
-        });
-
-    });
+    res.render('report.ejs');
 });
 
