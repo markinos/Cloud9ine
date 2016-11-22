@@ -42,7 +42,7 @@ app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 app.use('/js', express.static(__dirname + '/node_modules/bootstrap/dist/js')); 
 app.use('/js', express.static(__dirname + '/node_modules/jquery/dist')); 
 
-//middleware for passing data bewteen routes
+//middleware for passing data bewteen route
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -67,6 +67,7 @@ app.post('/login', function(req, res) {
         connection.query("SELECT * FROM faculty WHERE faculty.email = " + "'" + email + "'" + "AND faculty.password = " + "'" + password + "'", function(err, rows) {
             if (err) {
                 console.log(err);
+                res.render('/login', { err: err.message } );
             } else {
                 console.log(rows);
             }
@@ -107,6 +108,7 @@ app.post('/register', function(req, res) {
         connection.query("INSERT INTO faculty (email, password) VALUES ('" + email + "'" + "," + "'" + password + "'" + ")", function(err, rows) {
             if (err) {
                 console.log(err);
+
             } else {
                 console.log(rows);
                 console.log("User was successfully registered")

@@ -44,7 +44,11 @@ body {
 	}
 }
 
-
+.fa-cloud {
+  color: #ccc; /*font-family: 'Roboto';*/
+  /*font-size: 1.5em;*/
+  text-align: center;
+}
 .panel {
 	border-radius: 5px;
 }
@@ -68,6 +72,7 @@ label {
 	font-weight: 300;
 	display: inline-block;
 	position: relative;
+  font-family: 'Roboto';
 }
 
 .panel-login .checkbox {
@@ -91,6 +96,7 @@ label {
 }
 
 .panel-login .checkbox label::after {
+
 	display: inline-block;
 	position: absolute;
 	width: 16px;
@@ -109,17 +115,19 @@ label {
 }
 
 .panel-login .checkbox input[type="checkbox"]:focus + label::before {
+
 	outline: thin dotted;
 	outline: 5px auto -webkit-focus-ring-color;
 	outline-offset: -2px;
 }
 
 .panel-login .checkbox input[type="checkbox"]:checked + label::after {
-	font-family: 'FontAwesome';
 	content: "\f00c";
+
 }
 
 .panel-login>.panel-heading .tabs{
+  font-family: 'Roboto', sans-serif;
 	padding: 0;
 }
 
@@ -127,6 +135,8 @@ label {
 	font-size: 20px;
 	font-weight: 300;
 	margin: 30px;
+    font-family: 'Roboto';
+
 }
 
 .panel-login>.panel-heading {
@@ -190,6 +200,8 @@ label {
 	border-bottom: 1px solid #e7e7e7;
 	border-radius: 0px;
 	padding: 6px 0px;
+  font-family: 'Roboto';
+
 }
 
 .panel-login input:hover,
@@ -202,7 +214,8 @@ label {
 	border-color: #ccc;
 }
 
-.btn-login {
+.btn-login {  
+  font-family: 'Roboto';
 	background-color: #E8E9EC;
 	outline: none;
 	color: #2D3B55;
@@ -214,6 +227,7 @@ label {
 	border: none;
 	border-radius: 0px;
 	box-shadow: none;
+
 }
 
 .btn-login:hover,
@@ -223,17 +237,6 @@ label {
 	background-color: #2D3B55;
 }
 
-.forgot-password {
-	text-decoration: underline;
-	color: #888;
-}
-
-.forgot-password:hover,
-
-.forgot-password:focus {
-	text-decoration: underline;
-	color: #666;
-}
 
 .btn-register {
 	background-color: #E8E9EC;
@@ -247,6 +250,8 @@ label {
 	border: none;
 	border-radius: 0px;
 	box-shadow: none;
+  font-family: 'Roboto';
+
 }
 
 .btn-register:hover,
