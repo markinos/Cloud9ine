@@ -36,6 +36,7 @@ app.use('/plugins/knob', express.static(__dirname + '/plugins/knob'));
 app.use('/plugins/slimScroll', express.static(__dirname + '/plugins/slimScroll'));
 app.use('/plugins/fastclick', express.static(__dirname + '/plugins/fastclick'));
 app.use('/plugins/chartjs', express.static(__dirname + '/plugins/chartjs'));
+app.use('/plugins/datatables', express.static(__dirname + '/plugins/datatables'));
 
 
 // serve bootstrap css/javascript and jquery
@@ -166,6 +167,7 @@ app.get('/graduates', function(req, res) {
 
 //report
 app.get('/report', function (req, res) {
-    res.render('report.ejs');
+    
+    res.render('chartjs.ejs');
 });
 
