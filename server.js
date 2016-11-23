@@ -167,7 +167,6 @@ app.get('/graduates', function(req, res) {
 
 //report
 app.get('/report', function (req, res) {
-    
-    res.render('chartjs.ejs');
+    res.render('report.ejs');
 });
 
