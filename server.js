@@ -66,7 +66,6 @@ app.get('/login', function(req, res) {
 app.post('/login', function(req, res) {
 	var email = req.body.email;
     var password = req.body.password;
-    // var fname = req.body.
 
     console.log(email);
     console.log(password);
@@ -84,8 +83,7 @@ app.post('/login', function(req, res) {
             if (rows.length) {
                 console.log('user found');
                 // req.session.userId = rows[0].id;
-                // console.log(req.session.userId);
-               
+                // console.log(req.session.userId);               
                 res.redirect('/dashboard');
             } else {
                 console.log('user not found');
