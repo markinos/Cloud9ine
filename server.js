@@ -137,6 +137,7 @@ app.get('/dashboard', function(req, res) {
 	res.render('dashboard.ejs');
 
 });
+
 //survey page
 app.get('/survey', function(req, res) {
 	res.render('survey.ejs');
@@ -173,6 +174,34 @@ app.get('/graduates', function(req, res) {
 
 //report
 app.get('/report', function (req, res) {
-    res.render('report.ejs');
+    //connect to database
+    pool.getConnection(function(error, connection) {
+        
+        //query database
+        connection.query('SELECT COUNT(*) AS total FROM graduate', function(err, rows) {
+
+            //error querying
+            if (err) {
+                console.log(err);
+                res.send(err);
+            } else {
+    
+                var totalGrads = rows[0].total;
+
+                var graduates = {
+                    'totalGrads': totalGrads
+                };
+
+                console.log(graduates);
+
+                //release connection to db
+                connection.release();
+                
+                //render page and pass in graudate info
+                res.render('report.ejs', graduates);
+            }
+        });
+    }); 
+    
 });
 
