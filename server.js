@@ -58,9 +58,15 @@ app.get('/', function (req, res) {
   	res.render('login.ejs');
 });
 
+app.get('/login', function(req, res) {
+	res.render('login.ejs');
+
+});
+
 app.post('/login', function(req, res) {
 	var email = req.body.email;
     var password = req.body.password;
+    // var fname = req.body.
 
     console.log(email);
     console.log(password);
