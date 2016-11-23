@@ -48,7 +48,14 @@ app.use('/js', express.static(__dirname + '/node_modules/jquery/dist'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-//
+//use session middleware for persistent login
+app.use(session({
+    secret: 'keyboard cat', 
+    cookie: {maxAge: 86400000}, //24hrs
+    resave: false,
+    saveUninitialized: false
+}));
+
 server.listen(app.get('port'), function() {
 	console.log('listening on port:', app.get('port'));
 });
@@ -77,9 +84,10 @@ app.post('/login', function(req, res) {
             //user found
             if (rows.length) {
                 console.log('user found');
-                // req.session.userId = rows[0].id;
-                // console.log(req.session.userId);
-               
+                req.session.userId = rows[0].id;
+                req.session.email = rows[0].email;
+                req.session.firstName = rows[0].firstName;
+                req.session.lastName = rows[0].lastName;
                 res.redirect('/dashboard');
             } else {
                 console.log('user not found');
@@ -112,8 +120,7 @@ app.post('/register', function(req, res) {
                 console.log(err);
 
             } else {
-                console.log(rows);
-                console.log("User was successfully registered")
+                console.log("User was successfully registered");
                 res.redirect('/'); // once registered redirect to login page
             }
 
@@ -126,10 +133,13 @@ app.post('/register', function(req, res) {
     });
 });
 
-//homepage
+//dashboard - first page faculty sees after login
 app.get('/dashboard', function(req, res) {
-	res.render('dashboard.ejs');
-
+    if (req.session.userId) {
+        res.render('dashboard.ejs');
+    } else {
+        res.redirect('/');
+    }
 });
 
 //survey page
@@ -153,8 +163,6 @@ app.get('/graduates', function(req, res) {
 				var graduates = {
 					'graduates': rows
 				};
-
-				console.log(graduates);
 
 				//release connection to db
 				connection.release();
