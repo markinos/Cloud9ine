@@ -142,7 +142,15 @@ app.post('/register', function(req, res) {
 //dashboard - first page faculty sees after login
 app.get('/dashboard', function(req, res) {
     if (req.session.userId) {
-        res.render('dashboard.ejs');
+
+        var faculty = {
+            'userId': req.session.userId,
+            'email': req.session.email,
+            'firstName': req.session.firstName,
+            'lastName': req.session.lastName
+        };
+
+        res.render('dashboard.ejs', faculty);
     } else {
         res.redirect('/');
     }
@@ -182,34 +190,51 @@ app.get('/graduates', function(req, res) {
 
 //report
 app.get('/report', function (req, res) {
-    //connect to database
-    pool.getConnection(function(error, connection) {
-        
-        //query database
-        connection.query('SELECT COUNT(*) AS total FROM graduate', function(err, rows) {
+    if (req.session.userId) {
+        //connect to database
+        pool.getConnection(function(error, connection) {
+            
+            //query database
+            connection.query('SELECT COUNT(*) AS total FROM graduate', function(err, rows) {
 
-            //error querying
-            if (err) {
-                console.log(err);
-                res.send(err);
-            } else {
-    
-                var totalGrads = rows[0].total;
+                //error querying
+                if (err) {
+                    console.log(err);
+                    res.send(err);
+                } else {
 
-                var graduates = {
-                    'totalGrads': totalGrads
-                };
+                    //get count of grads in db
+                    var totalGrads = rows[0].total;
+                    var graduates = {
+                        'totalGrads': totalGrads
+                    };
 
-                console.log(graduates);
+                    //get user info
+                    var user = {
+                        'id': req.session.userId,
+                        'email': req.session.email,
+                        'firstName': req.session.firstName,
+                        'lastName': req.session.lastName
+                    };
 
-                //release connection to db
-                connection.release();
-                
-                //render page and pass in graudate info
-                res.render('report.ejs', graduates);
-            }
-        });
-    }); 
+                    var data = {
+                        'graduates': graduates,
+                        'user': user
+                    };
+
+                    console.log(graduates);
+
+                    //release connection to db
+                    connection.release();
+                    
+                    //render page and pass in graudate info
+                    res.render('report.ejs', data);
+                }
+            });
+        }); 
+    } else {
+        res.redirect('/login');
+    }
     
 });
 
