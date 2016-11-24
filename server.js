@@ -79,6 +79,9 @@ app.post('/login', function(req, res) {
 	var email = req.body.email;
     var password = req.body.password;
 
+    console.log(email);
+    console.log(password);
+
     pool.getConnection(function(err, connection) {
         connection.query("SELECT * FROM Faculty WHERE Faculty.email = " + "'" + email + "'" + "AND Faculty.password = " + "'" + password + "'", function(err, rows) {
             if (err) {
@@ -118,10 +121,13 @@ app.post('/register', function(req, res) {
 	// getting inputted username and pass
 	var email = req.body.email;
 	var password = req.body.password;
+	var firstName = req.body.firstName;
+	var lastName = req.body.lastName;
 
 	// connect and insert into database
 	pool.getConnection(function(err, connection) {
-        connection.query("INSERT INTO Faculty (email, password) VALUES ('" + email + "'" + "," + "'" + password + "'" + ")", function(err, rows) {
+        connection.query("INSERT INTO Faculty (email, password, firstName, lastName) VALUES ('" + email + "'" + "," + "'" + password + "'" +  "," + "'" + firstName +
+        					"'" + "," + "'" + lastName + "'" + ")", function(err, rows) {
             if (err) {
                 console.log(err);
 
