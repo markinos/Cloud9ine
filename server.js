@@ -10,10 +10,9 @@ var q = require('q');
 //setup heroku database
 var pool = mysql.createPool({
   	host     : 'us-cdbr-iron-east-04.cleardb.net',
-    port     : '3306',
-  	user     : 'b888ca48365de9',
-  	password : '04f53f1a',
-  	database : 'Cloud9ine'
+  	user     : 'b5a41b60cec771',
+  	password : '29c6cc15',
+  	database : 'heroku_50a8c0371a0e6f5'
 });
 
 //setup
@@ -130,7 +129,7 @@ app.post('/register', function(req, res) {
         					"'" + "," + "'" + lastName + "'" + ")", function(err, rows) {
             if (err) {
                 console.log(err);
-
+                res.send(err);
             } else {
                 console.log("User was successfully registered");
                 res.redirect('/'); // once registered redirect to login page
