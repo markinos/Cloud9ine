@@ -9,10 +9,11 @@ var q = require('q');
 
 //setup heroku database
 var pool = mysql.createPool({
-  	host     : 'us-cdbr-iron-east-04.cleardb.net',
-  	user     : 'b888ca48365de9',
-  	password : '04f53f1a',
-  	database : 'heroku_8af57d2bbf38f19'
+  	host     : 'thaijaso.vergil.u.washington.edu',
+    port     : '8865',
+  	user     : 'root',
+  	password : 'ou8inxs2ic',
+  	database : 'GradTrack'
 });
 
 //setup
@@ -79,7 +80,7 @@ app.post('/login', function(req, res) {
     var password = req.body.password;
 
     pool.getConnection(function(err, connection) {
-        connection.query("SELECT * FROM faculty WHERE faculty.email = " + "'" + email + "'" + "AND faculty.password = " + "'" + password + "'", function(err, rows) {
+        connection.query("SELECT * FROM Faculty WHERE Faculty.email = " + "'" + email + "'" + "AND Faculty.password = " + "'" + password + "'", function(err, rows) {
             if (err) {
                 console.log(err);
                 res.render('/login', { err: err.message } );
@@ -120,7 +121,7 @@ app.post('/register', function(req, res) {
 
 	// connect and insert into database
 	pool.getConnection(function(err, connection) {
-        connection.query("INSERT INTO faculty (email, password) VALUES ('" + email + "'" + "," + "'" + password + "'" + ")", function(err, rows) {
+        connection.query("INSERT INTO Faculty (email, password) VALUES ('" + email + "'" + "," + "'" + password + "'" + ")", function(err, rows) {
             if (err) {
                 console.log(err);
 
@@ -165,7 +166,7 @@ app.get('/graduates', function(req, res) {
 	//connect to database
 	pool.getConnection(function(error, connection) {
 		//query database
-		connection.query('SELECT * FROM graduate', function(err, rows) {
+		connection.query('SELECT * FROM Graduate', function(err, rows) {
 
 			//error querying
 			if (err) {
@@ -244,7 +245,7 @@ app.get('/report', function(req, res) {
  */
 function getTotalGrads(connection) {
     var defered = q.defer();
-    connection.query('SELECT COUNT(*) AS total FROM graduate', defered.makeNodeResolver());
+    connection.query('SELECT COUNT(*) AS total FROM Graduate', defered.makeNodeResolver());
     return defered.promise;
 }
 
@@ -256,7 +257,7 @@ function getTotalGrads(connection) {
  */
 function getTotalFaculty(connection) {
     var defered = q.defer();
-    connection.query('SELECT COUNT(*) AS total FROM faculty', defered.makeNodeResolver());
+    connection.query('SELECT COUNT(*) AS total FROM Faculty', defered.makeNodeResolver());
     return defered.promise;
 }
 
@@ -268,7 +269,7 @@ function getTotalFaculty(connection) {
  */
 function getTotalSentSurveys(connection) {
     var defered = q.defer();
-    connection.query('SELECT COUNT(*) AS total FROM survey', defered.makeNodeResolver());
+    connection.query('SELECT COUNT(*) AS total FROM Survey', defered.makeNodeResolver());
     return defered.promise;
 }
 
@@ -289,7 +290,8 @@ function getSurveysCompletedPercent(connection) {
  * @return a promise, to be executed once the query is finished executing
  */
 function getTotalGradsInCSS(connection) {
-
+    var defered = q.defer();
+    connection.query('')
 }
 
 /**
