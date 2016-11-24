@@ -1,9 +1,11 @@
+//node modules
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var server = require('http').Server(app);
 var mysql = require('mysql');
 var session = require('express-session');
+var q = require('q');
 
 //setup heroku database
 var pool = mysql.createPool({
@@ -25,6 +27,7 @@ app.use('/js/pages', express.static(__dirname + '/js/pages'));
 app.use('/img', express.static(__dirname + '/public/img'));
 app.use('/fonts', express.static(__dirname + '/public/fonts'));
 
+//serve static css, image, and js files from admin template 
 app.use('/plugins/iCheck/flat/', express.static(__dirname + '/plugins/iCheck/flat/'));
 app.use('/plugins/morris', express.static(__dirname + '/plugins/morris'));
 app.use('/plugins/jvectormap', express.static(__dirname + '/plugins/jvectormap'));
@@ -48,7 +51,14 @@ app.use('/js', express.static(__dirname + '/node_modules/jquery/dist'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-//
+//use session middleware for persistent login
+app.use(session({
+    secret: 'keyboard cat', 
+    cookie: {maxAge: 86400000}, //24hrs
+    resave: false,
+    saveUninitialized: false
+}));
+
 server.listen(app.get('port'), function() {
 	console.log('listening on port:', app.get('port'));
 });
@@ -58,6 +68,7 @@ app.get('/', function (req, res) {
   	res.render('login.ejs');
 });
 
+//login page
 app.get('/login', function(req, res) {
 	res.render('login.ejs');
 
@@ -67,28 +78,26 @@ app.post('/login', function(req, res) {
 	var email = req.body.email;
     var password = req.body.password;
 
-    console.log(email);
-    console.log(password);
-
     pool.getConnection(function(err, connection) {
         connection.query("SELECT * FROM faculty WHERE faculty.email = " + "'" + email + "'" + "AND faculty.password = " + "'" + password + "'", function(err, rows) {
             if (err) {
                 console.log(err);
                 res.render('/login', { err: err.message } );
-            } else {
-                console.log(rows);
             }
 
             //user found
             if (rows.length) {
-                console.log('user found');
-                // req.session.userId = rows[0].id;
-                // console.log(req.session.userId);               
+                //set session data
+                req.session.userId = rows[0].id;
+                req.session.email = rows[0].email;
+                req.session.firstName = rows[0].firstName;
+                req.session.lastName = rows[0].lastName;
                 res.redirect('/dashboard');
             } else {
                 console.log('user not found');
                 res.send('error user not found');
             }
+            connection.release();
         });
     });
 });
@@ -116,8 +125,7 @@ app.post('/register', function(req, res) {
                 console.log(err);
 
             } else {
-                console.log(rows);
-                console.log("User was successfully registered")
+                console.log("User was successfully registered");
                 res.redirect('/'); // once registered redirect to login page
             }
 
@@ -130,10 +138,21 @@ app.post('/register', function(req, res) {
     });
 });
 
-//homepage
+//dashboard - first page faculty sees after login
 app.get('/dashboard', function(req, res) {
-	res.render('dashboard.ejs');
+    if (req.session.userId) {
 
+        var faculty = {
+            'userId': req.session.userId,
+            'email': req.session.email,
+            'firstName': req.session.firstName,
+            'lastName': req.session.lastName
+        };
+
+        res.render('dashboard.ejs', faculty);
+    } else {
+        res.redirect('/');
+    }
 });
 
 //survey page
@@ -158,8 +177,6 @@ app.get('/graduates', function(req, res) {
 					'graduates': rows
 				};
 
-				console.log(graduates);
-
 				//release connection to db
 				connection.release();
 				
@@ -170,38 +187,143 @@ app.get('/graduates', function(req, res) {
 	});	
 });
 
-// app.post(graduates)
+app.get('/report', function(req, res) {
+    if (req.session.userId) {
+         00d381b8079f650afcfd70e009d5ef2026de4ae3
 
-//report
-app.get('/report', function (req, res) {
-    //connect to database
-    pool.getConnection(function(error, connection) {
-        
-        //query database
-        connection.query('SELECT COUNT(*) AS total FROM graduate', function(err, rows) {
+        //get user info
+        var user = {
+            'id': req.session.userId,
+            'email': req.session.email,
+            'firstName': req.session.firstName,
+            'lastName': req.session.lastName
+        };
 
-            //error querying
-            if (err) {
-                console.log(err);
-                res.send(err);
+        pool.getConnection(function(error, connection) {
+            if (error) {
+                res.send(error);
             } else {
-    
-                var totalGrads = rows[0].total;
+                //query for total grads and faculty
+                q.all([getTotalGrads(connection), getTotalFaculty(connection)]).then(function(results) {
+                    var totalGrads = results[0][0][0].total;
+                    var totalFaculty = results[1][0][0].total;
 
-                var graduates = {
-                    'totalGrads': totalGrads
-                };
+                    //
+                    q.all([getTotalSentSurveys(connection)]).then(function(results) {
+                        var totalSentSurveys = results[0][0][0].total;
+                        console.log(totalSentSurveys);
 
-                console.log(graduates);
+                        //set up data from queries to be passed into view
+                        var data = {
+                            'totalGrads': totalGrads,
+                            'totalFaculty': totalFaculty,
+                            'totalSentSurveys': totalSentSurveys,
+                            'user': user
+                        }
 
-                //release connection to db
-                connection.release();
-                
-                //render page and pass in graudate info
-                res.render('report.ejs', graduates);
+                        //render page and pass in data
+                        res.render('report.ejs', data);
+                    }).catch(function(error) {
+                        res.send(error);
+                    });
+                }).catch(function(error) {
+                    res.send(error);
+                });
             }
+            connection.release();
         });
-    }); 
-    
+    } else {
+        res.redirect('/login');
+    }
 });
+
+/**
+ * Get the total number of graduates in the database
+ *
+ * @param connection is the mysql connection object for querying
+ * @return a promise, to be executed once the query is finished executing
+ */
+function getTotalGrads(connection) {
+    var defered = q.defer();
+    connection.query('SELECT COUNT(*) AS total FROM graduate', defered.makeNodeResolver());
+    return defered.promise;
+}
+
+/**
+ * Get the total number of faculty in the database
+ *
+ * @param connection is the mysql connection object for querying
+ * @return a promise, to be executed once the query is finished executing
+ */
+function getTotalFaculty(connection) {
+    var defered = q.defer();
+    connection.query('SELECT COUNT(*) AS total FROM faculty', defered.makeNodeResolver());
+    return defered.promise;
+}
+
+/**
+ * Get the total number of surveys sent.
+ *
+ * @param connection is the mysql connection object for querying
+ * @return a promise, to be executed once the query is finished executing
+ */
+function getTotalSentSurveys(connection) {
+    var defered = q.defer();
+    connection.query('SELECT COUNT(*) AS total FROM survey', defered.makeNodeResolver());
+    return defered.promise;
+}
+
+/**
+ * Get the ratio of number of surveys completed over sent.
+ *
+ * @param connection is the mysql connection object for querying
+ * @return a promise, to be executed once the query is finished executing
+ */
+function getSurveysCompletedPercent(connection) {
+
+}
+
+/**
+ * Get the total number of graudates in Computer Science
+ *
+ * @param connection is the mysql connection object for querying
+ * @return a promise, to be executed once the query is finished executing
+ */
+function getTotalGradsInCSS(connection) {
+
+}
+
+/**
+ * Get the total number of graduates in Computer Engineering.
+ *
+ * @param connection is the mysql connection object for querying
+ * @return a promise, to be executed once the query is finished executing
+ */
+function getTotalGradsInCE(connection) {
+
+}
+
+/**
+ * Get the total number of graduates in Information Techonology
+ *
+ * @param connection is the mysql connection object for querying
+ * @return a promise, to be executed once the query is finished executing
+ */
+function getTotalGradsInIT(connectinon) {
+
+}
+
+/**
+ * Get the total number of graduates in Electrical Engineering
+ *
+ * @param connection is the mysql connection object for querying
+ * @return a promise, to be executed once the query is finished executing
+ */
+function getTotalGradsInEE(connection) {
+
+}
+
+
+
+
 
