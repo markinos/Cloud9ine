@@ -9,11 +9,10 @@ var q = require('q');
 
 //setup heroku database
 var pool = mysql.createPool({
-  	host     : 'thaijaso.vergil.u.washington.edu',
-    port     : '8865',
-  	user     : 'root',
-  	password : 'ou8inxs2ic',
-  	database : 'GradTrack'
+  	host     : 'us-cdbr-iron-east-04.cleardb.net',
+  	user     : 'b5a41b60cec771',
+  	password : '29c6cc15',
+  	database : 'heroku_50a8c0371a0e6f5'
 });
 
 //setup
@@ -80,7 +79,7 @@ app.post('/login', function(req, res) {
     var password = req.body.password;
 
     pool.getConnection(function(err, connection) {
-        connection.query("SELECT * FROM Faculty WHERE Faculty.email = " + "'" + email + "'" + "AND Faculty.password = " + "'" + password + "'", function(err, rows) {
+        connection.query("SELECT * FROM faculty WHERE Faculty.email = " + "'" + email + "'" + "AND faculty.password = " + "'" + password + "'", function(err, rows) {
             if (err) {
                 console.log(err);
                 res.render('/login', { err: err.message } );
@@ -121,10 +120,10 @@ app.post('/register', function(req, res) {
 
 	// connect and insert into database
 	pool.getConnection(function(err, connection) {
-        connection.query("INSERT INTO Faculty (email, password) VALUES ('" + email + "'" + "," + "'" + password + "'" + ")", function(err, rows) {
+        connection.query("INSERT INTO faculty (email, password) VALUES ('" + email + "'" + "," + "'" + password + "'" + ")", function(err, rows) {
             if (err) {
                 console.log(err);
-
+                res.send(err);
             } else {
                 console.log("User was successfully registered");
                 res.redirect('/'); // once registered redirect to login page
@@ -166,7 +165,7 @@ app.get('/graduates', function(req, res) {
 	//connect to database
 	pool.getConnection(function(error, connection) {
 		//query database
-		connection.query('SELECT * FROM Graduate', function(err, rows) {
+		connection.query('SELECT * FROM graduate', function(err, rows) {
 
 			//error querying
 			if (err) {
@@ -246,7 +245,7 @@ app.get('/report', function(req, res) {
  */
 function getTotalGrads(connection) {
     var defered = q.defer();
-    connection.query('SELECT COUNT(*) AS total FROM Graduate', defered.makeNodeResolver());
+    connection.query('SELECT COUNT(*) AS total FROM graduate', defered.makeNodeResolver());
     return defered.promise;
 }
 
@@ -258,7 +257,7 @@ function getTotalGrads(connection) {
  */
 function getTotalFaculty(connection) {
     var defered = q.defer();
-    connection.query('SELECT COUNT(*) AS total FROM Faculty', defered.makeNodeResolver());
+    connection.query('SELECT COUNT(*) AS total FROM faculty', defered.makeNodeResolver());
     return defered.promise;
 }
 
@@ -270,7 +269,7 @@ function getTotalFaculty(connection) {
  */
 function getTotalSentSurveys(connection) {
     var defered = q.defer();
-    connection.query('SELECT COUNT(*) AS total FROM Survey', defered.makeNodeResolver());
+    connection.query('SELECT COUNT(*) AS total FROM survey', defered.makeNodeResolver());
     return defered.promise;
 }
 
