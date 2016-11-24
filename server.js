@@ -189,7 +189,7 @@ app.get('/graduates', function(req, res) {
 
 app.get('/report', function(req, res) {
     if (req.session.userId) {
-         00d381b8079f650afcfd70e009d5ef2026de4ae3
+         // 00d381b8079f650afcfd70e009d5ef2026de4ae3
 
         //get user info
         var user = {
