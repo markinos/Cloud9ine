@@ -170,6 +170,8 @@ app.get('/graduates', function(req, res) {
 	});	
 });
 
+// app.post(graduates)
+
 //report
 app.get('/report', function (req, res) {
     //connect to database
