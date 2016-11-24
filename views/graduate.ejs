@@ -94,10 +94,8 @@
                         <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                     </div>
                 </div>
-              
                 <!-- search form -->
                 <form action="#" method="get" class="sidebar-form">
-
                     <div class="input-group">
                         <input type="text" name="q" class="form-control" placeholder="Search...">
                         <span class="input-group-btn">
@@ -132,6 +130,76 @@
             <section class="content-header">
                 <h1>
                  Graduates 
+
+                <a href="#" id="addGradBtn" class="btn btn-primary" style="font-family: 'Source Sans Pro', sans-serif;">
+                    <i class="fa fa-plus-square"> Add Graduate</i>
+                </a>
+
+                <div class="modal fade" id="addGradModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                          <h4 class="modal-title" id="exampleModalLabel" style="font-size: 24px;"><b>Add a Graduate</b></h4>
+                        </div>
+                        <div class="modal-body">
+                          <form>
+                                <div class="form-group">
+                                      <label for="recipient-name" class="form-control-label" style="font-size: 16px;" >Student Id:</label>
+                                      <input type="text" class="form-control" id="studentId" placeholder="1234567">
+                                </div>
+                                <div class="form-group">
+                                          <label for="message-text" class="form-control-label" style="font-size: 16px;">First Name:</label>
+                                          <input type="text" class="form-control" id="studentFirstName" placeholder="Jane">
+                                </div>
+                                 <div class="form-group">
+                                          <label for="message-text" class="form-control-label" style="font-size: 16px;">Last Name:</label>
+                                          <input type="text" class="form-control" id="studentLastName" placeholder="Doe">
+                                </div>
+                                <div class="form-group">
+                                          <label for="message-text" class="form-control-label" style="font-size: 16px;">Email:</label>
+                                          <input type="text" class="form-control" id="studentEmail" placeholder="example@uw.edu">
+                                </div>
+                                <div class="form-group">
+                                          <label for="message-text" class="form-control-label" style="font-size: 16px;">GPA:</label>
+                                          <input type="text" class="form-control" id="studentGPA" placeholder="0.0">
+                                </div>
+                                <div class="form-group">
+                                          <label for="message-text" class="form-control-label" style="font-size: 16px;">Program:</label>
+                                          <input type="text" class="form-control" id="studentProgram" placeholder= "CSS";>
+                                </div>
+                                <div class="form-group">
+                                          <label for="message-text" class="form-control-label" style="font-size: 16px;">Grad Year:</label>
+                                          <input type="text" class="form-control" id="studentGradYear" placeholder= "YYYY";>
+                                </div>
+                                <div class="form-group">
+                                          <label for="message-text" class="form-control-label" style="font-size: 16px;">Grad Term:</label>
+                                          <input type="text" class="form-control" id="studentGradTerm" placeholder= "SPR"; >
+                                </div>
+                                    <label for="message-text" class="form-control-label" id="canContact" style="font-size: 16px;">Contact: </label>
+
+                                    <label class="custom-control custom-radio">
+                                      <input id="radio1" name="radio" type="radio" class="custom-control-input">
+                                      <span class="custom-control-indicator"></span>
+                                      <span class="custom-control-description" style="font-size: 16px;">Yes</span>
+                                    </label>
+                                    <label class="custom-control custom-radio">
+                                      <input id="radio2" name="radio" type="radio" class="custom-control-input">
+                                      <span class="custom-control-indicator"></span>
+                                      <span class="custom-control-description" style="font-size: 16px;">No</span>
+                                    </label>
+                          </form>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="button" class="btn btn-primary" id="addGradToDataBtn">Add</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                                 
                 <!-- <small>advanced tables</small>  -->
             </h1>
                 <ol class="breadcrumb">
@@ -140,22 +208,14 @@
             </section>
             <!-- Main content -->
             <section class="content">
-
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="box">
                             <div class="box-header">
-
                             </div>
                             <!-- /.box-header -->
                             <div class="box-body">
                                 <table id="example1" class="table table-bordered table-striped">
-                                <div class= "text-center"> 
-                                    <a href="#" class="btn btn-default btn-xs"> 
-                                    <i class="fa fa-plus-square"> Add Graduate</i> 
-                                </a>
-                                </div>
-                                
                                     <thead>
                                         <tr>
                                             <th>Student Id</th>
@@ -186,12 +246,11 @@
                                                     </a>
                                                     <a href="#" class="btn btn-danger btn-xs">
                                                         <span class="glyphicon glyphicon-remove"></span> Del</a>
-                                                    <a href="#" class="btn btn-success btn-xs" >
+                                                    <a href="#" class="btn btn-success btn-xs">
                                                         <i class="fa fa-paper-plane" aria-hidden="true"></i> Survey</a>
                                                 </td>
                                             </tr>
                                             <%}%>
-                                               
                                     </tbody>
                                     <tfoot>
                                         <tr>
@@ -407,6 +466,8 @@
     <script src="js/app.min.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="js/demo.js"></script>
+    <!-- Graduate functionality -->
+    <script src="js/pages/graduate.js" type="text/javascript"></script>
     <!-- page script -->
     <script>
     $(function() {
@@ -418,6 +479,32 @@
             "ordering": true,
             "info": true,
             "autoWidth": false
+        });
+    });
+    </script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        $("#addGradBtn").click(function() {
+
+            $("#addGradModal").modal('show');
+        });
+    });
+      $(document).ready(function() {
+        $("#addGradToDataBtn").click(function() {
+            var studentInfo = [];
+            studentInfo[0] = $("#studentId").val();
+            studentInfo[1] = $("#studentFirstName").val();
+            studentInfo[2] = $("#studentLastName").val();
+            studentInfo[3] = $("#studentEmail").val();
+            studentInfo[4] = $("#studentGPA").val();
+            studentInfo[5] = $("#studentProgram").val();
+            studentInfo[6] = $("#studentGradYear").val();
+            studentInfo[7] = $("#studentGradTerm").val();
+            studentInfo[8] = $("#canContact").val();
+
+            addGrad(studentInfo);
+            $("#addGradModal").modal('hide');
+
         });
     });
     </script>
