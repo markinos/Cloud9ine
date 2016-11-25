@@ -171,7 +171,7 @@
                         <!-- small box -->
                         <div class="small-box bg-yellow">
                             <div class="inner">
-                                <h3><%= totalSentSurveys %></h3>
+                                <h3><%= totalSurveys %></h3>
                                 <p>Suveys Sent</p>
                             </div>
                             <div class="icon">
@@ -185,8 +185,8 @@
                         <!-- small box -->
                         <div class="small-box bg-red">
                             <div class="inner">
-                                <h3>65<sup style="font-size: 20px">%</sup></h3>
-                                <p>Unique Visitors</p>
+                                <h3><%= surveysCompletedPercent %><sup style="font-size: 20px">%</sup></h3>
+                                <p>Surveys Completed</p>
                             </div>
                             <div class="icon">
                                 <i class="ion ion-pie-graph"></i>
@@ -202,7 +202,7 @@
                         <!-- DONUT CHART -->
                         <div class="box box-danger">
                             <div class="box-header with-border">
-                                <h3 class="box-title">Donut Chart</h3>
+                                <h3 class="box-title">Institute of Technology Degrees</h3>
                                 <div class="box-tools pull-right">
                                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                                     </button>
@@ -565,35 +565,35 @@
         var pieChartCanvas = $("#pieChart").get(0).getContext("2d");
         var pieChart = new Chart(pieChartCanvas);
         var PieData = [{
-            value: 1,
+            value: <%= totalBSCSS %>,
             color: "#f56954",
             highlight: "#f56954",
-            label: "Chrome"
+            label: "Computer Science and Systems BS"
         }, {
-            value: 1,
+            value: <%= totalBSCES %>,
             color: "#00a65a",
             highlight: "#00a65a",
-            label: "IE"
+            label: "Compter Engineering and Systems BS"
         }, {
-            value: 1,
+            value: <%= totalBSIT %>,
             color: "#f39c12",
             highlight: "#f39c12",
-            label: "FireFox"
+            label: "Information Technology BS"
         }, {
-            value: 1,
+            value: <%= totalBSEE %>,
             color: "#00c0ef",
             highlight: "#00c0ef",
-            label: "Safari"
+            label: "Electrical Engineering BS"
         }, {
-            value: 1,
+            value: <%= totalMSCSS %>,
             color: "#3c8dbc",
             highlight: "#3c8dbc",
-            label: "Opera"
+            label: "Computer Science and Systems MS"
         }, {
-            value: 1,
+            value: <%= totalBACSS %>,
             color: "#d2d6de",
             highlight: "#d2d6de",
-            label: "Navigator"
+            label: "Computer Science and Systems BA"
         }];
         
         var pieOptions = {
@@ -617,7 +617,7 @@
             responsive: true,
             // Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
             maintainAspectRatio: true
-                //String - A legend template
+            //String - A legend template
 
         };
         //Create pie or douhnut chart

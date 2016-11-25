@@ -5,7 +5,7 @@ var bodyParser = require('body-parser');
 var server = require('http').Server(app);
 var mysql = require('mysql');
 var session = require('express-session');
-var q = require('q');
+var async = require('async');
 
 //setup heroku database
 var pool = mysql.createPool({
@@ -91,10 +91,13 @@ app.post('/login', function(req, res) {
             //user found
             if (rows.length) {
                 //set session data
-                req.session.userId = rows[0].id;
-                req.session.email = rows[0].email;
-                req.session.firstName = rows[0].firstName;
-                req.session.lastName = rows[0].lastName;
+                req.session.user = {
+                    'id': rows[0].id,
+                    'email': rows[0].email,
+                    'firstName': rows[0].firstName,
+                    'lastName': rows[0].lastName
+                }
+
                 res.redirect('/dashboard');
             } else {
                 console.log('user not found');
@@ -146,14 +149,9 @@ app.post('/register', function(req, res) {
 
 //dashboard - first page faculty sees after login
 app.get('/dashboard', function(req, res) {
-    if (req.session.userId) {
+    if (req.session.user.id) {
 
-        var faculty = {
-            'userId': req.session.userId,
-            'email': req.session.email,
-            'firstName': req.session.firstName,
-            'lastName': req.session.lastName
-        };
+        var faculty = req.session.user;
 
         res.render('dashboard.ejs', faculty);
     } else {
@@ -193,141 +191,303 @@ app.get('/graduates', function(req, res) {
 	});	
 });
 
-app.get('/report', function(req, res) {
-    if (req.session.userId) {
+app.get('/report', function(req, res) { 
+    if (req.session.user) {
 
-        //get user info
-        var user = {
-            'id': req.session.userId,
-            'email': req.session.email,
-            'firstName': req.session.firstName,
-            'lastName': req.session.lastName
-        };
+        pool.getConnection(function(err, connection) {
+           
+           //perform asyncronous queries one by one 
+           async.waterfall([    
+                
+                getTotalGrads(connection),
+                getTotalFaculty,
+                getTotalSurveys,
+                getSurveysCompletedPercent,
+                getTotalGradsWithBSCSS,
+                getTotalGradsWithBSCES,
+                getTotalGradsWithBSIT,
+                getTotalGradsWithMSCSS,
+                getTotalGradsWithBSEE,
+                getTotalGradsWithBACSS
+           
+            ], function(err, connection, results) {
+                if (err) {
+                    console.log(err);
+                    res.send(err);
+                    return;
+                } 
 
-        pool.getConnection(function(error, connection) {
-            if (error) {
-                res.send(error);
-            } else {
-                //query for total grads and faculty
-                q.all([getTotalGrads(connection), getTotalFaculty(connection)]).then(function(results) {
-                    var totalGrads = results[0][0][0].total;
-                    var totalFaculty = results[1][0][0].total;
-
-                    //
-                    q.all([getTotalSentSurveys(connection)]).then(function(results) {
-                        var totalSentSurveys = results[0][0][0].total;
-                        console.log(totalSentSurveys);
-
-                        //set up data from queries to be passed into view
-                        var data = {
-                            'totalGrads': totalGrads,
-                            'totalFaculty': totalFaculty,
-                            'totalSentSurveys': totalSentSurveys,
-                            'user': user
-                        }
-
-                        //render page and pass in data
-                        res.render('report.ejs', data);
-                    }).catch(function(error) {
-                        res.send(error);
-                    });
-                }).catch(function(error) {
-                    res.send(error);
-                });
-            }
-            connection.release();
+                //success
+                results['user'] = req.session.user;
+                connection.release();
+                //res.render('report.ejs', results); 
+                res.render('report.ejs', results);
+            });
         });
     } else {
         res.redirect('/login');
-    }
+    }   
 });
 
 /**
  * Get the total number of graduates in the database
  *
+ * To be called first in the async.waterfall function!
+ *
  * @param connection is the mysql connection object for querying
- * @return a promise, to be executed once the query is finished executing
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null error, connection, and results of query
  */
 function getTotalGrads(connection) {
-    var defered = q.defer();
-    connection.query('SELECT COUNT(*) AS total FROM graduate', defered.makeNodeResolver());
-    return defered.promise;
+
+    return function(callback) {
+
+        connection.query("SELECT COUNT(*) AS total FROM graduate", function(err, rows) {
+            //error with query
+            if (err) {
+                console.log(err);
+                callback(err);
+                return;
+            }
+
+            //successful query
+            var results = {
+                'totalGrads': rows[0].total
+            }
+
+            //calls test 2
+            callback(null, connection, results);
+        });
+    }   
 }
 
 /**
- * Get the total number of faculty in the database
+ * Get the total number of graduates in the database
  *
  * @param connection is the mysql connection object for querying
- * @return a promise, to be executed once the query is finished executing
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null error, connection, and results of query
  */
-function getTotalFaculty(connection) {
-    var defered = q.defer();
-    connection.query('SELECT COUNT(*) AS total FROM faculty', defered.makeNodeResolver());
-    return defered.promise;
+function getTotalFaculty(connection, results, callback) {
+    connection.query("SELECT COUNT(*) AS total FROM faculty", function(err, rows) {
+        if (err) {
+            console.log(err);
+            callback(err);
+            return;
+        }
+
+        console.log(rows[0].total);
+        results['totalFaculty'] = rows[0].total;
+        callback(null, connection, results);
+    });
 }
 
 /**
- * Get the total number of surveys sent.
+ * Get the total number of surveys in the database
  *
  * @param connection is the mysql connection object for querying
- * @return a promise, to be executed once the query is finished executing
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null error, connection, and results of query
  */
-function getTotalSentSurveys(connection) {
-    var defered = q.defer();
-    connection.query('SELECT COUNT(*) AS total FROM survey', defered.makeNodeResolver());
-    return defered.promise;
+function getTotalSurveys(connection, results, callback) {
+    connection.query("SELECT COUNT(*) AS total FROM survey", function(err, rows) {
+        if (err) {
+            console.log(err);
+            callback(err);
+            return;
+        }
+
+        results['totalSurveys'] = rows[0].total;
+        callback(null, connection, results);
+    });
 }
 
 /**
- * Get the ratio of number of surveys completed over sent.
+ * Get the total number of completed surveys in the database
+ * as a percentage
  *
  * @param connection is the mysql connection object for querying
- * @return a promise, to be executed once the query is finished executing
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null error, connection, and results of query
  */
-function getSurveysCompletedPercent(connection) {
+function getSurveysCompletedPercent(connection, results, callback) {
+    var query = "SELECT ROUND((SELECT COUNT(*) FROM survey WHERE status = 'sent') / " + 
+                    "COUNT(*) * 100) AS surveysCompletedPercent " +
+                "FROM survey";
 
+    connection.query(query, function(err, rows) {
+        if (err) {
+            console.log(err);
+            callback(err);
+            return;
+        }
+
+        results['surveysCompletedPercent'] = rows[0].surveysCompletedPercent;
+        callback(null, connection, results);
+    });
 }
 
 /**
- * Get the total number of graudates in Computer Science
+ * Get the total number of graduates with a Bachelors of
+ * Science in Computer Science and Systems
  *
  * @param connection is the mysql connection object for querying
- * @return a promise, to be executed once the query is finished executing
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null error, connection, and results of query
  */
-function getTotalGradsInCSS(connection) {
-    var defered = q.defer();
-    connection.query('')
+function getTotalGradsWithBSCSS(connection, results, callback) {
+    var query = "SELECT COUNT(*) AS total FROM graduate " +
+                "WHERE program = 'CSS' AND degree = 'BS'";
+
+    connection.query(query, function(err, rows) {
+        if (err) {
+            console.log(err);
+            callback(err);
+            return;
+        }
+
+        results['totalBSCSS'] = rows[0].total;
+        callback(null, connection, results);
+    });
 }
 
 /**
- * Get the total number of graduates in Computer Engineering.
+ * Get the total number of grads with a Bachelors of Science
+ * in Computer Engineering and Systems
  *
  * @param connection is the mysql connection object for querying
- * @return a promise, to be executed once the query is finished executing
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null error, connection, and results of query
  */
-function getTotalGradsInCE(connection) {
+function getTotalGradsWithBSCES(connection, results, callback) {
+    var query = "SELECT COUNT(*) AS total FROM graduate " +
+                "WHERE program = 'CES' AND degree = 'BS'";
 
+    connection.query(query, function(err, rows) {
+        if (err) {
+            console.log(err);
+            callback(err);
+            return;
+        }
+
+        results['totalBSCES'] = rows[0].total;
+        callback(null, connection, results);
+    });
 }
 
 /**
- * Get the total number of graduates in Information Techonology
+ * Get the total number of grads with a Bachelors of Science
+ * in Information Technology
  *
  * @param connection is the mysql connection object for querying
- * @return a promise, to be executed once the query is finished executing
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null error, connection, and results of query
  */
-function getTotalGradsInIT(connectinon) {
+function getTotalGradsWithBSIT(connection, results, callback) {
+    var query = "SELECT COUNT(*) AS total FROM graduate " +
+                "WHERE program = 'IT' AND degree = 'BS'";
 
+    connection.query(query, function(err, rows) {
+        if (err) {
+            console.log(err);
+            callback(err);
+            return;
+        }
+
+        results['totalBSIT'] = rows[0].total;
+        callback(null, connection, results);
+    });
 }
 
 /**
- * Get the total number of graduates in Electrical Engineering
+ * Get the total number of grads with a Masters
+ * in Computer Science and Systems
  *
  * @param connection is the mysql connection object for querying
- * @return a promise, to be executed once the query is finished executing
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null error, connection, and results of query
  */
-function getTotalGradsInEE(connection) {
+function getTotalGradsWithMSCSS(connection, results, callback) {
+    var query = "SELECT COUNT(*) AS total FROM graduate " +
+                "WHERE program = 'CSS' AND degree = 'MS'";
 
+    connection.query(query, function(err, rows) {
+        if (err) {
+            console.log(err);
+            callback(err);
+            return;
+        }
+
+        results['totalMSCSS'] = rows[0].total;
+        callback(null, connection, results);
+    });
 }
+
+/**
+ * Get the total number of grads with a Bachelors of Science
+ * in Electrical Engineering
+ *
+ * @param connection is the mysql connection object for querying
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null error, connection, and results of query
+ */
+function getTotalGradsWithBSEE(connection, results, callback) {
+    var query = "SELECT COUNT(*) AS total FROM graduate " +
+                "WHERE program = 'EE' AND degree = 'BS'";
+
+    connection.query(query, function(err, rows) {
+        if (err) {
+            console.log(err);
+            callback(err);
+            return;
+        }
+
+        results['totalBSEE'] = rows[0].total;
+        callback(null, connection, results);
+    });
+}
+
+/**
+ * Get the total number of grads with a Bachelors of Science
+ * in Electrical Engineering
+ *
+ * @param connection is the mysql connection object for querying
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null error, connection, and results of query
+ */
+function getTotalGradsWithBACSS(connection, results, callback) {
+    var query = "SELECT COUNT(*) AS total FROM graduate " +
+                "WHERE program = 'CSS' AND degree = 'BA'";
+
+    connection.query(query, function(err, rows) {
+        if (err) {
+            console.log(err);
+            callback(err);
+            return;
+        }
+
+        results['totalBACSS'] = rows[0].total;
+        callback(null, connection, results);
+    })
+}
+
+
+
+
+
+
+
+
 
 
 
