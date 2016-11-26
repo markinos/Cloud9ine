@@ -26,6 +26,7 @@ app.use('/js', express.static(__dirname + '/public/js'));
 app.use('/js/pages', express.static(__dirname + '/js/pages'));
 app.use('/img', express.static(__dirname + '/public/img'));
 app.use('/fonts', express.static(__dirname + '/public/fonts'));
+app.use('/public', express.static(__dirname + '/public'));
 
 //serve static css, image, and js files from admin template 
 app.use('/plugins/iCheck/flat/', express.static(__dirname + '/plugins/iCheck/flat/'));

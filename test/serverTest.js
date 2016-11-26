@@ -78,4 +78,28 @@ describe('GradTrack', () => {
 		});
 	});
 
+	//Test the GET /survey route
+	describe('GET /survey', () => {
+		it('it should GET the survey view', () => {		
+			chai.request(server)
+				.get('/survey')
+				.end((err, res) => {
+					res.should.have.status(200);
+					done();
+				});
+		});
+	});
+
+	//Test the GET /dashboard route
+	describe('GET /report', () => {
+		it('it should GET the report view', () => {		
+			chai.request(server)
+				.get('/report')
+				.end((err, res) => {
+					res.should.have.status(200);
+					done();
+				});
+		});
+	});
+
 });
