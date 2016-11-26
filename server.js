@@ -166,9 +166,6 @@ app.get('/survey', function(req, res) {
 
 //graduates page
 app.get('/graduates', function(req, res) {
-	console.dir(req.body);
-
-	console.log("delete grad");
 	//connect to database
 	pool.getConnection(function(error, connection) {
 		//query database
@@ -195,7 +192,6 @@ app.get('/graduates', function(req, res) {
 });
 
 app.post('/graduates', function(req, res) {
-	console.dir(req.body);
 
 	var id = req.body.studentId;
 	var firstName = req.body.firstName;
@@ -238,6 +234,37 @@ app.post('/graduates', function(req, res) {
 			}
 		});
 	});	
+
+});
+
+
+app.get('/delete', function(req, res) {
+	res.render("graduate.ejs");
+
+});
+
+app.post('/delete', function(req, res) {
+
+	console.dir("delete this id: " + req.body.gradId);
+
+	var gradId = req.body.gradId;
+
+	pool.getConnection(function(error, connection) {
+		connection.query("DELETE FROM graduate WHERE studentId =" + "'" + gradId + "'" + ";", function(err, rows) {
+
+			if(err) {
+				console.log(err);
+			} else {
+				console.log( gradId + " was deleted");
+				res.redirect('/graduates');
+			}
+
+		});
+
+	});
+
+	
+
 
 });
 

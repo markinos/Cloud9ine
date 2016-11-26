@@ -228,9 +228,13 @@
                                     </thead>
                                     <tbody>
                                         <% for (var i = graduates.length - 1; i >= 0; i--) { %>
+                                          <div action="post" method="/graduates" class="gradIdTbl">
+
                                             <tr>
                                                 <td>
-                                                    <%= graduates[i].studentId %>
+                                                        <%= graduates[i].studentId %>
+
+                                                
                                                 </td>
                                                 <td>
                                                     <%= graduates[i].lastName %>
@@ -252,6 +256,7 @@
                                                             <i class="fa fa-paper-plane" aria-hidden="true"></i> Survey</a>
                                                     </td>
                                                 </div>
+                                             </div>
                                             </tr>
                                             <%}%>
                                     </tbody>
@@ -516,10 +521,23 @@
     $(document).ready(function() {
         var table = $('#example1').DataTable();
         $('#example1 tbody').on('click', '.btn-danger', function() {
+
+            var gradId = table.row($(this).parents('tr')).data();
+
+            // deleteGrad(gradId[0]);
+
+            // console.log(row1[0]);
+
             table
                 .row($(this).parents('tr'))
                 .remove()
                 .draw();
+
+            $.ajax({
+                url: '/delete',
+                data: { gradId: gradId[0] },
+                type: 'POST',
+            });
         });
 
     });
