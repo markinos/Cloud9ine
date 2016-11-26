@@ -1,14 +1,14 @@
 //node modules
-var express = require('express');
-var app = express();
-var bodyParser = require('body-parser');
-var server = require('http').Server(app);
-var mysql = require('mysql');
-var session = require('express-session');
-var async = require('async');
+const express = require('express');
+const app = express();
+const bodyParser = require('body-parser');
+const server = require('http').Server(app);
+const mysql = require('mysql');
+const session = require('express-session');
+const async = require('async');
 
 //setup heroku database
-var pool = mysql.createPool({
+const pool = mysql.createPool({
   	host     : 'us-cdbr-iron-east-04.cleardb.net',
   	user     : 'b5a41b60cec771',
   	password : '29c6cc15',
@@ -78,9 +78,6 @@ app.post('/login', function(req, res) {
 	var email = req.body.email;
     var password = req.body.password;
 
-    console.log(email);
-    console.log(password);
-
     pool.getConnection(function(err, connection) {
         connection.query("SELECT * FROM faculty WHERE faculty.email = " + "'" + email + "'" + "AND faculty.password = " + "'" + password + "'", function(err, rows) {
             if (err) {
@@ -108,28 +105,24 @@ app.post('/login', function(req, res) {
     });
 });
 
-//register page
-app.get('/register', function(req, res) {
-	res.render('register.ejs');
-});
-
-
 //POST to register
 app.post('/register', function(req, res) {
-	// console.dir(req.body);
-	console.log("email: " + req.body.email);
-	console.log("password: " + req.body.password);
-
 	// getting inputted username and pass
 	var email = req.body.email;
 	var password = req.body.password;
 	var firstName = req.body.firstName;
 	var lastName = req.body.lastName;
 
+    //console.log(email);
+    //console.log(password);
+
 	// connect and insert into database
 	pool.getConnection(function(err, connection) {
         connection.query("INSERT INTO faculty (email, password, firstName, lastName) VALUES ('" + email + "'" + "," + "'" + password + "'" +  "," + "'" + firstName +
         					"'" + "," + "'" + lastName + "'" + ")", function(err, rows) {
+            
+            console.log('here');
+
             if (err) {
                 console.log(err);
                 res.send(err);
@@ -481,7 +474,8 @@ function getTotalGradsWithBACSS(connection, results, callback) {
     })
 }
 
-
+//For testing
+module.exports = app;
 
 
 

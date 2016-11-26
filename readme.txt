@@ -9,8 +9,10 @@ Install Instructions:
 
 type localhost:8888 into your browser
 
+If you dont want to install npm to run the app locally,
+feel free to visit grad-track.herokuapp.com
 
+Run Test:
 
-
-
+1)npm test
 
