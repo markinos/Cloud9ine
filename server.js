@@ -142,7 +142,7 @@ app.post('/register', function(req, res) {
 
 //dashboard - first page faculty sees after login
 app.get('/dashboard', function(req, res) {
-    if (req.session.user.id) {
+    if (req.session.user) {
 
         var faculty = req.session.user;
 
@@ -476,14 +476,4 @@ function getTotalGradsWithBACSS(connection, results, callback) {
 
 //For testing
 module.exports = app;
-
-
-
-
-
-
-
-
-
-
 

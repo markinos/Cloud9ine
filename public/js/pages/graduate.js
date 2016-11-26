@@ -6,6 +6,7 @@ Adds new graduates to the database, and searches for them in the database
 Edits, and deletes grads as well.
 
 **/ 
+// static var
 
 function addGrad(studentInfo) {
 	console.log(studentInfo[0]+ "\n" + studentInfo[1] + "\n" + studentInfo[2]
@@ -21,25 +22,25 @@ function addGrad(studentInfo) {
 	var gradYear = studentInfo[6];
 	var gradTerm = studentInfo[7];
 	var contact = studentInfo[8];
-		pool.getConnection(function(error, connection) {
-		//query database
-        connection.query("INSERT INTO graduate (studentId, firstName, lastName, email, gpa, program, gradTerm, gradYear)" + 
-        	"VALUES ('" + id + "'" + "," + "'" + firstName + "'" + ")", function(err, rows) {
+	// 	pool.getConnection(function(error, connection) {
+	// 	//query database
+ //        connection.query("INSERT INTO graduate (studentId, firstName, lastName, email, gpa, program, gradTerm, gradYear)" + 
+ //        	"VALUES ('" + id + "'" + "," + "'" + firstName + "'" + ")", function(err, rows) {
 
-			//error querying
-			if (err) {
-				console.log(err);
-				res.send(err);
-			} else {
+	// 		//error querying
+	// 		if (err) {
+	// 			console.log(err);
+	// 			res.send(err);
+	// 		} else {
 	
-				console.log("Graduate was added!");
+	// 			console.log("Graduate was added!");
 
-				//release connection to db
-				connection.release();
+	// 			//release connection to db
+	// 			connection.release();
 				
-				//pass graduates object to graduate view
-				// res.render('graduate.ejs', graduates);
-			}
-		});
-	});	
+	// 			//pass graduates object to graduate view
+	// 			// res.render('graduate.ejs', graduates);
+	// 		}
+	// 	});
+	// });	
 }
