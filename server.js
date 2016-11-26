@@ -26,6 +26,7 @@ app.use('/js', express.static(__dirname + '/public/js'));
 app.use('/js/pages', express.static(__dirname + '/js/pages'));
 app.use('/img', express.static(__dirname + '/public/img'));
 app.use('/fonts', express.static(__dirname + '/public/fonts'));
+app.use('/public', express.static(__dirname + '/public'));
 
 //serve static css, image, and js files from admin template 
 app.use('/plugins/iCheck/flat/', express.static(__dirname + '/plugins/iCheck/flat/'));
@@ -175,11 +176,14 @@ app.get('/graduates', function(req, res) {
 			if (err) {
 				console.log(err);
 				res.send(err);
-			} else {
+			}  
+			else {
 	
 				var graduates = {
 					'graduates': rows
 				};
+
+
 
 				//release connection to db
 				connection.release();
@@ -222,7 +226,8 @@ app.post('/graduates', function(req, res) {
 			if (err) {
 				console.log(err);
 				res.send(err);
-			} else {
+			}
+			else {
 	
 				console.log("Graduate was added!");
 
@@ -256,7 +261,10 @@ app.post('/delete', function(req, res) {
 				console.log(err);
 			} else {
 				console.log( gradId + " was deleted");
+				connection.release();
+
 				res.redirect('/graduates');
+
 			}
 
 		});

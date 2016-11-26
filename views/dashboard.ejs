@@ -31,6 +31,9 @@
     <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
     <!-- bootstrap wysihtml5 - text editor -->
     <link rel="stylesheet" href="plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+
+    <link rel='shortcut icon' href='/public/favicon.ico' type='image/x-icon'/ >
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -43,17 +46,8 @@
     <div class="wrapper">
         <header class="main-header">
             <!-- Logo -->
-            <a href="report.ejs" class="logo">
-                <!-- mini logo for sidebar mini 50x50 pixels -->
-                <span class="logo-mini"><b>G</b>T</span>
-                <!-- logo for regular state and mobile devices -->
-                 <div class="mainHeader">
-                      <!-- <span class="fa fa-cloud" style=" vertical-align: left;"></span> -->
-                     <span class="logo-lg"><b>Grad</b>Track</span>               
-                 </div>
-    
-
-              
+            <a href="/dashboard" class="logo">
+                <i class="fa fa-cloud" style="margin-right: 5px;"></i><b>Grad</b>Track
             </a>
             <!-- Header Navbar: style can be found in header.less -->
             <nav class="navbar navbar-static-top">
@@ -72,6 +66,8 @@
                             <ul class="dropdown-menu">
                                 <!-- User image -->
                                 <li class="user-header">
+                                     <!-- <i class="fa fa-user-circle" aria-hidden="true"></i> -->
+
                                     <img src="/img/user2-160x160.jpg" class="img-circle" alt="User Image">
                                     <p>
                                         <%= firstName %> <%= lastName %> - Faculty Advisor
@@ -104,6 +100,8 @@
                 <!-- Sidebar user panel -->
                 <div class="user-panel">
                     <div class="pull-left image">
+                    <!-- <i class="fa fa-user-circle" aria-hidden="true" style="font-size: 100px;"></i> -->
+
                         <img src="/img/user2-160x160.jpg" class="img-circle" alt="User Image">
                     </div>
                     <div class="pull-left info">
