@@ -169,11 +169,14 @@ app.get('/graduates', function(req, res) {
 			if (err) {
 				console.log(err);
 				res.send(err);
-			} else {
+			}  
+			else {
 	
 				var graduates = {
 					'graduates': rows
 				};
+
+
 
 				//release connection to db
 				connection.release();
@@ -183,6 +186,88 @@ app.get('/graduates', function(req, res) {
 			}
 		});
 	});	
+});
+
+
+app.post('/graduates', function(req, res) {
+
+	var id = req.body.studentId;
+	var firstName = req.body.firstName;
+	var lastName = req.body.lastName;
+	var email = req.body.email;
+	var GPA = req.body.gpa;
+	var program = req.body.program;
+	var gradYear = req.body.gradYear;
+	var gradTerm = req.body.gradTerm;
+	var contact = req.body.radio;
+
+	if(contact == "on") {
+		contact = 1;
+	} else {
+		contact = 0;
+	}
+
+	/** This will insert a new graduate into the system. **/
+
+	pool.getConnection(function(error, connection) {
+		//query database
+        connection.query("INSERT INTO graduate (studentId, firstName, lastName, email, gpa, program, gradTerm, gradYear, canContact)" + 
+        	"VALUES ('" + id + "'" + "," + "'" + firstName + "'" + "," +"'"+ lastName + "'" + "," + "'" + email + "'" +
+        	"," + "'" + GPA + "'" + "," + "'" + program + "'" + "," + "'" + gradYear + "'" + "," + "'" + gradTerm + "'" +
+        	"," + "'" + contact + "'" + ")", function(err, rows) {
+
+			//error querying
+			if (err) {
+				console.log(err);
+				res.send(err);
+			}
+			else {
+	
+				console.log("Graduate was added!");
+
+				//release connection to db
+				connection.release();
+				res.redirect('/graduates');
+				//pass graduates object to graduate view
+				// res.render('graduate.ejs', graduates);
+			}
+		});
+	});	
+
+});
+
+
+app.get('/delete', function(req, res) {
+	res.render("graduate.ejs");
+
+});
+
+app.post('/delete', function(req, res) {
+
+	console.dir("delete this id: " + req.body.gradId);
+
+	var gradId = req.body.gradId;
+
+	pool.getConnection(function(error, connection) {
+		connection.query("DELETE FROM graduate WHERE studentId =" + "'" + gradId + "'" + ";", function(err, rows) {
+
+			if(err) {
+				console.log(err);
+			} else {
+				console.log( gradId + " was deleted");
+				connection.release();
+
+				res.redirect('/graduates');
+
+			}
+
+		});
+
+	});
+
+	
+
+
 });
 
 app.get('/report', function(req, res) { 
