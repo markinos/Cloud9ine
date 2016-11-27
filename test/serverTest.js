@@ -90,6 +90,55 @@ describe('GradTrack', () => {
 		});
 	});
 
+
+	//Test the GET /graduate route
+	describe('GET /graduates', () => {
+		it('it should GET the graduate view', () => {		
+			chai.request(server)
+				.get('/graduates')
+				.end((err, res) => {
+					res.should.have.status(200);
+					done();
+				});
+		});
+	});
+
+	//Test the POST /dashboard route
+	describe('POST /graduates', () => {
+		it('it should add the graduate to the database', () => {		
+			chai.request(server)
+				.post('/graduates')
+				.end((err, res) => {
+					res.should.have.status(200);
+					done();
+				});
+		});
+	});
+
+	//Test the GET /delete route
+	describe('GET /delete', () => {
+		it('it should GET the graduate view', () => {		
+			chai.request(server)
+				.get('/delete')
+				.end((err, res) => {
+					res.should.have.status(200);
+					done();
+				});
+		});
+	});
+
+	//Test the GET /delete route
+	describe('POST /delete', () => {
+		it('it should POST and delete a graduate from the database', () => {		
+			chai.request(server)
+				.post('/delete')
+				.end((err, res) => {
+					res.should.have.status(200);
+					done();
+				});
+		});
+	});
+
 	//Test the GET /dashboard route
 	describe('GET /report', () => {
 		it('it should GET the report view', () => {		
@@ -101,5 +150,8 @@ describe('GradTrack', () => {
 				});
 		});
 	});
+
+
+	
 
 });

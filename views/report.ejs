@@ -129,7 +129,7 @@
             <!-- Content Header (Page header) -->
             <section class="content-header">
                 <h1>Report
-                    <small>all reports</small>
+                    <small>Institute of Technology</small>
                 </h1>
                 <ol class="breadcrumb">
                     <li><a href="#"><i class="fa fa-dashboard"></i> Report</a></li>
@@ -202,7 +202,7 @@
                         <!-- DONUT CHART -->
                         <div class="box box-danger">
                             <div class="box-header with-border">
-                                <h3 class="box-title">Institute of Technology Degrees</h3>
+                                <h3 class="box-title">Institute of Technology Degrees <small>2015</small></h3>
                                 <div class="box-tools pull-right">
                                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                                     </button>
@@ -215,10 +215,10 @@
                             <!-- /.box-body -->
                         </div>
                         <!-- /.box -->
-                        <!-- AREA CHART -->
-                        <div class="box box-primary">
+                         <!-- BAR CHART -->
+                        <div class="box box-success">
                             <div class="box-header with-border">
-                                <h3 class="box-title">Area Chart</h3>
+                                <h3 class="box-title">Bar Chart</h3>
                                 <div class="box-tools pull-right">
                                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                                     </button>
@@ -227,7 +227,7 @@
                             </div>
                             <div class="box-body">
                                 <div class="chart">
-                                    <canvas id="areaChart" style="height:250px"></canvas>
+                                    <canvas id="barChart" style="height:230px"></canvas>
                                 </div>
                             </div>
                             <!-- /.box-body -->
@@ -239,7 +239,7 @@
                         <!-- LINE CHART -->
                         <div class="box box-info">
                             <div class="box-header with-border">
-                                <h3 class="box-title">Line Chart</h3>
+                                <h3 class="box-title">Undergraduate Degrees Granted Per Year <small>2001-2015<small></h3>
                                 <div class="box-tools pull-right">
                                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                                     </button>
@@ -254,10 +254,10 @@
                             <!-- /.box-body -->
                         </div>
                         <!-- /.box -->
-                        <!-- BAR CHART -->
-                        <div class="box box-success">
+                       <!-- AREA CHART -->
+                        <div class="box box-primary">
                             <div class="box-header with-border">
-                                <h3 class="box-title">Bar Chart</h3>
+                                <h3 class="box-title">Graduate Degrees Granted Per Year</h3>
                                 <div class="box-tools pull-right">
                                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                                     </button>
@@ -266,7 +266,7 @@
                             </div>
                             <div class="box-body">
                                 <div class="chart">
-                                    <canvas id="barChart" style="height:230px"></canvas>
+                                    <canvas id="areaChart" style="height:250px"></canvas>
                                 </div>
                             </div>
                             <!-- /.box-body -->
@@ -487,25 +487,17 @@
         var areaChart = new Chart(areaChartCanvas);
 
         var areaChartData = {
-            labels: ["January", "February", "March", "April", "May", "June", "July"],
-            datasets: [{
-                label: "Electronics",
-                fillColor: "rgba(210, 214, 222, 1)",
-                strokeColor: "rgba(210, 214, 222, 1)",
-                pointColor: "rgba(210, 214, 222, 1)",
-                pointStrokeColor: "#c1c7d1",
-                pointHighlightFill: "#fff",
-                pointHighlightStroke: "rgba(220,220,220,1)",
-                data: [65, 59, 80, 81, 56, 55, 40]
-            }, {
-                label: "Digital Goods",
+            labels: ["2009", "2010", "2011", "2012", "2013", "2014", "2015"],
+            datasets: [
+            {
+                label: "Undergraduate Degrees Granted",
                 fillColor: "rgba(60,141,188,0.9)",
                 strokeColor: "rgba(60,141,188,0.8)",
                 pointColor: "#3b8bba",
                 pointStrokeColor: "rgba(60,141,188,1)",
                 pointHighlightFill: "#fff",
                 pointHighlightStroke: "rgba(60,141,188,1)",
-                data: [28, 48, 40, 19, 86, 27, 90]
+                data: [30, 35, 31, 46, 60, 55, 61]
             }]
         };
 
@@ -513,7 +505,7 @@
             //Boolean - If we should show the scale at all
             showScale: true,
             //Boolean - Whether grid lines are shown across the chart
-            scaleShowGridLines: false,
+            scaleShowGridLines: true,
             //String - Colour of the grid lines
             scaleGridLineColor: "rgba(0,0,0,.05)",
             //Number - Width of the grid lines
@@ -547,16 +539,33 @@
         };
 
         //Create the line chart
+        areaChartOptions.datasetFill = false;
         areaChart.Line(areaChartData, areaChartOptions);
 
         //-------------
         //- LINE CHART -
         //--------------
+
+        var underGradLineChartData = {
+            labels: ["01", "02", "03", "04", "05", "06", "07", "08",
+                    "09", "10", "11", "12", "13", "14", "15"],
+            datasets: [{
+                label: "Undergraduate Degrees Granted",
+                fillColor: "#00c0ef",
+                strokeColor: "#00c0ef",
+                pointColor: "#3b8bba",
+                pointStrokeColor: "#00c0ef",
+                pointHighlightFill: "#fff",
+                pointHighlightStroke: "#00c0ef",
+                data: [171, 180, 175, 190, 200, 203, 222]
+            }]
+        };
+
         var lineChartCanvas = $("#lineChart").get(0).getContext("2d");
         var lineChart = new Chart(lineChartCanvas);
         var lineChartOptions = areaChartOptions;
         lineChartOptions.datasetFill = false;
-        lineChart.Line(areaChartData, lineChartOptions);
+        lineChart.Line(underGradLineChartData, lineChartOptions);
 
         //-------------
         //- PIE CHART -
@@ -629,7 +638,33 @@
         //-------------
         var barChartCanvas = $("#barChart").get(0).getContext("2d");
         var barChart = new Chart(barChartCanvas);
-        var barChartData = areaChartData;
+
+         var barChartData = {
+            labels: ["2009", "2010", "2011", "2012", "2013", "2014", "2015"],
+            datasets: [
+            {
+                label: "Undergraduate Degrees Granted",
+                fillColor: "rgba(60,141,188,0.9)",
+                strokeColor: "rgba(60,141,188,0.8)",
+                pointColor: "#3b8bba",
+                pointStrokeColor: "rgba(60,141,188,1)",
+                pointHighlightFill: "#fff",
+                pointHighlightStroke: "rgba(60,141,188,1)",
+                data: [30, 35, 31, 46, 60, 55, 61]
+            },
+            {
+                label: "Undergraduate Degrees Granted",
+                fillColor: "rgba(60,141,188,0.9)",
+                strokeColor: "rgba(60,141,188,0.8)",
+                pointColor: "#3b8bba",
+                pointStrokeColor: "rgba(60,141,188,1)",
+                pointHighlightFill: "#fff",
+                pointHighlightStroke: "rgba(60,141,188,1)",
+                data: [30, 35, 31, 46, 60, 55, 61]
+            }]
+        };
+
+       
         barChartData.datasets[1].fillColor = "#00a65a";
         barChartData.datasets[1].strokeColor = "#00a65a";
         barChartData.datasets[1].pointColor = "#00a65a";

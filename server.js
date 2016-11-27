@@ -287,7 +287,8 @@ app.get('/report', function(req, res) {
                 getTotalGradsWithBSIT,
                 getTotalGradsWithMSCSS,
                 getTotalGradsWithBSEE,
-                getTotalGradsWithBACSS
+                getTotalGradsWithBACSS,
+                getUndergradDegreesIn01
            
             ], function(err, connection, results) {
                 if (err) {
@@ -299,8 +300,8 @@ app.get('/report', function(req, res) {
                 //success
                 results['user'] = req.session.user;
                 connection.release();
-                //res.render('report.ejs', results); 
-                res.render('report.ejs', results);
+                res.send(results); 
+                //res.render('report.ejs', results);
             });
         });
     } else {
@@ -335,7 +336,7 @@ function getTotalGrads(connection) {
                 'totalGrads': rows[0].total
             }
 
-            //calls test 2
+            //calls getTotalFaculty
             callback(null, connection, results);
         });
     }   
@@ -359,6 +360,7 @@ function getTotalFaculty(connection, results, callback) {
 
         console.log(rows[0].total);
         results['totalFaculty'] = rows[0].total;
+        //calls getTotalSurveys
         callback(null, connection, results);
     });
 }
@@ -380,6 +382,7 @@ function getTotalSurveys(connection, results, callback) {
         }
 
         results['totalSurveys'] = rows[0].total;
+        //calls ggetSurveysCompletedPercent
         callback(null, connection, results);
     });
 }
@@ -550,7 +553,6 @@ function getTotalGradsWithBACSS(connection, results, callback) {
 
     connection.query(query, function(err, rows) {
         if (err) {
-            console.log(err);
             callback(err);
             return;
         }
@@ -558,6 +560,79 @@ function getTotalGradsWithBACSS(connection, results, callback) {
         results['totalBACSS'] = rows[0].total;
         callback(null, connection, results);
     })
+}
+
+/**
+ * Get the total number of undergraduate degrees granted in 2001
+ *
+ * @param connection is the mysql connection object for querying
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null, connection, and results of query
+ */
+function getUndergradDegreesIn01(connection, results, callback) {
+    var query = "SELECT COUNT(*) as total FROM graduate " +
+                "WHERE (degree = 'BS' OR degree = 'BA') " +
+                "AND gradYear = 2001";
+
+    connection.query(query, (err, rows) => {
+        if (err) {
+            //console.log(err);
+            callback(err);
+            
+        }
+
+        results['undergradsIn01'] = rows[0].total;
+        callback(null, connection, results);
+    });
+}
+
+/**
+ * Get the total number of undergraduate degrees granted in 2002
+ *
+ * @param connection is the mysql connection object for querying
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null, connection, and results of query
+ */
+function getUndergradDegreesIn02(connection, results, callback) {
+    var query = "SELECT COUNT(*) AS total FROM graduate " +
+                "WHERE degree = 'BA' OR degree = 'BS' " +
+                "AND gradYear = 2002";
+
+    connection.query(query, (err, rows) => {
+        if (err) {
+            //console.log(err);
+            callback(err);
+        }
+
+        results['undergradsIn02'] = rows[0].total;
+        callback(null, connection, results);
+    });
+}
+
+/**
+ * Get the total number of undergraduate degrees granted in 2002
+ *
+ * @param connection is the mysql connection object for querying
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null, connection, and results of query
+ */
+function getUndergradDegreesIn03(connection, results, callback) {
+    var query = "SELECT COUNT(*) AS total FROM graduate " +
+                "WHERE degree = 'BA' OR degree = 'BS' " +
+                "AND gradYear = 2003";
+
+    connection.query(query, (err, rows) => {
+        if (err) {
+            //console.log(err);
+            callback(err);
+        }
+
+        results['undergradsIn03'] = rows[0].total;
+        callback(null, connection, results);
+    });
 }
 
 //For testing
