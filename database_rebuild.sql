@@ -77,6 +77,7 @@ CREATE TABLE IF NOT EXISTS `heroku_50a8c0371a0e6f5`.`Graduate` (
 DROP TABLE IF EXISTS `heroku_50a8c0371a0e6f5`.`Job`;
 CREATE TABLE IF NOT EXISTS `heroku_50a8c0371a0e6f5`.`Job` (
   `id` INT NOT NULL AUTO_INCREMENT,
+  `jobCode` INT NULL,
   `employmentType` ENUM('Intern', 'Part Time', 'Full Time', 'Residency') NULL,
   `employerName` VARCHAR(255) NULL,
   `employerType` VARCHAR(255) NULL,
@@ -207,6 +208,7 @@ CREATE TABLE IF NOT EXISTS `heroku_50a8c0371a0e6f5`.`Skill_Has_Job` (
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
 
 
 
