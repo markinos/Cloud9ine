@@ -77,7 +77,9 @@ app.get('/login', function(req, res) {
 
 app.post('/login', function(req, res) {
 	var email = req.body.email;
-    var password = req.body.password;
+	var password = req.body.password;
+
+	//for (var g = 0; g <997; g++) randomlyGenerateGraduate();
 
     pool.getConnection(function(err, connection) {
         connection.query("SELECT * FROM faculty WHERE faculty.email = " + "'" + email + "'" + "AND faculty.password = " + "'" + password + "'", function(err, rows) {
@@ -559,6 +561,130 @@ function getTotalGradsWithBACSS(connection, results, callback) {
         callback(null, connection, results);
     })
 }
+
+var maxYear = 2016;
+var appMinYear = 1997;
+var gradMinYear = 2001;
+
+var monthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+var programs = ['CSS', 'CES', 'EE', 'IT'];
+var degrees = ['BA', 'BS', 'MS'];
+var terms = ['AUT', 'WIN', 'SPR', 'SUM'];
+
+var firstNames = [  'Menaka', 'Jason', 'Shema', 'Travis', 'Mark', 'Chris', 'Vito', 'Lebron', 'Stephen', 'Alice', 'Russel',
+                    'James', 'Mohib', 'Alexander', 'Steve', 'Elon', 'Rick', 'Tewodros', 'John', 'Mary', 'Loc', 'Connor',
+                    'Ibrahim', 'Elisha', 'Elizabeth', 'Brandon', 'Nursultan', 'Jabo', 'Brian', 'Andrew', 'Michael', 'Susan',
+                    'Monica', 'Ankur', 'Ingrid', 'Alan', 'Charles', 'Jieun', 'Humza', 'Demyan', 'Ryan', 'Vladislav', 'Taeler',
+                    'Thomas', 'Tiffany', 'Benjamin', 'Patrick', 'Prabhjot', 'Sarah', 'Edgard', 'Nico', 'Nina', 'Jowy', 'Yau',
+                    'Adam', 'Amy', 'Alec', 'Louis', 'Rocky', 'Marco', 'Donald', 'Rob', 'Asop', 'George', 'Susan', 'Ivanka',
+                    'Hillary', 'Michelle', 'Samantha', 'Ingrid', 'Bridgette', 'Brittany', 'Alison', 'Rehina', 'Joraniah',
+                    'Drew', 'Pak', 'Desiree', 'Vasika', 'Sayla', 'Cayla', 'Mercedes', 'Donia', 'Jennifer', 'Kesha', 'Luka',
+                    'Gabriel', 'Bonginkosi', 'Aliaksandr', 'Ninaliezel', 'Aundraya', 'Noamio', 'Danille', 'Dana', 'Brandy',
+                    'Ruth', 'Jose', 'Erlinda', 'Josh', 'Luke', 'Lyn', 'Pat', 'Haley', 'Lavaunte', 'Christina', 'Shaun',
+                    'Ki', 'Brenda', 'Mengxiao'
+];
+
+var lastNames = [   'Abraham', 'Bada', 'Bui', 'Cox', 'Diabate', 'Gentry', 'Gibbons', 'Ho', 'Irgaliyev', 'Johnigan', 'Klonitsko',
+                    'Kohi', 'Lambion', 'Lee', 'Lloyd', 'Mangrio', 'Pavlovskiy', 'Fowler', 'Peters', 'Schumer', 'Potter', 'Chau',
+                    'Psarev', 'Quesada', 'Rezanejad', 'van Riper', 'Russell', 'Sanchez', 'Singh', 'Snyder', 'Solorzano', 'Tandyo',
+                    'Thai', 'Tran', 'Tsang', 'Waldron', 'Walsh', 'Yang', 'Vishoot', 'Westbrook', 'Curry', 'James', 'Aeriola',
+                    'Harden', 'Pierce', 'Jobs', 'Musk', 'Ross', 'Polo', 'Stone', 'Lao', 'Liu', 'King', 'Fergeson', 'Arnold',
+                    'Hoffer', 'Cheng', 'Brown', 'Bobryk', 'Cardinal', 'Horakova', 'Chavez', 'Clark', 'Comer', 'Dahl', 'Evans',
+                    'Fdhila', 'Fischer', 'Fitzpatrick', 'Gajic', 'Hentyarsa', 'Holman', 'Legaspi', 'Lo', 'McCord', 'McDonald',
+                    'McMahon', 'Obama', 'Meyer', 'Miller', 'Clinton', 'Trump', 'Biden', 'Montgomery', 'Nuguse', 'Oliva', 'Roberts',
+                    'Rowe', 'Sbory', 'Schilling', 'Taylor', 'Tippett', 'Wilson', 'Wong', 'Yun', 'Zhu'
+];
+
+var genders = ['Female', 'Male', 'Other'];
+var ethnicities = ['Asian', 'African/Black', 'Caucasian/White', 'Native/Indigenous', 'Hispanic/Latino/a', 'Mixed', 'Pacific Islander', 'Other'];
+var ages = ['<18', '18-23', '24-29', '30-39', '40-49', '50-59', '60+'];
+var generations = ['1st', '2nd', 'Parent(s) Alumni'];
+
+function randomlyGenerateGraduate() {
+    pool.getConnection(function (err, connection) {
+        var appDate = randomInt(appMinYear, maxYear - 2);
+        var gradYear = randomInt(appDate + 2, maxYear);
+        var status = 'current';
+        var updatedMonth = randomInt(0, 12);
+        var updatedAt = randomInt(gradYear, maxYear) + '-' + pad(updatedMonth + 1, 2) + '-' + pad(randomInt(1, monthDays[updatedMonth] + 1),2);
+        var canContact = Math.random() < 0.9 ? 1 : 0;
+        var contactStatus = 'updated';
+        var canTrack = 1;
+        var surveyFreq = 1;
+        var firstName = firstNames[randomInt(0, firstNames.length)];
+        var lastName = lastNames[randomInt(0, lastNames.length)];
+        var UWemail = firstName.charAt(0) + lastName + '@uw.edu';
+        var email = lastName + gradYear + '@gmail.com';
+        var gpa = ((Math.random() * 2 + 2)+'').substr(0,4);
+        var appMonth = randomInt(0,12);
+        var appDate = appDate + '-' + pad(appMonth + 1, 2) + '-' + pad(randomInt(1, monthDays[appMonth] + 1),2);
+        var program = programs[randomInt(0, programs.length)];
+        var degree = degrees[randomInt(0, degrees.length)];
+        var gradTerm = Math.random() < 0.7 ? 'SPR' : terms[randomInt(0, terms.length)];
+        var gender = genders[Math.random() < 0.99 ? randomInt(0, 2) : 2];
+        var ethnicity = ethnicities[randomInt(0, ethnicities.length)];
+        var age = Math.random() < 0.6 ? '18-23' : ages[randomInt(0, ages.length)];
+        var generation = generations[randomInt(0, generations.length)];
+        var studentId = randomInt(1000000, 10000000);
+        var stats = {
+            'updatedAt': updatedAt, 'canContact': canContact, 'contactStatus': contactStatus, 'canTrack': canTrack, 'surveyFreq': surveyFreq,
+            'firstName': firstName, 'lastName': lastName, 'UWemail': UWemail, 'email': email, 'gpa': gpa, 'appDate': appDate, 'program': program, 'degree': degree,
+            'gradTerm': gradTerm, 'gradYear': gradYear, 'gender': gender, 'ethnicity': ethnicity, 'age': age, 'generation': generation, 'studentId': studentId
+        };
+        var query = "INSERT INTO Graduate (status";
+        var values = ") VALUES ('" + status;
+        for (var stat in stats) {
+            console.log(stat + ": " + stats[stat]);
+            query += ', ' + stat;
+            values += "', '" + stats[stat];
+        }
+//        status, updatedAt, canContact, contactStatus, canTrack, surveyFreq, firstName, lastName," +
+//                    "UWemail, email, gpa, appDate, program, degree, gradTerm, gradYear, gender, ethnicity, age, generation, studentId)" +
+//                    "VALUES ('"
+        try {
+            connection.query(query + values + "')", function (err, rows) {
+                //"INSERT INTO Graduate (status, updatedAt, canContact, contactStatus, canTrack, surveyFreq, firstName, lastName, UWemail, email, gpa, appDate, program, degree, gradTerm, gradYear, gender, ethnicity, age, generation, studentId)" +
+                //           "VALUES ('" + status + "', '" + updatesAt + "', '" + canContact + "', '" + contactStatus + "', '" + canTrack + "', '" + "')", function (err, rows) {
+
+                console.log('here');
+
+                if (err) {
+                    console.log(err);
+                    //res.send(err);
+                } else {
+                    console.log("Graduate was successfully registered");
+                    //res.redirect('/'); // once registered redirect to login page
+                }
+
+                // verify user doesnt already have an account
+                // verify it is a valid email address
+                // verify @ and .com/.edu/.net/.org included aka it is a complete email
+                connection.release();
+            });
+        } catch (err) {
+            console.log("\nError:\n");
+            for (var stat in stats) console.log(stat + ": " + stats[stat]);
+        }
+
+    });
+
+}
+
+/**
+ * Quick random integer generator from l to h-1
+ *
+ * @param {int} l         -   the low range (inclusive)
+ * @param {int} h         -   the high range (exclusive)
+ * @return {int}          -   random number in [l, h-1]
+ */
+function randomInt(l, h) {
+    return Math.floor(Math.random() * (h-l)) + l;
+};
+
+function pad(n, s) {
+    return (Array(s).join('0') + n).slice(-s);
+} 
 
 //For testing
 module.exports = app;
