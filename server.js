@@ -79,7 +79,8 @@ app.post('/login', function(req, res) {
 	var email = req.body.email;
 	var password = req.body.password;
 
-	//for (var g = 0; g <997; g++) randomlyGenerateGraduate();
+    //for (var g = 0; g < 1000; g++) randomlyGenerateGraduate();
+    //for (var f = 0; f < 100; f++) randomlyGenerateFaculty();
 
     pool.getConnection(function(err, connection) {
         connection.query("SELECT * FROM faculty WHERE faculty.email = " + "'" + email + "'" + "AND faculty.password = " + "'" + password + "'", function(err, rows) {
@@ -633,7 +634,6 @@ function getUndergradDegreesIn03(connection, results, callback) {
     });
 }
 
-
 var maxYear = 2016;
 var appMinYear = 1997;
 var gradMinYear = 2001;
@@ -644,7 +644,7 @@ var programs = ['CSS', 'CES', 'EE', 'IT'];
 var degrees = ['BA', 'BS', 'MS'];
 var terms = ['AUT', 'WIN', 'SPR', 'SUM'];
 
-var firstNames = [  'Menaka', 'Jason', 'Shema', 'Travis', 'Mark', 'Chris', 'Vito', 'Lebron', 'Stephen', 'Alice', 'Russel',
+var firstNames = ['Menaka', 'Jason', 'Shema', 'Travis', 'Mark', 'Chris', 'Vito', 'Lebron', 'Stephen', 'Alice', 'Russel',
                     'James', 'Mohib', 'Alexander', 'Steve', 'Elon', 'Rick', 'Tewodros', 'John', 'Mary', 'Loc', 'Connor',
                     'Ibrahim', 'Elisha', 'Elizabeth', 'Brandon', 'Nursultan', 'Jabo', 'Brian', 'Andrew', 'Michael', 'Susan',
                     'Monica', 'Ankur', 'Ingrid', 'Alan', 'Charles', 'Jieun', 'Humza', 'Demyan', 'Ryan', 'Vladislav', 'Taeler',
@@ -657,7 +657,7 @@ var firstNames = [  'Menaka', 'Jason', 'Shema', 'Travis', 'Mark', 'Chris', 'Vito
                     'Ki', 'Brenda', 'Mengxiao'
 ];
 
-var lastNames = [   'Abraham', 'Bada', 'Bui', 'Cox', 'Diabate', 'Gentry', 'Gibbons', 'Ho', 'Irgaliyev', 'Johnigan', 'Klonitsko',
+var lastNames = ['Abraham', 'Bada', 'Bui', 'Cox', 'Diabate', 'Gentry', 'Gibbons', 'Ho', 'Irgaliyev', 'Johnigan', 'Klonitsko',
                     'Kohi', 'Lambion', 'Lee', 'Lloyd', 'Mangrio', 'Pavlovskiy', 'Fowler', 'Peters', 'Schumer', 'Potter', 'Chau',
                     'Psarev', 'Quesada', 'Rezanejad', 'van Riper', 'Russell', 'Sanchez', 'Singh', 'Snyder', 'Solorzano', 'Tandyo',
                     'Thai', 'Tran', 'Tsang', 'Waldron', 'Walsh', 'Yang', 'Vishoot', 'Westbrook', 'Curry', 'James', 'Aeriola',
@@ -679,7 +679,7 @@ function randomlyGenerateGraduate() {
         var gradYear = randomInt(appDate + 2, maxYear);
         var status = 'current';
         var updatedMonth = randomInt(0, 12);
-        var updatedAt = randomInt(gradYear, maxYear) + '-' + pad(updatedMonth + 1, 2) + '-' + pad(randomInt(1, monthDays[updatedMonth] + 1),2);
+        var updatedAt = randomInt(gradYear, maxYear) + '-' + pad(updatedMonth + 1, 2) + '-' + pad(randomInt(1, monthDays[updatedMonth] + 1), 2);
         var canContact = Math.random() < 0.9 ? 1 : 0;
         var contactStatus = 'updated';
         var canTrack = 1;
@@ -688,9 +688,9 @@ function randomlyGenerateGraduate() {
         var lastName = lastNames[randomInt(0, lastNames.length)];
         var UWemail = firstName.charAt(0) + lastName + '@uw.edu';
         var email = lastName + gradYear + '@gmail.com';
-        var gpa = ((Math.random() * 2 + 2)+'').substr(0,4);
-        var appMonth = randomInt(0,12);
-        var appDate = appDate + '-' + pad(appMonth + 1, 2) + '-' + pad(randomInt(1, monthDays[appMonth] + 1),2);
+        var gpa = ((Math.random() * 2 + 2) + '').substr(0, 4);
+        var appMonth = randomInt(0, 12);
+        var appDate = appDate + '-' + pad(appMonth + 1, 2) + '-' + pad(randomInt(1, monthDays[appMonth] + 1), 2);
         var program = programs[randomInt(0, programs.length)];
         var degree = degrees[randomInt(0, degrees.length)];
         var gradTerm = Math.random() < 0.7 ? 'SPR' : terms[randomInt(0, terms.length)];
@@ -707,31 +707,66 @@ function randomlyGenerateGraduate() {
         var query = "INSERT INTO Graduate (status";
         var values = ") VALUES ('" + status;
         for (var stat in stats) {
-            console.log(stat + ": " + stats[stat]);
             query += ', ' + stat;
             values += "', '" + stats[stat];
         }
-//        status, updatedAt, canContact, contactStatus, canTrack, surveyFreq, firstName, lastName," +
-//                    "UWemail, email, gpa, appDate, program, degree, gradTerm, gradYear, gender, ethnicity, age, generation, studentId)" +
-//                    "VALUES ('"
+
         try {
             connection.query(query + values + "')", function (err, rows) {
-                //"INSERT INTO Graduate (status, updatedAt, canContact, contactStatus, canTrack, surveyFreq, firstName, lastName, UWemail, email, gpa, appDate, program, degree, gradTerm, gradYear, gender, ethnicity, age, generation, studentId)" +
-                //           "VALUES ('" + status + "', '" + updatesAt + "', '" + canContact + "', '" + contactStatus + "', '" + canTrack + "', '" + "')", function (err, rows) {
-
                 console.log('here');
 
                 if (err) {
                     console.log(err);
                     //res.send(err);
                 } else {
-                    console.log("Graduate was successfully registered");
-                    //res.redirect('/'); // once registered redirect to login page
+                    console.log("Graduate was successfully added");
+                    //res.redirect('/');
                 }
 
-                // verify user doesnt already have an account
-                // verify it is a valid email address
-                // verify @ and .com/.edu/.net/.org included aka it is a complete email
+                connection.release();
+            });
+        } catch (err) {
+            console.log("\nError:\n");
+            for (var stat in stats) console.log(stat + ": " + stats[stat]);
+        }
+
+    });
+
+}
+
+function randomlyGenerateFaculty() {
+    pool.getConnection(function (err, connection) {
+        var firstName = firstNames[randomInt(0, firstNames.length)];
+        var lastName = lastNames[randomInt(0, lastNames.length)];
+        var email = firstName.charAt(0) + lastName + '@uw.edu';
+        var password = 'password' + randomInt(0, 100);
+        var status = Math.random() < 0.9 ? 'Staff' : 'Admin';
+        var permissionAccess = Math.random() < 0.9 ? 1 : 0;
+        var permissionUpdate = Math.random() < 0.9 ? 1 : 0;
+        var permissionReport = Math.random() < 0.9 ? 1 : 0;
+        var stats = {
+            'firstName': firstName, 'lastName': lastName, 'password': password, 'status': status,
+            'permissionAccess': permissionAccess, 'permissionUpdate': permissionUpdate, 'permissionReport': permissionReport
+        };
+        var query = "INSERT INTO Faculty (email";
+        var values = ") VALUES ('" + email;
+        for (var stat in stats) {
+            query += ', ' + stat;
+            values += "', '" + stats[stat];
+        }
+
+        try {
+            connection.query(query + values + "')", function (err, rows) {
+                console.log('here');
+
+                if (err) {
+                    console.log(err);
+                    //res.send(err);
+                } else {
+                    console.log("Faculty was successfully added");
+                    //res.redirect('/');
+                }
+
                 connection.release();
             });
         } catch (err) {
