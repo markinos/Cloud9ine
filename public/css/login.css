@@ -48,12 +48,18 @@ body {
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 .fa-cloud {
-  color: #ccc; /*font-family: 'Roboto';*/
+  color: #fff; /*font-family: 'Roboto';*/
   /*font-size: 1.5em;*/
   text-align: center;
 }
 .panel {
 	border-radius: 5px;
+}
+
+
+.box-body {
+	  width: 800px;
+        margin: 0 auto;
 }
 
 .mainHeader {

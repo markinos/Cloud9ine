@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>AdminLTE 2 | Data Tables</title>
+    <title>GradTrack | Graduates</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.6 -->
@@ -20,9 +20,9 @@
     <!-- AdminLTE Skins. Choose a skin from the css/skins
              folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="css/skins/_all-skins.min.css">
-
-     <link rel='shortcut icon' href='/public/favicon.ico' type='image/x-icon'/ >
-
+    <link rel='shortcut icon' href='/public/favicon.ico' type='image/x-icon' />
+    <link rel="stylesheet" type="text/css" href="/css/graduate.css">
+    <!-- <link rel="stylesheet" type="text/css" href="/css/login.css"> -->
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -135,8 +135,8 @@
                 <h1>
                  Graduates 
 
-                <a href="#" id="addGradBtn" class="btn btn-primary ">
-                    <i class="fa fa-plus-square"></i>  Add Graduate
+                <a href="#" id="addGradBtn" class="btn btn-primary " style="margin-right: 5px;">
+                    <i class="fa fa-plus-square" style="margin-right: 5px;"></i>  Add Graduate
                 </a>
 
                 <div class="modal fade" id="addGradModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -149,51 +149,58 @@
                           <h4 class="modal-title" id="exampleModalLabel" style="font-size: 24px;"><b>Add a Graduate</b></h4>
                         </div>
                         <div class="modal-body">
-                          <form id="addGradForm" action="/graduates" method="post" style="display: block;">
-                                <div class="form-group">
-                                      <label for="recipient-name" class="form-control-label" style="font-size: 16px;" >Student Id:</label>
-                                      <input type="text" name="studentId" class="form-control" id="studentId" placeholder="1234567">
-                                </div>
-                                <div class="form-group">
-                                          <label for="message-text" class="form-control-label" style="font-size: 16px;">First Name:</label>
-                                          <input type="text" name="firstName" class="form-control" id="studentFirstName" placeholder="Jane">
-                                </div>
-                                 <div class="form-group">
-                                          <label for="message-text" class="form-control-label" style="font-size: 16px;">Last Name:</label>
-                                          <input type="text" name="lastName" class="form-control" id="studentLastName" placeholder="Doe">
-                                </div>
-                                <div class="form-group">
-                                          <label for="message-text" class="form-control-label" style="font-size: 16px;">Email:</label>
-                                          <input type="text" name="email" class="form-control" id="studentEmail" placeholder="example@uw.edu">
-                                </div>
-                                <div class="form-group">
-                                          <label for="message-text" class="form-control-label" style="font-size: 16px;">GPA:</label>
-                                          <input type="text" name="gpa" class="form-control" id="studentGPA" placeholder="0.0">
-                                </div>
-                                <div class="form-group">
-                                          <label for="message-text" class="form-control-label" style="font-size: 16px;">Program:</label>
-                                          <input type="text" name="program" class="form-control" id="studentProgram" placeholder= "CSS";>
-                                </div>
-                                <div class="form-group">
-                                          <label for="message-text" class="form-control-label" style="font-size: 16px;">Grad Year:</label>
-                                          <input type="text" name="gradYear" class="form-control" id="studentGradYear" placeholder= "YYYY";>
-                                </div>
-                                <div class="form-group">
-                                          <label for="message-text" class="form-control-label" style="font-size: 16px;">Grad Term:</label>
-                                          <input type="text" name="gradTerm" class="form-control" id="studentGradTerm" placeholder= "SPR"; >
-                                </div>
-                                    <label for="message-text" class="form-control-label" id="canContact" style="font-size: 16px;">Contact: </label>
 
-                                    <label class="custom-control custom-radio">
-                                      <input id="radio1" name="canContact" type="radio" class="custom-control-input">
-                                      <span class="custom-control-indicator"></span>
-                                      <span class="custom-control-description" style="font-size: 16px;">Yes</span>
-                                    </label>
-                                    <label class="custom-control custom-radio">
-                                      <input id="radio2" name="canContact" type="radio" class="custom-control-input">
-                                      <span class="custom-control-indicator"></span>
-                                      <span class="custom-control-description" style="font-size: 16px;">No</span>
-                                    </label>
+                          <form id="addGradForm" action="/addGrad" method="post" style="display: block;">
+                                  <label for="recipient-name" class="form-control-label" style="font-size: 16px;">Student Id:</label>
+                                <input type="text" name="studentId" class="form-control" id="studentId" placeholder="1234567">
+
+                                <label for="message-text" class="form-control-label" style="font-size: 16px;">First Name:</label>
+                                <input type="text" name="firstName" class="form-control" id="studentFirstName" placeholder="Jane">
+                               
+                                <label for="message-text" class="form-control-label" style="font-size: 16px;">Last Name:</label>
+                                <input type="text" name="lastName" class="form-control" id="studentLastName" placeholder="Doe">
+                             
+                                <label for="message-text" class="form-control-label" style="font-size: 16px;">Email:</label>
+                                <input type="text" name="email" class="form-control" id="studentEmail" placeholder="example@uw.edu">
+
+                                <label for="message-text" class="form-control-label" style="font-size: 16px;">Age:</label>
+                                <input type="text" name="age" class="form-control" id="studentAge" placeholder="20">
+
+                                <label for="message-text" class="form-control-label" style="font-size: 16px;">Gender:</label>
+                                <input type="text" name="gneder" class="form-control" id="studentAge" placeholder="20">
+
+                                <label for="message-text" class="form-control-label" style="font-size: 16px;">Generation:</label>
+                                <input type="text" name="generation" class="form-control" id="studentGen" placeholder="2nd">
+
+                                 <label for="message-text" class="form-control-label" style="font-size: 16px;">Ethnicity:</label>
+                                <input type="text" name="ethnicity" class="form-control" id="studentEthnicity" placeholder="Hispanic">
+                                
+                                <label for="message-text" class="form-control-label" style="font-size: 16px;">GPA:</label>
+                                <input type="text" name="gpa" class="form-control" id="studentGPA" placeholder="3.2">
+                             
+                                <label for="message-text" class="form-control-label" style="font-size: 16px;">Program:</label>
+                                <input type="text" name="program" class="form-control" id="studentProgram" placeholder="CSS">
+                                
+                                <label for="message-text" class="form-control-label" style="font-size: 16px;">Degree:</label>
+                                <input type="text" name="degree" class="form-control" id="studentEthnicity" placeholder="BS">
+                               
+                                <label for="message-text" class="form-control-label" style="font-size: 16px;">Grad Year:</label>
+                                <input type="text" name="gradYear" class="form-control" id="studentGradYear" placeholder="YYYY">
+                                
+                                <label for="message-text" class="form-control-label" style="font-size: 16px;">Grad Term:</label>
+                                <input type="text" name="gradTerm" class="form-control" id="studentGradTerm" placeholder="SPR">
+
+                                <label for="message-text" class="form-control-label" id="canContact" style="font-size: 16px;">Contact: </label>
+                                <label class="custom-control custom-radio">
+                                    <input id="radio1Edit" name="canContact" type="radio" class="custom-control-input">
+                                    <span class="custom-control-indicator"></span>
+                                    <span class="custom-control-description" style="font-size: 16px;">Yes</span>
+                                </label>
+                                <label class="custom-control custom-radio">
+                                    <input id="radio2Edit" name="canContact" type="radio" class="custom-control-input">
+                                    <span class="custom-control-indicator"></span>
+                                    <span class="custom-control-description" style="font-size: 16px;">No</span>
+                                </label>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                    <button type="submit" class="btn btn-primary" id="addGradToDataBtn" form="addGradForm">Add</button>
@@ -204,8 +211,9 @@
                       </div>
                     </div>
                   </div>
+
+                  <!-- end modal -->
                                  
-                <!-- <small>advanced tables</small>  -->
             </h1>
                 <ol class="breadcrumb">
                     <li><a href="/graduates"><i class="fa fa-th"></i> Graduates</a></li>
@@ -220,57 +228,111 @@
                             </div>
                             <!-- /.box-header -->
                             <div class="box-body">
-                                <table id="example1" class="table table-bordered table-striped">
+                                <table id="example1" class="table table-bordered table-striped" class="display nowrap" width="100%;" cellspacing="0">
                                     <thead>
                                         <tr>
+                                            <th>Action</th>
                                             <th>Student Id</th>
                                             <th>Last Name</th>
                                             <th>First Name</th>
+                                            <th>Age</th>
+                                            <th>Gender</th>
+                                            <th>Ethnicity</th>
+                                            <th>Generation</th>
+                                            <th>Email</th>
                                             <th>Program</th>
-                                            <th>Action</th>
+                                            <th>Degree</th>
+                                            <th>Grad Year</th>
+                                            <th>Grad Term</th>
+                                            <th>GPA </th>
+                                            <th>Contact</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <% for (var i = graduates.length - 1; i >= 0; i--) { %>
-                                          <div action="post" method="/graduates" class="gradIdTbl">
-
-                                            <tr>
-                                                <td>
+                                            <div action="post" method="/addGrad" class="gradIdTbl">
+                                                <tr data-child-value=<%graduates[i].email%>>
+                                                    <div id="actionBtns">
+                                                        <td>
+                                                            <a href="#" class="btn btn-danger btn-xs">
+                                                                <span class="glyphicon glyphicon-trash" id="deleteBtn" class="deleteClass"></span> Del</a>
+                                                            <a href="#" class="btn btn-success btn-xs">
+                                                                <i class="fa fa-paper-plane" aria-hidden="true"></i> Survey</a>
+                                                            <!--  <a class='btn btn-info btn-xs disabled' href="#">
+                                                                    <span class="glyphicon glyphicon-edit"> </span> Edit
+                                                                </a> -->
+                                                            <a class='btn btn-info btn-xs' href="#">
+                                                                <span class="glyphicon glyphicon-edit"> </span> Edit
+                                                            </a>
+                                                        </td>
+                                                    </div>
+                                                    <td>
                                                         <%= graduates[i].studentId %>
-
-                                                
-                                                </td>
-                                                <td>
-                                                    <%= graduates[i].lastName %>
-                                                </td>
-                                                <td>
-                                                    <%= graduates[i].firstName %>
-                                                </td>
-                                                <td>
-                                                    <%= graduates[i].program  %>
-                                                </td>
-                                                <div id="actionBtns">
-                                                    <td class="text-center">
-                                                        <a class='btn btn-info btn-xs' href="#">
-                                                            <span class="glyphicon glyphicon-edit"> </span> Edit
-                                                        </a>
-                                                        <a href="#" class="btn btn-danger btn-xs">
-                                                            <span class="glyphicon glyphicon-trash" id="deleteBtn" class="deleteClass"></span> Del</a>
-                                                        <a href="#" class="btn btn-success btn-xs">
-                                                            <i class="fa fa-paper-plane" aria-hidden="true"></i> Survey</a>
                                                     </td>
-                                                </div>
-                                             </div>
+                                                    <td>
+                                                        <%= graduates[i].lastName %>
+                                                    </td>
+                                                    <td>
+                                                        <%= graduates[i].firstName %>
+                                                    </td>
+                                                    <td>
+                                                        <%= graduates[i].age  %>
+                                                    </td>
+                                                    <td>
+                                                        <%= graduates[i].gender  %>
+                                                    </td>
+                                                    <td>
+                                                        <%= graduates[i].ethnicity  %>
+                                                    </td>
+                                                    <td>
+                                                        <%= graduates[i].generation  %>
+                                                    </td>
+                                                    <td>
+                                                        <%= graduates[i].email  %>
+                                                    </td>
+                                                    <td>
+                                                        <%= graduates[i].program  %>
+                                                    </td>
+                                                    <td>
+                                                        <%= graduates[i].degree  %>
+                                                    </td>
+                                                    <td>
+                                                        <%= graduates[i].gradYear  %>
+                                                    </td>
+                                                    <td>
+                                                        <%= graduates[i].gradTerm  %>
+                                                    </td>
+                                                    <td>
+                                                        <%= graduates[i].gpa  %>
+                                                    </td>
+                                                    <td>
+                                                        <% if(graduates[i].canContact == 1)   { %>
+                                                            Yes
+                                                            <% } else { %>
+                                                                No
+                                                                <%}%>
+                                                    </td>
+                                            </div>
                                             </tr>
                                             <%}%>
                                     </tbody>
                                     <tfoot>
                                         <tr>
+                                            <th>Action</th>
                                             <th>Student Id</th>
                                             <th>Last Name</th>
                                             <th>First Name</th>
+                                            <th>Age</th>
+                                            <th>Gender</th>
+                                            <th>Ethnicity</th>
+                                            <th>Generation</th>
+                                            <th>Email</th>
                                             <th>Program</th>
-                                            <th>Action</th>
+                                            <th>Degree</th>
+                                            <th>Grad Year</th>
+                                            <th>Grad Term</th>
+                                            <th>GPA </th>
+                                            <th>Contact</th>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -286,6 +348,77 @@
             <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
+        <!-- start edit modal -->
+        <div class="modal fade" id="editGradModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="exampleModalLabel" style="font-size: 24px;"><b>Edit a Graduate</b></h4>
+                    </div>
+                    <div class="modal-body">
+                        <form style="display: block;" action="/editGrad" method="post" id="editGradForm">
+                            <div class="form-group">
+                                <label for="recipient-name" class="form-control-label" style="font-size: 16px;">Student Id:</label>
+                                <input type="text" name="studentId" class="form-control" id="studentIdEdit">
+
+                                <label for="message-text" class="form-control-label" style="font-size: 16px;">First Name:</label>
+                                <input type="text" name="firstName" class="form-control" id="studentFirstNameEdit">
+
+                                <label for="message-text" class="form-control-label" style="font-size: 16px;">Last Name:</label>
+                                <input type="text" name="lastName" class="form-control" id="studentLastNameEdit">
+
+                                <label for="message-text" class="form-control-label" style="font-size: 16px;">Email:</label>
+                                <input type="text" name="email" class="form-control" id="studentEmailEdit">
+
+                                <label for="message-text" class="form-control-label" style="font-size: 16px;">Age:</label>
+                                <input type="text" name="age" class="form-control" id="studentAgeEdit">
+
+                                <label for="message-text" class="form-control-label" style="font-size: 16px;">Generation:</label>
+                                <input type="text" name="generation" class="form-control" id="studentGenEdit">
+
+                                <label for="message-text" class="form-control-label" style="font-size: 16px;">Ethnicity:</label>
+                                <input type="text" name="ethnicity" class="form-control" id="studentEthnicityEdit">
+
+                                <label for="message-text" class="form-control-label" style="font-size: 16px;">GPA:</label>
+                                <input type="text" name="gpa" class="form-control" id="studentGPAEdit">
+
+                                <label for="message-text" class="form-control-label" style="font-size: 16px;">Program:</label>
+                                <input type="text" name="program" class="form-control" id="studentProgramEdit">
+
+                                <label for="message-text" class="form-control-label" style="font-size: 16px;">Degree:</label>
+                                <input type="text" name="degree" class="form-control" id="studentDegreeEdit">
+
+                                <label for="message-text" class="form-control-label" style="font-size: 16px;">Grad Year:</label>
+                                <input type="text" name="gradYear" class="form-control" id="studentGradYearEdit">
+
+                                <label for="message-text" class="form-control-label" style="font-size: 16px;">Grad Term:</label>
+                                <input type="text" name="gradTerm" class="form-control" id="studentGradTermEdit">
+
+                                <label for="message-text" class="form-control-label" id="canContact" style="font-size: 16px;">Contact: </label>
+                                <label class="custom-control custom-radio">
+                                    <input id="radio1Edit" name="canContact" type="radio" class="custom-control-input">
+                                    <span class="custom-control-indicator"></span>
+                                    <span class="custom-control-description" style="font-size: 16px;">Yes</span>
+                                </label>
+                                <label class="custom-control custom-radio">
+                                    <input id="radio2Edit" name="canContact" type="radio" class="custom-control-input">
+                                    <span class="custom-control-indicator"></span>
+                                    <span class="custom-control-description" style="font-size: 16px;">No</span>
+                                </label>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary" id="editGradToDataBtn" form="editGradForm">Edit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end edit modal -->
         <footer class="main-footer">
             <div class="pull-right hidden-xs">
                 <b>Version</b> 2.3.8
@@ -494,6 +627,7 @@
         });
     });
     </script>
+    <!-- adding a graduate -->
     <script type="text/javascript">
     $(document).ready(function() {
         $("#addGradBtn").click(function() {
@@ -503,18 +637,6 @@
     });
     $(document).ready(function() {
         $("#addGradToDataBtn").click(function() {
-            var studentInfo = [];
-            studentInfo[0] = $("#studentId").val();
-            studentInfo[1] = $("#studentFirstName").val();
-            studentInfo[2] = $("#studentLastName").val();
-            studentInfo[3] = $("#studentEmail").val();
-            studentInfo[4] = $("#studentGPA").val();
-            studentInfo[5] = $("#studentProgram").val();
-            studentInfo[6] = $("#studentGradYear").val();
-            studentInfo[7] = $("#studentGradTerm").val();
-            studentInfo[8] = $("#canContact").val();
-
-            // addGrad(studentInfo);
             $("#addGradModal").modal('hide');
 
         });
@@ -528,9 +650,7 @@
 
             var gradId = table.row($(this).parents('tr')).data();
 
-            // deleteGrad(gradId[0]);
-
-            // console.log(row1[0]);
+            console.log("delete this id: " + gradId[1]);
 
             table
                 .row($(this).parents('tr'))
@@ -539,37 +659,103 @@
 
             $.ajax({
                 url: '/delete',
-                data: { gradId: gradId[0] },
+                data: {
+                    gradId: gradId[1]
+                },
                 type: 'POST',
             });
         });
 
     });
     </script>
-
     <script type="text/javascript">
-
     // for editing a current graduate
     $(document).ready(function() {
+        var table = $('#example1').DataTable();
+
         $('#example1 tbody').on('click', '.btn-info', function() {
             console.log("edit grad");
-            example1.row(this).edit();
-             buttons: [
-            { label: 'Cancel', fn: function () { this.close(); } },
-            'Edit'
-        ]
+            var gradInfo = table.row($(this).parents('tr')).data();
+
+            var id = gradInfo[1];
+            var lastName = gradInfo[2];
+            var firstName = gradInfo[3];
+            var age = gradInfo[4];
+            var gender = gradInfo[5];
+            var ethnicity = gradInfo[6];
+            var generation = gradInfo[7];
+            var email = gradInfo[8];
+            var program = gradInfo[9];
+            var degree = gradInfo[10];
+            var gradYr = gradInfo[11];
+            var gradTrm = gradInfo[12];
+            var gpa = gradInfo[13];
+            var contact = gradInfo[14];
+
+
+            console.log("grad info: " + firstName + " " + lastName + " " + id + " " + program + " " + contact);
+
+
+            $('#studentIdEdit').val(id);
+            $('#studentLastNameEdit').val(lastName);
+            $('#studentFirstNameEdit').val(firstName);
+            $('#studentProgramEdit').val(program);
+            $('#studentGenderEdit').val(gender);
+            $('#studentAgeEdit').val(age);
+            $('#studentEthnicityEdit').val(ethnicity);
+            $('#studentGenEdit').val(generation);
+            $('#studentEmailEdit').val(email);
+            $('#studentDegreeEdit').val(degree);
+            $('#studentGradYearEdit').val(gradYr);
+            $('#studentGradTermEdit').val(gradTrm);
+            $('#studentDegreeEdit').val(degree);
+            $('#studentGPAEdit').val(gpa);
+
+            if (contact == "Yes") {
+                $('#radio1Edit').prop("interdeterminate", true);
+
+            }
+
+            $("#editGradModal").modal('show');
+
 
 
         });
 
+
     });
-        
-
-
-
     </script>
-    <!--     searching for a graduate
- -->
+    <script type="text/javascript">
+    $(document).ready(function() {
+        $("#editGradToDataBtn").click(function() {
+            $("#editGradModal").modal('hide');
+
+        });
+    });
+    </script>
+    <!-- fix the header and footer  of table-->
+    <script type="text/javascript">
+    $(document).ready(function() {
+        var table = $('#example1').DataTable({
+            fixedHeader: {
+                header: true,
+                footer: true
+            }
+        });
+    });
+    </script>
+    <!-- Enable Scrolling -->
+    <script type="text/javascript">
+    var table;
+    $(document).ready(function() {
+        table = $('#example1').DataTable({
+            "scrollX": true,
+            "sScrollX": '100%',
+            // "sScrollXInner": "110%",
+            "bScrollCollapse": true,
+        });
+    });
+    </script>
     <script type="text/javascript">
     $(document).ready(function() {
         // Setup - add a text input to each footer cell

@@ -191,7 +191,9 @@ app.get('/graduates', function(req, res) {
 });
 
 
-app.post('/graduates', function(req, res) {
+app.post('/addGrad', function(req, res) {
+
+	console.dir(req.body);
 
 	var id = req.body.studentId;
 	var firstName = req.body.firstName;
@@ -200,7 +202,12 @@ app.post('/graduates', function(req, res) {
 	var GPA = req.body.gpa;
 	var program = req.body.program;
 	var gradYear = req.body.gradYear;
+
 	var gradTerm = req.body.gradTerm;
+	var ethnicity = req.body.ethnicity;
+	var age = req.body.age;
+	var degree = req.body.degree;
+	var generation = req.body.generation;
 	var contact = req.body.radio;
 
 	if(contact == "on") {
@@ -213,10 +220,12 @@ app.post('/graduates', function(req, res) {
 
 	pool.getConnection(function(error, connection) {
 		//query database
-        connection.query("INSERT INTO graduate (studentId, firstName, lastName, email, gpa, program, gradTerm, gradYear, canContact)" + 
+        connection.query("INSERT INTO graduate (studentId, firstName, lastName, email, gpa, program, gradTerm, gradYear, ethnicity, age, degree,"+
+        	"generation, canContact)" + 
         	"VALUES ('" + id + "'" + "," + "'" + firstName + "'" + "," +"'"+ lastName + "'" + "," + "'" + email + "'" +
-        	"," + "'" + GPA + "'" + "," + "'" + program + "'" + "," + "'" + gradYear + "'" + "," + "'" + gradTerm + "'" +
-        	"," + "'" + contact + "'" + ")", function(err, rows) {
+        	"," + "'" + GPA + "'" + "," + "'" + program + "'" + "," + "'" + gradTerm  + "'" + "," + "'" +  gradYear + "'" +
+        	"," + "'" + ethnicity + "'" + "," + "'" + age + "'" + "," + "'" + degree + "'" + "," + "'" + generation + "'" + "," +
+        	 "'" + contact + "'" + ")", function(err, rows) {
 
 			//error querying
 			if (err) {
@@ -226,6 +235,10 @@ app.post('/graduates', function(req, res) {
 			else {
 	
 				console.log("Graduate was added!");
+
+				req.session.user = {
+					'canContact': contact
+				}
 
 				//release connection to db
 				connection.release();
@@ -267,8 +280,11 @@ app.post('/delete', function(req, res) {
 
 	});
 
-	
+});
 
+app.post('/editGrad', function(req, res) {
+
+	console.dir("edit: " + req.body);
 
 });
 
