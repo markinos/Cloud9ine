@@ -14,7 +14,7 @@
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
     <!-- Theme style -->
-    <link rel="stylesheet" href="css/AdminLTE.min.css">
+    <link rel="stylesheet" href="css/AdminLTE.css">
     <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="css/skins/_all-skins.min.css">
@@ -157,11 +157,11 @@
                         <!-- small box -->
                         <div class="small-box bg-green">
                             <div class="inner">
-                                <h3><%= totalFaculty %></h3>
-                                <p>Faculty Registered</p>
+                                <h3><%= gradsWithJobs %></h3>
+                                <p>Have Jobs</p>
                             </div>
                             <div class="icon">
-                                <i class="ion ion-person-add"></i>
+                                <i class="ion ion-wrench"></i>
                             </div>
                             <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
                         </div>
@@ -171,8 +171,53 @@
                         <!-- small box -->
                         <div class="small-box bg-yellow">
                             <div class="inner">
+                                <h3><%= jobPlacementRate %><sup style="font-size: 20px">%</sup></h3>
+                                <p>Job Placement</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-pie-graph"></i>
+                            </div>
+                            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <!-- ./col -->
+                    <div class="col-lg-3 col-xs-6">
+                        <!-- small box -->
+                        <div class="small-box bg-red">
+                            <div class="inner">
+                                <h3><%= gradsWithInternships %></h3>
+                                <p>Had Internships</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-ios-printer"></i>
+                            </div>
+                            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <!-- ./col -->
+                </div>
+                <!-- /.row -->
+                <div class="row">
+                    <!-- ./col -->
+                    <div class="col-lg-3 col-xs-6">
+                        <!-- small box -->
+                        <div class="small-box bg-maroon">
+                            <div class="inner">
+                                <h3><%= totalFaculty %></h3>
+                                <p>Faculty Registered</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-person-add"></i>
+                            </div>
+                            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-xs-6">
+                        <!-- small box -->
+                        <div class="small-box bg-purple">
+                            <div class="inner">
                                 <h3><%= totalSurveys %></h3>
-                                <p>Suveys Sent</p>
+                                <p>Surveys Sent</p>
                             </div>
                             <div class="icon">
                                 <i class="ion ion-paper-airplane"></i>
@@ -183,26 +228,40 @@
                     <!-- ./col -->
                     <div class="col-lg-3 col-xs-6">
                         <!-- small box -->
-                        <div class="small-box bg-red">
+                        <div class="small-box bg-teal">
                             <div class="inner">
                                 <h3><%= surveysCompletedPercent %><sup style="font-size: 20px">%</sup></h3>
                                 <p>Surveys Completed</p>
                             </div>
                             <div class="icon">
-                                <i class="ion ion-pie-graph"></i>
+                                <i class="ion ion-email"></i>
                             </div>
                             <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
                     <!-- ./col -->
+                    <div class="col-lg-3 col-xs-6">
+                        <!-- small box -->
+                        <div class="small-box bg-gray">
+                            <div class="inner">
+                                <h3><%= gradsThatInternedAndFoundAJob %></h3>
+                                <p>Interns Found Jobs</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-clipboard"></i>
+                            </div>
+                            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <!-- ./col -->
+
                 </div>
-                <!-- /.row -->
                 <div class="row">
                     <div class="col-md-6">
                         <!-- DONUT CHART -->
                         <div class="box box-danger">
                             <div class="box-header with-border">
-                                <h3 class="box-title">Institute of Technology Degrees <small>2015</small></h3>
+                                <h3 class="box-title">Institute of Technology Degrees <small>2016</small></h3>
                                 <div class="box-tools pull-right">
                                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                                     </button>
@@ -239,7 +298,7 @@
                         <!-- LINE CHART -->
                         <div class="box box-info">
                             <div class="box-header with-border">
-                                <h3 class="box-title">Undergraduate Degrees Granted Per Year <small>2001-2015<small></h3>
+                                <h3 class="box-title">Undergraduate Degrees Granted Per Year <small>2001-2016<small></h3>
                                 <div class="box-tools pull-right">
                                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                                     </button>
@@ -487,17 +546,33 @@
         var areaChart = new Chart(areaChartCanvas);
 
         var areaChartData = {
-            labels: ["2009", "2010", "2011", "2012", "2013", "2014", "2015"],
+            labels: ["01", "02", "03", "04", "05", "06", "07", "08",
+                    "09", "10", "11", "12", "13", "14", "15", "16"],
             datasets: [
             {
-                label: "Undergraduate Degrees Granted",
+                label: "Graduate Degrees Granted",
                 fillColor: "rgba(60,141,188,0.9)",
                 strokeColor: "rgba(60,141,188,0.8)",
                 pointColor: "#3b8bba",
                 pointStrokeColor: "rgba(60,141,188,1)",
                 pointHighlightFill: "#fff",
                 pointHighlightStroke: "rgba(60,141,188,1)",
-                data: [30, 35, 31, 46, 60, 55, 61]
+                data: [<%= gradDegreesGranted01 %>, 
+                       <%= gradDegreesGranted02 %>, 
+                       <%= gradDegreesGranted03 %>,
+                       <%= gradDegreesGranted04 %>,
+                       <%= gradDegreesGranted05 %>,
+                       <%= gradDegreesGranted06 %>,
+                       <%= gradDegreesGranted07 %>,
+                       <%= gradDegreesGranted08 %>,
+                       <%= gradDegreesGranted09 %>,
+                       <%= gradDegreesGranted10 %>,
+                       <%= gradDegreesGranted11 %>,
+                       <%= gradDegreesGranted12 %>,
+                       <%= gradDegreesGranted13 %>,
+                       <%= gradDegreesGranted14 %>,
+                       <%= gradDegreesGranted15 %>,
+                       <%= gradDegreesGranted16 %>]
             }]
         };
 
@@ -548,7 +623,7 @@
 
         var underGradLineChartData = {
             labels: ["01", "02", "03", "04", "05", "06", "07", "08",
-                    "09", "10", "11", "12", "13", "14", "15"],
+                    "09", "10", "11", "12", "13", "14", "15", "16"],
             datasets: [{
                 label: "Undergraduate Degrees Granted",
                 fillColor: "#00c0ef",
@@ -557,7 +632,23 @@
                 pointStrokeColor: "#00c0ef",
                 pointHighlightFill: "#fff",
                 pointHighlightStroke: "#00c0ef",
-                data: [171, 180, 175, 190, 200, 203, 222]
+                data: [<%= undergradDegreesGranted01 %>, 
+                       <%= undergradDegreesGranted02 %>, 
+                       <%= undergradDegreesGranted03 %>,
+                       <%= undergradDegreesGranted04 %>,
+                       <%= undergradDegreesGranted05 %>,
+                       <%= undergradDegreesGranted06 %>,
+                       <%= undergradDegreesGranted07 %>,
+                       <%= undergradDegreesGranted08 %>,
+                       <%= undergradDegreesGranted09 %>,
+                       <%= undergradDegreesGranted10 %>,
+                       <%= undergradDegreesGranted11 %>,
+                       <%= undergradDegreesGranted12 %>,
+                       <%= undergradDegreesGranted13 %>,
+                       <%= undergradDegreesGranted14 %>,
+                       <%= undergradDegreesGranted15 %>,
+                       <%= undergradDegreesGranted16 %>]
+                
             }]
         };
 

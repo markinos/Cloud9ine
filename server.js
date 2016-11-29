@@ -1,3 +1,5 @@
+'use strict';
+
 //node modules
 const express = require('express');
 const app = express();
@@ -275,8 +277,13 @@ app.get('/report', function(req, res) {
            
            //perform asyncronous queries one by one 
            async.waterfall([    
-                
+                //getTotalGrads must return a callback function
+                //so that async will know how to call the next function
                 getTotalGrads(connection),
+                getNumberOfGradsWithJobs,
+                getJobPlacementRate,
+                getNumberOfGradsWithInternships,
+                getGradsThatInternedAndFoundAJob,
                 getTotalFaculty,
                 getTotalSurveys,
                 getSurveysCompletedPercent,
@@ -286,7 +293,38 @@ app.get('/report', function(req, res) {
                 getTotalGradsWithMSCSS,
                 getTotalGradsWithBSEE,
                 getTotalGradsWithBACSS,
-                getUndergradDegreesIn01
+                getUndergradDegreesIn01,
+                getUndergradDegreesIn02,
+                getUndergradDegreesIn03,
+                getUndergradDegreesIn04,
+                getUndergradDegreesIn05,
+                getUndergradDegreesIn06,
+                getUndergradDegreesIn07,
+                getUndergradDegreesIn08,
+                getUndergradDegreesIn09,
+                getUndergradDegreesIn10,
+                getUndergradDegreesIn11,
+                getUndergradDegreesIn12,
+                getUndergradDegreesIn13,
+                getUndergradDegreesIn14,
+                getUndergradDegreesIn15,
+                getUndergradDegreesIn16,
+                getGradDegreesIn01,
+                getGradDegreesIn02,
+                getGradDegreesIn03,
+                getGradDegreesIn04,
+                getGradDegreesIn05,
+                getGradDegreesIn06,
+                getGradDegreesIn07,
+                getGradDegreesIn08,
+                getGradDegreesIn09,
+                getGradDegreesIn10,
+                getGradDegreesIn11,
+                getGradDegreesIn12,
+                getGradDegreesIn13,
+                getGradDegreesIn14,
+                getGradDegreesIn15,
+                getGradDegreesIn16
            
             ], function(err, connection, results) {
                 if (err) {
@@ -319,6 +357,7 @@ app.get('/report', function(req, res) {
  */
 function getTotalGrads(connection) {
 
+    //must return callback function in order for async to work properly
     return function(callback) {
 
         connection.query("SELECT COUNT(*) AS total FROM graduate", function(err, rows) {
@@ -337,7 +376,106 @@ function getTotalGrads(connection) {
             //calls getTotalFaculty
             callback(null, connection, results);
         });
-    }   
+    } 
+}
+
+/**
+ * Get the job placement rate for all graduates at the institute of technoogy
+ *
+ * @param connection is the mysql connection object for querying
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null error, connection, and results of query
+ */
+function getJobPlacementRate(connection, results, callback) {
+    let query = "SELECT ROUND(COUNT(DISTINCT graduate.id, firstName, lastName) / " +
+                    "(SELECT COUNT(*) FROM graduate) * 100) AS jobPlacementRate " +
+                "FROM graduate " + 
+                "JOIN graduate_has_job ON graduate_has_job.graduateId = graduate.id " +
+                "JOIN job ON job.id = graduate_has_job.employmentId " +
+                "WHERE jobProgram IN ('CSS', 'EE', 'CES', 'tech other') " +
+                "AND startDate >= gradYear";
+
+    connection.query(query, (err, rows) => {
+        if (err) {
+            callback(err);
+            return;
+        }
+
+        //console.log(rows[0].jobPlacementRate);
+        results['jobPlacementRate'] = rows[0].jobPlacementRate;
+        callback(null, connection, results);
+    });
+
+}
+
+function getNumberOfGradsWithJobs(connection, results, callback) {
+    let query = "SELECT COUNT(DISTINCT graduate.id) as gradsWithJobs FROM graduate " +
+                "JOIN graduate_has_job ON graduate_has_job.graduateId = graduate.id " +
+                "JOIN job ON job.id = graduate_has_job.employmentId " +
+                "WHERE jobProgram IN ('CSS', 'EE', 'CES', 'tech other') " +
+                "AND startDate >= gradYear; "
+
+    connection.query(query, (err, rows) => {
+        if (err) {
+            callback(err);
+            return;
+        }
+
+        //console.log(rows[0].gradsWithJobs);
+        results['gradsWithJobs'] = rows[0].gradsWithJobs;
+        callback(null, connection, results);
+    });
+}
+
+function getNumberOfGradsWithInternships(connection, results, callback) {
+    let query = "SELECT COUNT(DISTINCT graduate.id) AS gradsWithInternships FROM graduate " +
+                "JOIN graduate_has_job ON graduate_has_job.graduateId = graduate.id " +
+                "JOIN job ON job.id = graduate_has_job.employmentId " +
+                "WHERE employmentType = 'Intern'";
+
+    connection.query(query, (err, rows) => {
+        if (err) {
+            callback(err);
+            return;
+        }
+
+        //console.log(rows[0].gradsWithInternships);
+        results['gradsWithInternships'] = rows[0].gradsWithInternships;
+        callback(null, connection, results);
+    });
+}
+
+function getGradsThatInternedAndFoundAJob(connection, results, callback) {
+    let query = "SELECT COUNT(DISTINCT graduate.id) AS gradsThatInternedAndFoundAJob FROM graduate " +
+                "JOIN graduate_has_job ON graduate_has_job.graduateId = graduate.id " +
+                "JOIN job ON job.id = graduate_has_job.employmentId " +
+                "WHERE jobProgram IN ('CSS', 'EE', 'CES', 'tech other') " +
+                "AND graduate.id IN (SELECT graduate.id FROM graduate " +
+                    "JOIN graduate_has_job ON graduate_has_job.graduateId = graduate.id " +
+                    "JOIN job ON job.id = graduate_has_job.employmentId " +
+                    "WHERE employmentType = 'Intern') " +
+                "AND startDate >= gradYear " +
+                "AND employmentType != 'Intern'";
+
+    connection.query(query, (err, rows) => {
+        if (err) {
+            callback(err);
+            return;
+        }
+
+        console.log(rows[0].gradsThatInternedAndFoundAJob);
+
+        connection.query(query, (err, rows) => {
+            if (err) {
+                callback(err);
+                return;
+            }
+
+            results['gradsThatInternedAndFoundAJob'] = rows[0].gradsThatInternedAndFoundAJob;
+            callback(null, connection, results);
+        });
+    });
 }
 
 /**
@@ -356,7 +494,7 @@ function getTotalFaculty(connection, results, callback) {
             return;
         }
 
-        console.log(rows[0].total);
+        //console.log(rows[0].total);
         results['totalFaculty'] = rows[0].total;
         //calls getTotalSurveys
         callback(null, connection, results);
@@ -580,7 +718,7 @@ function getUndergradDegreesIn01(connection, results, callback) {
             
         }
 
-        results['undergradsIn01'] = rows[0].total;
+        results['undergradDegreesGranted01'] = rows[0].total;
         callback(null, connection, results);
     });
 }
@@ -604,13 +742,13 @@ function getUndergradDegreesIn02(connection, results, callback) {
             callback(err);
         }
 
-        results['undergradsIn02'] = rows[0].total;
+        results['undergradDegreesGranted02'] = rows[0].total;
         callback(null, connection, results);
     });
 }
 
 /**
- * Get the total number of undergraduate degrees granted in 2002
+ * Get the total number of undergraduate degrees granted in 2003
  *
  * @param connection is the mysql connection object for querying
  * @return callback function to be executed. On error: execute
@@ -628,10 +766,693 @@ function getUndergradDegreesIn03(connection, results, callback) {
             callback(err);
         }
 
-        results['undergradsIn03'] = rows[0].total;
+        results['undergradDegreesGranted03'] = rows[0].total;
         callback(null, connection, results);
     });
 }
+
+/**
+ * Get the total number of undergraduate degrees granted in 2004
+ *
+ * @param connection is the mysql connection object for querying
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null, connection, and results of query
+ */
+function getUndergradDegreesIn04(connection, results, callback) {
+    var query = "SELECT COUNT(*) AS total FROM graduate " +
+                "WHERE degree = 'BA' OR degree = 'BS' " +
+                "AND gradYear = 2004";
+
+    connection.query(query, (err, rows) => {
+        if (err) {
+            //console.log(err);
+            callback(err);
+        }
+
+        results['undergradDegreesGranted04'] = rows[0].total;
+        callback(null, connection, results);
+    });
+}
+
+/**
+ * Get the total number of undergraduate degrees granted in 2005
+ *
+ * @param connection is the mysql connection object for querying
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null, connection, and results of query
+ */
+function getUndergradDegreesIn05(connection, results, callback) {
+    var query = "SELECT COUNT(*) AS total FROM graduate " +
+                "WHERE degree = 'BA' OR degree = 'BS' " +
+                "AND gradYear = 2005";
+
+    connection.query(query, (err, rows) => {
+        if (err) {
+            //console.log(err);
+            callback(err);
+        }
+
+        results['undergradDegreesGranted05'] = rows[0].total;
+        callback(null, connection, results);
+    });
+}
+
+/**
+ * Get the total number of undergraduate degrees granted in 2006
+ *
+ * @param connection is the mysql connection object for querying
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null, connection, and results of query
+ */
+function getUndergradDegreesIn06(connection, results, callback) {
+    var query = "SELECT COUNT(*) AS total FROM graduate " +
+                "WHERE degree = 'BA' OR degree = 'BS' " +
+                "AND gradYear = 2006";
+
+    connection.query(query, (err, rows) => {
+        if (err) {
+            //console.log(err);
+            callback(err);
+        }
+
+        results['undergradDegreesGranted06'] = rows[0].total;
+        callback(null, connection, results);
+    });
+}
+
+/**
+ * Get the total number of undergraduate degrees granted in 2007
+ *
+ * @param connection is the mysql connection object for querying
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null, connection, and results of query
+ */
+function getUndergradDegreesIn07(connection, results, callback) {
+    var query = "SELECT COUNT(*) AS total FROM graduate " +
+                "WHERE degree = 'BA' OR degree = 'BS' " +
+                "AND gradYear = 2007";
+
+    connection.query(query, (err, rows) => {
+        if (err) {
+            //console.log(err);
+            callback(err);
+        }
+
+        results['undergradDegreesGranted07'] = rows[0].total;
+        callback(null, connection, results);
+    });
+}
+
+/**
+ * Get the total number of undergraduate degrees granted in 2008
+ *
+ * @param connection is the mysql connection object for querying
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null, connection, and results of query
+ */
+function getUndergradDegreesIn08(connection, results, callback) {
+    var query = "SELECT COUNT(*) AS total FROM graduate " +
+                "WHERE degree = 'BA' OR degree = 'BS' " +
+                "AND gradYear = 2008";
+
+    connection.query(query, (err, rows) => {
+        if (err) {
+            //console.log(err);
+            callback(err);
+        }
+
+        results['undergradDegreesGranted08'] = rows[0].total;
+        callback(null, connection, results);
+    });
+}
+
+/**
+ * Get the total number of undergraduate degrees granted in 2009
+ *
+ * @param connection is the mysql connection object for querying
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null, connection, and results of query
+ */
+function getUndergradDegreesIn09(connection, results, callback) {
+    var query = "SELECT COUNT(*) AS total FROM graduate " +
+                "WHERE degree = 'BA' OR degree = 'BS' " +
+                "AND gradYear = 2009";
+
+    connection.query(query, (err, rows) => {
+        if (err) {
+            //console.log(err);
+            callback(err);
+        }
+
+        results['undergradDegreesGranted09'] = rows[0].total;
+        callback(null, connection, results);
+    });
+}
+
+/**
+ * Get the total number of undergraduate degrees granted in 2010
+ *
+ * @param connection is the mysql connection object for querying
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null, connection, and results of query
+ */
+function getUndergradDegreesIn10(connection, results, callback) {
+    var query = "SELECT COUNT(*) AS total FROM graduate " +
+                "WHERE degree = 'BA' OR degree = 'BS' " +
+                "AND gradYear = 2010";
+
+    connection.query(query, (err, rows) => {
+        if (err) {
+            //console.log(err);
+            callback(err);
+        }
+
+        results['undergradDegreesGranted10'] = rows[0].total;
+        callback(null, connection, results);
+    });
+}
+
+/**
+ * Get the total number of undergraduate degrees granted in 2011
+ *
+ * @param connection is the mysql connection object for querying
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null, connection, and results of query
+ */
+function getUndergradDegreesIn11(connection, results, callback) {
+    var query = "SELECT COUNT(*) AS total FROM graduate " +
+                "WHERE degree = 'BA' OR degree = 'BS' " +
+                "AND gradYear = 2011";
+
+    connection.query(query, (err, rows) => {
+        if (err) {
+            //console.log(err);
+            callback(err);
+        }
+
+        results['undergradDegreesGranted11'] = rows[0].total;
+        callback(null, connection, results);
+    });
+}
+
+/**
+ * Get the total number of undergraduate degrees granted in 2012
+ *
+ * @param connection is the mysql connection object for querying
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null, connection, and results of query
+ */
+function getUndergradDegreesIn12(connection, results, callback) {
+    var query = "SELECT COUNT(*) AS total FROM graduate " +
+                "WHERE degree = 'BA' OR degree = 'BS' " +
+                "AND gradYear = 2012";
+
+    connection.query(query, (err, rows) => {
+        if (err) {
+            //console.log(err);
+            callback(err);
+        }
+
+        results['undergradDegreesGranted12'] = rows[0].total;
+        callback(null, connection, results);
+    });
+}
+
+/**
+ * Get the total number of undergraduate degrees granted in 2013
+ *
+ * @param connection is the mysql connection object for querying
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null, connection, and results of query
+ */
+function getUndergradDegreesIn13(connection, results, callback) {
+    var query = "SELECT COUNT(*) AS total FROM graduate " +
+                "WHERE degree = 'BA' OR degree = 'BS' " +
+                "AND gradYear = 2013";
+
+    connection.query(query, (err, rows) => {
+        if (err) {
+            //console.log(err);
+            callback(err);
+        }
+
+        results['undergradDegreesGranted13'] = rows[0].total;
+        callback(null, connection, results);
+    });
+}
+
+/**
+ * Get the total number of undergraduate degrees granted in 2014
+ *
+ * @param connection is the mysql connection object for querying
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null, connection, and results of query
+ */
+function getUndergradDegreesIn14(connection, results, callback) {
+    var query = "SELECT COUNT(*) AS total FROM graduate " +
+                "WHERE degree = 'BA' OR degree = 'BS' " +
+                "AND gradYear = 2014";
+
+    connection.query(query, (err, rows) => {
+        if (err) {
+            //console.log(err);
+            callback(err);
+        }
+
+        results['undergradDegreesGranted14'] = rows[0].total;
+        callback(null, connection, results);
+    });
+}
+
+/**
+ * Get the total number of undergraduate degrees granted in 2015
+ *
+ * @param connection is the mysql connection object for querying
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null, connection, and results of query
+ */
+function getUndergradDegreesIn15(connection, results, callback) {
+    var query = "SELECT COUNT(*) AS total FROM graduate " +
+                "WHERE degree = 'BA' OR degree = 'BS' " +
+                "AND gradYear = 2015";
+
+    connection.query(query, (err, rows) => {
+        if (err) {
+            //console.log(err);
+            callback(err);
+        }
+
+        results['undergradDegreesGranted15'] = rows[0].total;
+        callback(null, connection, results);
+    });
+}
+
+/**
+ * Get the total number of undergraduate degrees granted in 2016
+ *
+ * @param connection is the mysql connection object for querying
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null, connection, and results of query
+ */
+function getUndergradDegreesIn16(connection, results, callback) {
+    var query = "SELECT COUNT(*) AS total FROM graduate " +
+                "WHERE degree = 'BA' OR degree = 'BS' " +
+                "AND gradYear = 2016";
+
+    connection.query(query, (err, rows) => {
+        if (err) {
+            //console.log(err);
+            callback(err);
+        }
+
+        results['undergradDegreesGranted16'] = rows[0].total;
+        callback(null, connection, results);
+    });
+}
+
+/**
+ * Get the total number of graduate degrees granted in 2001
+ *
+ * @param connection is the mysql connection object for querying
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null, connection, and results of query
+ */
+function getGradDegreesIn01(connection, results, callback) {
+    var query = "SELECT COUNT(*) AS total FROM graduate " +
+                "WHERE degree = 'MS' AND gradYear = 2001";
+
+    connection.query(query, (err, rows) => {
+        if (err) {
+            //console.log(err);
+            callback(err);
+            
+        }
+
+        results['gradDegreesGranted01'] = rows[0].total;
+        callback(null, connection, results);
+    });
+}
+
+/**
+ * Get the total number of graduate degrees granted in 2002
+ *
+ * @param connection is the mysql connection object for querying
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null, connection, and results of query
+ */
+function getGradDegreesIn02(connection, results, callback) {
+    var query = "SELECT COUNT(*) AS total FROM graduate " +
+                "WHERE degree = 'MS' AND gradYear = 2002";
+
+    connection.query(query, (err, rows) => {
+        if (err) {
+            //console.log(err);
+            callback(err);
+        }
+
+        results['gradDegreesGranted02'] = rows[0].total;
+        callback(null, connection, results);
+    });
+}
+
+/**
+ * Get the total number of graduate degrees granted in 2003
+ *
+ * @param connection is the mysql connection object for querying
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null, connection, and results of query
+ */
+function getGradDegreesIn03(connection, results, callback) {
+    var query = "SELECT COUNT(*) AS total FROM graduate " +
+                "WHERE degree = 'MS' AND gradYear = 2003";
+
+    connection.query(query, (err, rows) => {
+        if (err) {
+            //console.log(err);
+            callback(err);
+        }
+
+        results['gradDegreesGranted03'] = rows[0].total;
+        callback(null, connection, results);
+    });
+}
+
+/**
+ * Get the total number of graduate degrees granted in 2004
+ *
+ * @param connection is the mysql connection object for querying
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null, connection, and results of query
+ */
+function getGradDegreesIn04(connection, results, callback) {
+    var query = "SELECT COUNT(*) AS total FROM graduate " +
+                "WHERE degree = 'MS' AND gradYear = 2004";
+
+    connection.query(query, (err, rows) => {
+        if (err) {
+            //console.log(err);
+            callback(err);
+        }
+
+        results['gradDegreesGranted04'] = rows[0].total;
+        callback(null, connection, results);
+    });
+}
+
+/**
+ * Get the total number of graduate degrees granted in 2005
+ *
+ * @param connection is the mysql connection object for querying
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null, connection, and results of query
+ */
+function getGradDegreesIn05(connection, results, callback) {
+    var query = "SELECT COUNT(*) AS total FROM graduate " +
+                "WHERE degree = 'MS' AND gradYear = 2005";
+
+    connection.query(query, (err, rows) => {
+        if (err) {
+            //console.log(err);
+            callback(err);
+        }
+
+        results['gradDegreesGranted05'] = rows[0].total;
+        callback(null, connection, results);
+    });
+}
+
+/**
+ * Get the total number of graduate degrees granted in 2006
+ *
+ * @param connection is the mysql connection object for querying
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null, connection, and results of query
+ */
+function getGradDegreesIn06(connection, results, callback) {
+    var query = "SELECT COUNT(*) AS total FROM graduate " +
+                "WHERE degree = 'MS' AND gradYear = 2006";
+
+    connection.query(query, (err, rows) => {
+        if (err) {
+            //console.log(err);
+            callback(err);
+        }
+
+        results['gradDegreesGranted06'] = rows[0].total;
+        callback(null, connection, results);
+    });
+}
+
+/**
+ * Get the total number of graduate degrees granted in 2007
+ *
+ * @param connection is the mysql connection object for querying
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null, connection, and results of query
+ */
+function getGradDegreesIn07(connection, results, callback) {
+    var query = "SELECT COUNT(*) AS total FROM graduate " +
+                "WHERE degree = 'BA' OR degree = 'BS' " +
+                "AND gradYear = 2007";
+
+    connection.query(query, (err, rows) => {
+        if (err) {
+            //console.log(err);
+            callback(err);
+        }
+
+        results['gradDegreesGranted07'] = rows[0].total;
+        callback(null, connection, results);
+    });
+}
+
+/**
+ * Get the total number of graduate degrees granted in 2008
+ *
+ * @param connection is the mysql connection object for querying
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null, connection, and results of query
+ */
+function getGradDegreesIn08(connection, results, callback) {
+    var query = "SELECT COUNT(*) AS total FROM graduate " +
+                "WHERE degree = 'MS' AND gradYear = 2008";
+
+    connection.query(query, (err, rows) => {
+        if (err) {
+            //console.log(err);
+            callback(err);
+        }
+
+        results['gradDegreesGranted08'] = rows[0].total;
+        callback(null, connection, results);
+    });
+}
+
+/**
+ * Get the total number of graduate degrees granted in 2009
+ *
+ * @param connection is the mysql connection object for querying
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null, connection, and results of query
+ */
+function getGradDegreesIn09(connection, results, callback) {
+    var query = "SELECT COUNT(*) AS total FROM graduate " +
+                "WHERE degree = 'MS' AND gradYear = 2009";
+
+    connection.query(query, (err, rows) => {
+        if (err) {
+            //console.log(err);
+            callback(err);
+        }
+
+        results['gradDegreesGranted09'] = rows[0].total;
+        callback(null, connection, results);
+    });
+}
+
+/**
+ * Get the total number of graduate degrees granted in 2010
+ *
+ * @param connection is the mysql connection object for querying
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null, connection, and results of query
+ */
+function getGradDegreesIn10(connection, results, callback) {
+    var query = "SELECT COUNT(*) AS total FROM graduate " +
+                "WHERE degree = 'MS' AND gradYear = 2010";
+
+    connection.query(query, (err, rows) => {
+        if (err) {
+            //console.log(err);
+            callback(err);
+        }
+
+        results['gradDegreesGranted10'] = rows[0].total;
+        callback(null, connection, results);
+    });
+}
+
+/**
+ * Get the total number of graduate degrees granted in 2011
+ *
+ * @param connection is the mysql connection object for querying
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null, connection, and results of query
+ */
+function getGradDegreesIn11(connection, results, callback) {
+    var query = "SELECT COUNT(*) AS total FROM graduate " +
+                "WHERE degree = 'MS' AND gradYear = 2011";
+
+    connection.query(query, (err, rows) => {
+        if (err) {
+            //console.log(err);
+            callback(err);
+        }
+
+        results['gradDegreesGranted11'] = rows[0].total;
+        callback(null, connection, results);
+    });
+}
+
+/**
+ * Get the total number of graduate degrees granted in 2012
+ *
+ * @param connection is the mysql connection object for querying
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null, connection, and results of query
+ */
+function getGradDegreesIn12(connection, results, callback) {
+    var query = "SELECT COUNT(*) AS total FROM graduate " +
+                "WHERE degree = 'MS' AND gradYear = 2012";
+
+    connection.query(query, (err, rows) => {
+        if (err) {
+            //console.log(err);
+            callback(err);
+        }
+
+        results['gradDegreesGranted12'] = rows[0].total;
+        callback(null, connection, results);
+    });
+}
+
+/**
+ * Get the total number of graduate degrees granted in 2013
+ *
+ * @param connection is the mysql connection object for querying
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null, connection, and results of query
+ */
+function getGradDegreesIn13(connection, results, callback) {
+    var query = "SELECT COUNT(*) AS total FROM graduate " +
+                "WHERE degree = 'MS' AND gradYear = 2013";
+
+    connection.query(query, (err, rows) => {
+        if (err) {
+            //console.log(err);
+            callback(err);
+        }
+
+        results['gradDegreesGranted13'] = rows[0].total;
+        callback(null, connection, results);
+    });
+}
+
+/**
+ * Get the total number of graduate degrees granted in 2014
+ *
+ * @param connection is the mysql connection object for querying
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null, connection, and results of query
+ */
+function getGradDegreesIn14(connection, results, callback) {
+    var query = "SELECT COUNT(*) AS total FROM graduate " +
+                "WHERE degree = 'MS' AND gradYear = 2014";
+
+    connection.query(query, (err, rows) => {
+        if (err) {
+            //console.log(err);
+            callback(err);
+        }
+
+        results['gradDegreesGranted14'] = rows[0].total;
+        callback(null, connection, results);
+    });
+}
+
+/**
+ * Get the total number of graduate degrees granted in 2015
+ *
+ * @param connection is the mysql connection object for querying
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null, connection, and results of query
+ */
+function getGradDegreesIn15(connection, results, callback) {
+    var query = "SELECT COUNT(*) AS total FROM graduate " +
+                "WHERE degree = 'MS' AND gradYear = 2015";
+
+    connection.query(query, (err, rows) => {
+        if (err) {
+            //console.log(err);
+            callback(err);
+        }
+
+        results['gradDegreesGranted15'] = rows[0].total;
+        callback(null, connection, results);
+    });
+}
+
+/**
+ * Get the total number of graduate degrees granted in 2016
+ *
+ * @param connection is the mysql connection object for querying
+ * @return callback function to be executed. On error: execute
+ *         callback with error passed in. On success: execute 
+ *         callback with null, connection, and results of query
+ */
+function getGradDegreesIn16(connection, results, callback) {
+    var query = "SELECT COUNT(*) AS total FROM graduate " +
+                "WHERE degree = 'MS' AND gradYear = 2016";
+
+    connection.query(query, (err, rows) => {
+        if (err) {
+            //console.log(err);
+            callback(err);
+        }
+
+        results['gradDegreesGranted16'] = rows[0].total;
+        callback(null, connection, results);
+    });
+}
+
 
 
 var maxYear = 2016;
