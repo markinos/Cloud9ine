@@ -14,5 +14,7 @@ feel free to visit grad-track.herokuapp.com
 
 Run Test:
 
-1)npm test
+1)type into prompt "npm test"
+2)if fails, and error reads "mocha is not recognized"
+  type into prompt "npm install mocha"
 

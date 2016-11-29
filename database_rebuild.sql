@@ -27,7 +27,9 @@ CREATE TABLE IF NOT EXISTS `heroku_50a8c0371a0e6f5`.`Faculty` (
   `email` VARCHAR(255) NULL,
   `password` VARCHAR(255) NULL,
   `status` ENUM('Admin', 'Staff') NULL,
-  `permissions` ENUM('Access', 'Update', 'Generate') NULL,
+  `permissionAccess` TINYINT(1) NULL,
+  `permissionUpdate` TINYINT(1) NULL,
+  `permissionReport` TINYINT(1) NULL,
   `firstName` VARCHAR(255) NULL,
   `lastName` VARCHAR(255) NULL,
   PRIMARY KEY (`id`));
@@ -75,6 +77,7 @@ CREATE TABLE IF NOT EXISTS `heroku_50a8c0371a0e6f5`.`Graduate` (
 DROP TABLE IF EXISTS `heroku_50a8c0371a0e6f5`.`Job`;
 CREATE TABLE IF NOT EXISTS `heroku_50a8c0371a0e6f5`.`Job` (
   `id` INT NOT NULL AUTO_INCREMENT,
+  `jobCode` INT NULL,
   `employmentType` ENUM('Intern', 'Part Time', 'Full Time', 'Residency') NULL,
   `employerName` VARCHAR(255) NULL,
   `employerType` VARCHAR(255) NULL,
