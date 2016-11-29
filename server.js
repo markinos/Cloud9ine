@@ -224,6 +224,7 @@ app.post('/addGrad', function(req, res) {
     var id = req.body.studentId;
     var firstName = req.body.firstName;
     var lastName = req.body.lastName;
+    var UWemail = req.body.UWemail;
     var email = req.body.email;
     var GPA = req.body.gpa;
     var gender = req.body.gender;
@@ -243,14 +244,18 @@ app.post('/addGrad', function(req, res) {
         contact = 0;
     }
 
+      UWemail = UWemail + "@uw.edu";
+
+    console.log(UWemail);
+
     /** This will insert a new graduate into the system. **/
 
     pool.getConnection(function(error, connection) {
         //query database
-        connection.query("INSERT INTO graduate (studentId, firstName, lastName, gender, UWemail, gpa, program, gradTerm, gradYear,"+
+        connection.query("INSERT INTO graduate (studentId, firstName, lastName, gender, UWemail, email, gpa, program, gradTerm, gradYear,"+
             " ethnicity, age, degree, generation, canContact)" +
-            "VALUES ('" + id + "'" + "," + "'" + firstName + "'" + "," + "'" + lastName + "'" + "," + "'" + gender + "'" + "," + "'" + email + "'" +
-            "," + "'" + GPA + "'" + "," + "'" + program + "'" + "," + "'" + gradTerm + "'" + "," + "'" + gradYear + "'" +
+            "VALUES ('" + id + "'" + "," + "'" + firstName + "'" + "," + "'" + lastName + "'" + "," + "'" + gender + "'" + "," + "'" + UWemail + "'" +
+            "," + "'" + email + "'" + "," + "'" + GPA + "'" + "," + "'" + program + "'" + "," + "'" + gradTerm + "'" + "," + "'" + gradYear + "'" +
             "," + "'" + ethnicity + "'" + "," + "'" + age + "'" + "," + "'" + degree + "'" + "," + "'" + generation + "'" + "," +
             "'" + contact + "'" + ")",
             function(err, rows) {
@@ -332,6 +337,10 @@ app.post('/editGrad', function(req, res) {
     } else {
         contact = 0;
     }
+
+    UWemail = UWemail + "@uw.edu";
+
+    console.log(UWemail);
 
     console.log("edit {" + id + " " + firstName + " " + lastName + " " + UWemail + " " + gpa + " " + program + " " + gradYear + " " +
         gradTerm + " " + ethnicity + " " + age + " " + degree + " " + generation + " " + contact);
