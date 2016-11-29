@@ -9,10 +9,10 @@ const async = require('async');
 
 //setup heroku database
 const pool = mysql.createPool({
-  	host     : 'us-cdbr-iron-east-04.cleardb.net',
-  	user     : 'b5a41b60cec771',
-  	password : '29c6cc15',
-  	database : 'heroku_50a8c0371a0e6f5'
+    host: 'us-cdbr-iron-east-04.cleardb.net',
+    user: 'b5a41b60cec771',
+    password: '29c6cc15',
+    database: 'heroku_50a8c0371a0e6f5'
 });
 
 //setup
@@ -44,9 +44,9 @@ app.use('/plugins/datatables', express.static(__dirname + '/plugins/datatables')
 
 
 // serve bootstrap css/javascript and jquery
-app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css')); 
-app.use('/js', express.static(__dirname + '/node_modules/bootstrap/dist/js')); 
-app.use('/js', express.static(__dirname + '/node_modules/jquery/dist')); 
+app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
+app.use('/js', express.static(__dirname + '/node_modules/bootstrap/dist/js'));
+app.use('/js', express.static(__dirname + '/node_modules/jquery/dist'));
 
 //middleware for passing data bewteen route
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -54,48 +54,48 @@ app.use(bodyParser.json());
 
 //use session middleware for persistent login
 app.use(session({
-    secret: 'keyboard cat', 
-    cookie: {maxAge: 86400000}, //24hrs
+    secret: 'keyboard cat',
+    cookie: { maxAge: 86400000 }, //24hrs
     resave: false,
     saveUninitialized: false
 }));
 
 server.listen(app.get('port'), function() {
-	console.log('listening on port:', app.get('port'));
+    console.log('listening on port:', app.get('port'));
 });
 
 //login page
-app.get('/', function (req, res) {
-  	res.render('login.ejs');
+app.get('/', function(req, res) {
+    res.render('login.ejs');
 });
 
 //login page
 app.get('/login', function(req, res) {
-	res.render('login.ejs');
+    res.render('login.ejs');
 
 });
 
-var generateGraduatesForDatabase = true;
-var generateFacultyForDatabase = true;
+var generateGraduatesForDatabase = false;
+var generateFacultyForDatabase = false;
 var newGrads = 50;
 var newFaculty = 20;
 var depreciation = 0.25;
 
 app.post('/login', function(req, res) {
-	var email = req.body.email;
-	var password = req.body.password;
-	
+    var email = req.body.email;
+    var password = req.body.password;
+
     try {
-        generateRandomDatabase(true, function (wait) {
+        generateRandomDatabase(true, function(wait) {
             if (wait === 0 || wait === 1) generateGraduatesForDatabase = false;
-            generateRandomDatabase(false, function (wait) {
+            generateRandomDatabase(false, function(wait) {
                 if (wait === 2) generateFacultyForDatabase = false;
-                pool.getConnection(function (err, connection) {
+                pool.getConnection(function(err, connection) {
                     try {
                         connection.query("SELECT * FROM faculty WHERE faculty.email = " + "'" + email + "'" + "AND faculty.password = " + "'" + password + "'", function(err, rows) {
                             if (err) {
                                 console.log(err);
-                                res.render('/login', { err: err.message } );
+                                res.render('/login', { err: err.message });
                             }
 
                             //user found
@@ -128,35 +128,36 @@ app.post('/login', function(req, res) {
 
 //POST to register
 app.post('/register', function(req, res) {
-	// getting inputted username and pass
-	var email = req.body.email;
-	var password = req.body.password;
-	var firstName = req.body.firstName;
-	var lastName = req.body.lastName;
+    // getting inputted username and pass
+    var email = req.body.email;
+    var password = req.body.password;
+    var firstName = req.body.firstName;
+    var lastName = req.body.lastName;
 
     //console.log(email);
     //console.log(password);
 
-	// connect and insert into database
-	pool.getConnection(function(err, connection) {
-        connection.query("INSERT INTO faculty (email, password, firstName, lastName) VALUES ('" + email + "'" + "," + "'" + password + "'" +  "," + "'" + firstName +
-        					"'" + "," + "'" + lastName + "'" + ")", function(err, rows) {
-            
-            console.log('here');
+    // connect and insert into database
+    pool.getConnection(function(err, connection) {
+        connection.query("INSERT INTO faculty (email, password, firstName, lastName) VALUES ('" + email + "'" + "," + "'" + password + "'" + "," + "'" + firstName +
+            "'" + "," + "'" + lastName + "'" + ")",
+            function(err, rows) {
 
-            if (err) {
-                console.log(err);
-                res.send(err);
-            } else {
-                console.log("User was successfully registered");
-                res.redirect('/'); // once registered redirect to login page
-            }
+                console.log('here');
 
-            // verify user doesnt already have an account
-            // verify it is a valid email address
-            // verify @ and .com/.edu/.net/.org included aka it is a complete email
-            connection.release();
-        });
+                if (err) {
+                    console.log(err);
+                    res.send(err);
+                } else {
+                    console.log("User was successfully registered");
+                    res.redirect('/'); // once registered redirect to login page
+                }
+
+                // verify user doesnt already have an account
+                // verify it is a valid email address
+                // verify @ and .com/.edu/.net/.org included aka it is a complete email
+                connection.release();
+            });
 
     });
 });
@@ -175,145 +176,199 @@ app.get('/dashboard', function(req, res) {
 
 //survey page
 app.get('/survey', function(req, res) {
-	res.render('survey.ejs');
+    res.render('survey.ejs');
 });
 
 //graduates page
 app.get('/graduates', function(req, res) {
-	//connect to database
-	pool.getConnection(function(error, connection) {
-		//query database
-		connection.query('SELECT * FROM graduate', function(err, rows) {
+    //connect to database
+    pool.getConnection(function(error, connection) {
+        //query database
+        connection.query('SELECT * FROM graduate', function(err, rows) {
 
-			//error querying
-			if (err) {
-				console.log(err);
-				res.send(err);
-			}  
-			else {
-	
-				var graduates = {
-					'graduates': rows
-				};
+            //error querying
+            try {
+                if (err) {
+                    console.log(err);
+                    res.send(err);
+                } else {
+                    var data = {
+                        'graduates': rows,
+                        'user': req.session.user
+                    };
 
 
+                    console.log(data.user);
 
-				//release connection to db
-				connection.release();
-				
-				//pass graduates object to graduate view
-				res.render('graduate.ejs', graduates);
-			}
-		});
-	});	
+                    //release connection to db
+                    connection.release();
+
+                    //pass graduates object to graduate view
+                    res.render('graduate.ejs', data);
+                }
+
+            } catch (err) {
+
+                res.redirect('/');
+
+            }
+        });
+    });
 });
 
 
 app.post('/addGrad', function(req, res) {
 
-	console.dir(req.body);
+    console.dir(req.body);
 
-	var id = req.body.studentId;
-	var firstName = req.body.firstName;
-	var lastName = req.body.lastName;
-	var email = req.body.email;
-	var GPA = req.body.gpa;
-	var program = req.body.program;
-	var gradYear = req.body.gradYear;
+    var id = req.body.studentId;
+    var firstName = req.body.firstName;
+    var lastName = req.body.lastName;
+    var email = req.body.email;
+    var GPA = req.body.gpa;
+    var gender = req.body.gender;
+    var program = req.body.program;
+    var gradYear = req.body.gradYear;
 
-	var gradTerm = req.body.gradTerm;
-	var ethnicity = req.body.ethnicity;
-	var age = req.body.age;
-	var degree = req.body.degree;
-	var generation = req.body.generation;
-	var contact = req.body.radio;
+    var gradTerm = req.body.gradTerm;
+    var ethnicity = req.body.ethnicity;
+    var age = req.body.age;
+    var degree = req.body.degree;
+    var generation = req.body.generation;
+    var contact = req.body.radio;
 
-	if(contact == "on") {
-		contact = 1;
-	} else {
-		contact = 0;
-	}
+    if (contact == "on") {
+        contact = 1;
+    } else {
+        contact = 0;
+    }
 
-	/** This will insert a new graduate into the system. **/
+    /** This will insert a new graduate into the system. **/
 
-	pool.getConnection(function(error, connection) {
-		//query database
-        connection.query("INSERT INTO graduate (studentId, firstName, lastName, email, gpa, program, gradTerm, gradYear, ethnicity, age, degree,"+
-        	"generation, canContact)" + 
-        	"VALUES ('" + id + "'" + "," + "'" + firstName + "'" + "," +"'"+ lastName + "'" + "," + "'" + email + "'" +
-        	"," + "'" + GPA + "'" + "," + "'" + program + "'" + "," + "'" + gradTerm  + "'" + "," + "'" +  gradYear + "'" +
-        	"," + "'" + ethnicity + "'" + "," + "'" + age + "'" + "," + "'" + degree + "'" + "," + "'" + generation + "'" + "," +
-        	 "'" + contact + "'" + ")", function(err, rows) {
+    pool.getConnection(function(error, connection) {
+        //query database
+        connection.query("INSERT INTO graduate (studentId, firstName, lastName, gender, UWemail, gpa, program, gradTerm, gradYear,"+
+            " ethnicity, age, degree, generation, canContact)" +
+            "VALUES ('" + id + "'" + "," + "'" + firstName + "'" + "," + "'" + lastName + "'" + "," + "'" + gender + "'" + "," + "'" + email + "'" +
+            "," + "'" + GPA + "'" + "," + "'" + program + "'" + "," + "'" + gradTerm + "'" + "," + "'" + gradYear + "'" +
+            "," + "'" + ethnicity + "'" + "," + "'" + age + "'" + "," + "'" + degree + "'" + "," + "'" + generation + "'" + "," +
+            "'" + contact + "'" + ")",
+            function(err, rows) {
 
-			//error querying
-			if (err) {
-				console.log(err);
-				res.send(err);
-			}
-			else {
-	
-				console.log("Graduate was added!");
+                //error querying
+                if (err) {
+                    console.log(err);
+                    res.send(err);
+                } else {
 
-				req.session.user = {
-					'canContact': contact
-				}
+                    console.log("Graduate was added!");
 
-				//release connection to db
-				connection.release();
-				res.redirect('/graduates');
-				//pass graduates object to graduate view
-				// res.render('graduate.ejs', graduates);
-			}
-		});
-	});	
+                    req.session.user = {
+                        'canContact': contact
+                    }
+
+                    //release connection to db
+                    connection.release();
+                    res.redirect('/graduates');
+                    //pass graduates object to graduate view
+                    // res.render('graduate.ejs', graduates);
+                }
+            });
+    });
 
 });
 
 
 app.get('/delete', function(req, res) {
-	res.render("graduate.ejs");
+    res.render("graduate.ejs");
 
 });
 
 app.post('/delete', function(req, res) {
 
-	console.dir("delete this id: " + req.body.gradId);
+    console.dir("delete this id: " + req.body.gradId);
 
-	var gradId = req.body.gradId;
+    var gradId = req.body.gradId;
 
-	pool.getConnection(function(error, connection) {
-		connection.query("DELETE FROM graduate WHERE studentId =" + "'" + gradId + "'" + ";", function(err, rows) {
+    pool.getConnection(function(error, connection) {
+        connection.query("DELETE FROM graduate WHERE studentId =" + "'" + gradId + "'" + ";", function(err, rows) {
 
-			if(err) {
-				console.log(err);
-			} else {
-				console.log( gradId + " was deleted");
-				connection.release();
+            if (err) {
+                console.log(err);
+            } else {
+                console.log(gradId + " was deleted");
+                connection.release();
 
-				res.redirect('/graduates');
+                res.redirect('/graduates');
 
-			}
+            }
 
-		});
+        });
 
-	});
+    });
 
 });
-
+/**
+    Will update anything edited by faculty inside sql.
+**/
 app.post('/editGrad', function(req, res) {
+    var id = req.body.studentId;
+    var firstName = req.body.firstName;
+    var lastName = req.body.lastName;
+    var UWemail = req.body.email;
+    var gpa = req.body.gpa;
+    var program = req.body.program;
+    var gradYear = req.body.gradYear;
 
-	console.dir("edit: " + req.body);
+    var gradTerm = req.body.gradTerm;
+    var ethnicity = req.body.ethnicity;
+    var age = req.body.age;
+    var degree = req.body.degree;
+    var generation = req.body.generation;
+    var contact = req.body.radio;
+
+    if (contact == "on") {
+        contact = 1;
+    } else {
+        contact = 0;
+    }
+
+    console.log("edit {" + id + " " + firstName + " " + lastName + " " + UWemail + " " + gpa + " " + program + " " + gradYear + " " +
+        gradTerm + " " + ethnicity + " " + age + " " + degree + " " + generation + " " + contact);
+
+
+    pool.getConnection(function(error, connection) {
+        connection.query("UPDATE graduate SET firstName =" + "'" + firstName + "'" + ", lastName=" + "'" + lastName + "'" +
+            ", UWemail=" + "'" + UWemail + "'" + ", gpa=" + "'" + gpa + "'" + ", program=" + "'" + program + "'" + ", gradYear=" +
+            "'" + gradYear + "'" + ", gradTerm= " + "'" + gradTerm + "'" + ", ethnicity=" + "'" + ethnicity + "'" + ", age=" + "'" + age + "'" +
+            ", degree=" + "'" + degree + "'" + ", generation= " + "'" + generation + "'" + ", canContact= " + "'" + contact + "'" +
+            "WHERE studentId =" + "'" + id + "'" + ";",
+            function(err, rows) {
+
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log(id + " was edited");
+                    connection.release();
+
+                    res.redirect('/graduates');
+
+                }
+
+            });
+
+    });
 
 });
 
-app.get('/report', function(req, res) { 
+app.get('/report', function(req, res) {
     if (req.session.user) {
 
         pool.getConnection(function(err, connection) {
-           
-           //perform asyncronous queries one by one 
-           async.waterfall([    
-                
+
+            //perform asyncronous queries one by one 
+            async.waterfall([
+
                 getTotalGrads(connection),
                 getTotalFaculty,
                 getTotalSurveys,
@@ -325,13 +380,13 @@ app.get('/report', function(req, res) {
                 getTotalGradsWithBSEE,
                 getTotalGradsWithBACSS,
                 getUndergradDegreesIn01
-           
+
             ], function(err, connection, results) {
                 if (err) {
                     console.log(err);
                     res.send(err);
                     return;
-                } 
+                }
 
                 //success
                 results['user'] = req.session.user;
@@ -342,7 +397,7 @@ app.get('/report', function(req, res) {
         });
     } else {
         res.redirect('/login');
-    }   
+    }
 });
 
 /**
@@ -375,7 +430,7 @@ function getTotalGrads(connection) {
             //calls getTotalFaculty
             callback(null, connection, results);
         });
-    }   
+    }
 }
 
 /**
@@ -433,9 +488,9 @@ function getTotalSurveys(connection, results, callback) {
  *         callback with null error, connection, and results of query
  */
 function getSurveysCompletedPercent(connection, results, callback) {
-    var query = "SELECT ROUND((SELECT COUNT(*) FROM survey WHERE status = 'sent') / " + 
-                    "COUNT(*) * 100) AS surveysCompletedPercent " +
-                "FROM survey";
+    var query = "SELECT ROUND((SELECT COUNT(*) FROM survey WHERE status = 'sent') / " +
+        "COUNT(*) * 100) AS surveysCompletedPercent " +
+        "FROM survey";
 
     connection.query(query, function(err, rows) {
         if (err) {
@@ -460,7 +515,7 @@ function getSurveysCompletedPercent(connection, results, callback) {
  */
 function getTotalGradsWithBSCSS(connection, results, callback) {
     var query = "SELECT COUNT(*) AS total FROM graduate " +
-                "WHERE program = 'CSS' AND degree = 'BS'";
+        "WHERE program = 'CSS' AND degree = 'BS'";
 
     connection.query(query, function(err, rows) {
         if (err) {
@@ -485,7 +540,7 @@ function getTotalGradsWithBSCSS(connection, results, callback) {
  */
 function getTotalGradsWithBSCES(connection, results, callback) {
     var query = "SELECT COUNT(*) AS total FROM graduate " +
-                "WHERE program = 'CES' AND degree = 'BS'";
+        "WHERE program = 'CES' AND degree = 'BS'";
 
     connection.query(query, function(err, rows) {
         if (err) {
@@ -510,7 +565,7 @@ function getTotalGradsWithBSCES(connection, results, callback) {
  */
 function getTotalGradsWithBSIT(connection, results, callback) {
     var query = "SELECT COUNT(*) AS total FROM graduate " +
-                "WHERE program = 'IT' AND degree = 'BS'";
+        "WHERE program = 'IT' AND degree = 'BS'";
 
     connection.query(query, function(err, rows) {
         if (err) {
@@ -535,7 +590,7 @@ function getTotalGradsWithBSIT(connection, results, callback) {
  */
 function getTotalGradsWithMSCSS(connection, results, callback) {
     var query = "SELECT COUNT(*) AS total FROM graduate " +
-                "WHERE program = 'CSS' AND degree = 'MS'";
+        "WHERE program = 'CSS' AND degree = 'MS'";
 
     connection.query(query, function(err, rows) {
         if (err) {
@@ -560,7 +615,7 @@ function getTotalGradsWithMSCSS(connection, results, callback) {
  */
 function getTotalGradsWithBSEE(connection, results, callback) {
     var query = "SELECT COUNT(*) AS total FROM graduate " +
-                "WHERE program = 'EE' AND degree = 'BS'";
+        "WHERE program = 'EE' AND degree = 'BS'";
 
     connection.query(query, function(err, rows) {
         if (err) {
@@ -585,7 +640,7 @@ function getTotalGradsWithBSEE(connection, results, callback) {
  */
 function getTotalGradsWithBACSS(connection, results, callback) {
     var query = "SELECT COUNT(*) AS total FROM graduate " +
-                "WHERE program = 'CSS' AND degree = 'BA'";
+        "WHERE program = 'CSS' AND degree = 'BA'";
 
     connection.query(query, function(err, rows) {
         if (err) {
@@ -608,14 +663,14 @@ function getTotalGradsWithBACSS(connection, results, callback) {
  */
 function getUndergradDegreesIn01(connection, results, callback) {
     var query = "SELECT COUNT(*) as total FROM graduate " +
-                "WHERE (degree = 'BS' OR degree = 'BA') " +
-                "AND gradYear = 2001";
+        "WHERE (degree = 'BS' OR degree = 'BA') " +
+        "AND gradYear = 2001";
 
     connection.query(query, (err, rows) => {
         if (err) {
             //console.log(err);
             callback(err);
-            
+
         }
 
         results['undergradsIn01'] = rows[0].total;
@@ -633,8 +688,8 @@ function getUndergradDegreesIn01(connection, results, callback) {
  */
 function getUndergradDegreesIn02(connection, results, callback) {
     var query = "SELECT COUNT(*) AS total FROM graduate " +
-                "WHERE degree = 'BA' OR degree = 'BS' " +
-                "AND gradYear = 2002";
+        "WHERE degree = 'BA' OR degree = 'BS' " +
+        "AND gradYear = 2002";
 
     connection.query(query, (err, rows) => {
         if (err) {
@@ -657,8 +712,8 @@ function getUndergradDegreesIn02(connection, results, callback) {
  */
 function getUndergradDegreesIn03(connection, results, callback) {
     var query = "SELECT COUNT(*) AS total FROM graduate " +
-                "WHERE degree = 'BA' OR degree = 'BS' " +
-                "AND gradYear = 2003";
+        "WHERE degree = 'BA' OR degree = 'BS' " +
+        "AND gradYear = 2003";
 
     connection.query(query, (err, rows) => {
         if (err) {
@@ -679,9 +734,9 @@ function generateRandomDatabase(genGrads, callback) {
         try {
             function getCurrentFaculty(goalFaculty, callback) {
                 function executeQuery(callback) {
-                    pool.getConnection(function (err, connection, results) {
+                    pool.getConnection(function(err, connection, results) {
                         try {
-                            connection.query("SELECT COUNT(*) AS total FROM faculty", function (err, rows) {
+                            connection.query("SELECT COUNT(*) AS total FROM faculty", function(err, rows) {
                                 if (err) {
                                     callback(-1);
                                     return;
@@ -696,24 +751,26 @@ function generateRandomDatabase(genGrads, callback) {
                         }
                     });
                 }
-                executeQuery(function (faculty) {
+                executeQuery(function(faculty) {
                     if (debug) console.log("    E_FACTS: " + faculty);
                     if (debug) console.log("    E_GOALS: " + goalFaculty);
                     if (!debug) process.stdout.write('.');
-                    if (faculty === -1) callback(goalFaculty-depreciation, -1);
+                    if (faculty === -1) callback(goalFaculty - depreciation, -1);
                     else callback(goalFaculty === 0 ? faculty + newFaculty : goalFaculty, faculty);
                 });
             }
 
 
-            getCurrentFaculty(desiredFaculty, function (goal, faculty) {
+            getCurrentFaculty(desiredFaculty, function(goal, faculty) {
                 if (goal != 0 && goal < desiredFaculty) getFaculty(goal);
                 else {
                     if (debug) console.log("  G_FACTS: " + faculty);
                     if (debug) console.log("  G_GOALS: " + goal);
                     if (!debug) process.stdout.write(' ');
-                    for (var g = 0; g < (goal - faculty) ; g++)
-                        try { randomlyGenerateFaculty(); } catch (err) { if (debug) console.log("generateDatabase faculty loop error: " + err); };
+                    for (var g = 0; g < (goal - faculty); g++)
+                        try { randomlyGenerateFaculty(); } catch (err) {
+                            if (debug) console.log("generateDatabase faculty loop error: " + err);
+                        };
                     if (goal > faculty) getFaculty(goal);
                     else {
                         process.stdout.write("\nFaculty Generation Complete!\n\n");
@@ -730,9 +787,9 @@ function generateRandomDatabase(genGrads, callback) {
         try {
             function getCurrentGrads(goalGrads, callback) {
                 function executeQuery(callback) {
-                    pool.getConnection(function (err, connection, results) {
+                    pool.getConnection(function(err, connection, results) {
                         try {
-                            connection.query("SELECT COUNT(*) AS total FROM graduate", function (err, rows) {
+                            connection.query("SELECT COUNT(*) AS total FROM graduate", function(err, rows) {
                                 if (err) {
                                     callback(-1);
                                     return;
@@ -747,24 +804,26 @@ function generateRandomDatabase(genGrads, callback) {
                         }
                     });
                 }
-                executeQuery(function (grads) {
+                executeQuery(function(grads) {
                     if (debug) console.log("    E_GRADS: " + grads);
                     if (debug) console.log("    E_GOALS: " + goalGrads);
                     if (!debug) process.stdout.write('.');
-                    if (grads === -1) callback(goalGrads-depreciation, -1);
+                    if (grads === -1) callback(goalGrads - depreciation, -1);
                     else callback(goalGrads === 0 ? grads + newGrads : goalGrads, grads);
                 });
             }
 
 
-            getCurrentGrads(desiredGrads, function (goal, grads) {
+            getCurrentGrads(desiredGrads, function(goal, grads) {
                 if (goal != 0 && goal < desiredGrads) getGrads(goal);
                 else {
                     if (debug) console.log("  G_GRADS: " + grads);
                     if (debug) console.log("  G_GOALS: " + goal);
                     if (!debug) process.stdout.write(' ');
-                    for (var g = 0; g < (goal - grads) ; g++)
-                        try { randomlyGenerateGraduate(); } catch (err) { if (debug) console.log("generateDatabase graduate loop error: " + err); };
+                    for (var g = 0; g < (goal - grads); g++)
+                        try { randomlyGenerateGraduate(); } catch (err) {
+                            if (debug) console.log("generateDatabase graduate loop error: " + err);
+                        };
                     if (goal > grads) getGrads(goal);
                     else {
                         process.stdout.write("\nGraduate Generation Complete!\n\n");
@@ -791,7 +850,7 @@ function generateRandomDatabase(genGrads, callback) {
         process.stdout.write("\nGenerating Faculty..");
         getFaculty(0);
     } else callback(-1);
-    
+
 }
 
 var maxYear = 2020;
@@ -805,28 +864,28 @@ var programs = ['CSS', 'CES', 'IT', 'EE'];
 var degrees = ['BA', 'BS', 'MS'];
 var terms = ['AUT', 'WIN', 'SPR', 'SUM'];
 
-var firstNames = [  'Menaka', 'Jason', 'Shema', 'Travis', 'Mark', 'Chris', 'Vito', 'Lebron', 'Stephen', 'Alice', 'Russel',
-                    'James', 'Mohib', 'Alexander', 'Steve', 'Elon', 'Rick', 'Tewodros', 'John', 'Mary', 'Loc', 'Connor',
-                    'Ibrahim', 'Elisha', 'Elizabeth', 'Brandon', 'Nursultan', 'Jabo', 'Brian', 'Andrew', 'Michael', 'Susan',
-                    'Monica', 'Ankur', 'Ingrid', 'Alan', 'Charles', 'Jieun', 'Humza', 'Demyan', 'Ryan', 'Vladislav', 'Taeler',
-                    'Thomas', 'Tiffany', 'Benjamin', 'Patrick', 'Prabhjot', 'Sarah', 'Edgard', 'Nico', 'Nina', 'Jowy', 'Yau',
-                    'Adam', 'Amy', 'Alec', 'Louis', 'Rocky', 'Marco', 'Donald', 'Rob', 'Asop', 'George', 'Susan', 'Ivanka',
-                    'Hillary', 'Michelle', 'Samantha', 'Ingrid', 'Bridgette', 'Brittany', 'Alison', 'Rehina', 'Joraniah',
-                    'Drew', 'Pak', 'Desiree', 'Vasika', 'Sayla', 'Cayla', 'Mercedes', 'Donia', 'Jennifer', 'Kesha', 'Luka',
-                    'Gabriel', 'Bonginkosi', 'Aliaksandr', 'Ninaliezel', 'Aundraya', 'Noamio', 'Danille', 'Dana', 'Brandy',
-                    'Ruth', 'Jose', 'Erlinda', 'Josh', 'Luke', 'Lyn', 'Pat', 'Haley', 'Lavaunte', 'Christina', 'Shaun',
-                    'Ki', 'Brenda', 'Mengxiao'
+var firstNames = ['Menaka', 'Jason', 'Shema', 'Travis', 'Mark', 'Chris', 'Vito', 'Lebron', 'Stephen', 'Alice', 'Russel',
+    'James', 'Mohib', 'Alexander', 'Steve', 'Elon', 'Rick', 'Tewodros', 'John', 'Mary', 'Loc', 'Connor',
+    'Ibrahim', 'Elisha', 'Elizabeth', 'Brandon', 'Nursultan', 'Jabo', 'Brian', 'Andrew', 'Michael', 'Susan',
+    'Monica', 'Ankur', 'Ingrid', 'Alan', 'Charles', 'Jieun', 'Humza', 'Demyan', 'Ryan', 'Vladislav', 'Taeler',
+    'Thomas', 'Tiffany', 'Benjamin', 'Patrick', 'Prabhjot', 'Sarah', 'Edgard', 'Nico', 'Nina', 'Jowy', 'Yau',
+    'Adam', 'Amy', 'Alec', 'Louis', 'Rocky', 'Marco', 'Donald', 'Rob', 'Asop', 'George', 'Susan', 'Ivanka',
+    'Hillary', 'Michelle', 'Samantha', 'Ingrid', 'Bridgette', 'Brittany', 'Alison', 'Rehina', 'Joraniah',
+    'Drew', 'Pak', 'Desiree', 'Vasika', 'Sayla', 'Cayla', 'Mercedes', 'Donia', 'Jennifer', 'Kesha', 'Luka',
+    'Gabriel', 'Bonginkosi', 'Aliaksandr', 'Ninaliezel', 'Aundraya', 'Noamio', 'Danille', 'Dana', 'Brandy',
+    'Ruth', 'Jose', 'Erlinda', 'Josh', 'Luke', 'Lyn', 'Pat', 'Haley', 'Lavaunte', 'Christina', 'Shaun',
+    'Ki', 'Brenda', 'Mengxiao'
 ];
 
-var lastNames = [   'Abraham', 'Bada', 'Bui', 'Cox', 'Diabate', 'Gentry', 'Gibbons', 'Ho', 'Irgaliyev', 'Johnigan', 'Klonitsko',
-                    'Kohi', 'Lambion', 'Lee', 'Lloyd', 'Mangrio', 'Pavlovskiy', 'Fowler', 'Peters', 'Schumer', 'Potter', 'Chau',
-                    'Psarev', 'Quesada', 'Rezanejad', 'van Riper', 'Russell', 'Sanchez', 'Singh', 'Snyder', 'Solorzano', 'Tandyo',
-                    'Thai', 'Tran', 'Tsang', 'Waldron', 'Walsh', 'Yang', 'Vishoot', 'Westbrook', 'Curry', 'James', 'Aeriola',
-                    'Harden', 'Pierce', 'Jobs', 'Musk', 'Ross', 'Polo', 'Stone', 'Lao', 'Liu', 'King', 'Fergeson', 'Arnold',
-                    'Hoffer', 'Cheng', 'Brown', 'Bobryk', 'Cardinal', 'Horakova', 'Chavez', 'Clark', 'Comer', 'Dahl', 'Evans',
-                    'Fdhila', 'Fischer', 'Fitzpatrick', 'Gajic', 'Hentyarsa', 'Holman', 'Legaspi', 'Lo', 'McCord', 'McDonald',
-                    'McMahon', 'Obama', 'Meyer', 'Miller', 'Clinton', 'Trump', 'Biden', 'Montgomery', 'Nuguse', 'Oliva', 'Roberts',
-                    'Rowe', 'Sbory', 'Schilling', 'Taylor', 'Tippett', 'Wilson', 'Wong', 'Yun', 'Zhu'
+var lastNames = ['Abraham', 'Bada', 'Bui', 'Cox', 'Diabate', 'Gentry', 'Gibbons', 'Ho', 'Irgaliyev', 'Johnigan', 'Klonitsko',
+    'Kohi', 'Lambion', 'Lee', 'Lloyd', 'Mangrio', 'Pavlovskiy', 'Fowler', 'Peters', 'Schumer', 'Potter', 'Chau',
+    'Psarev', 'Quesada', 'Rezanejad', 'van Riper', 'Russell', 'Sanchez', 'Singh', 'Snyder', 'Solorzano', 'Tandyo',
+    'Thai', 'Tran', 'Tsang', 'Waldron', 'Walsh', 'Yang', 'Vishoot', 'Westbrook', 'Curry', 'James', 'Aeriola',
+    'Harden', 'Pierce', 'Jobs', 'Musk', 'Ross', 'Polo', 'Stone', 'Lao', 'Liu', 'King', 'Fergeson', 'Arnold',
+    'Hoffer', 'Cheng', 'Brown', 'Bobryk', 'Cardinal', 'Horakova', 'Chavez', 'Clark', 'Comer', 'Dahl', 'Evans',
+    'Fdhila', 'Fischer', 'Fitzpatrick', 'Gajic', 'Hentyarsa', 'Holman', 'Legaspi', 'Lo', 'McCord', 'McDonald',
+    'McMahon', 'Obama', 'Meyer', 'Miller', 'Clinton', 'Trump', 'Biden', 'Montgomery', 'Nuguse', 'Oliva', 'Roberts',
+    'Rowe', 'Sbory', 'Schilling', 'Taylor', 'Tippett', 'Wilson', 'Wong', 'Yun', 'Zhu'
 ];
 
 var genders = ['Female', 'Male', 'Other'];
@@ -849,7 +908,7 @@ var goodJobGPA = 3.5;
 var badJobGPA = 2.5;
 
 function randomlyGenerateGraduate() {
-    pool.getConnection(function (err, connection) {
+    pool.getConnection(function(err, connection) {
         var appDate = randomInt(appMinYear, maxYear - 2);
         var gradYear = Math.max(gradMinYear, randomInt(appDate + 1, Math.min(appDate + 6, maxYear)));
         if (Math.random() < 0.1) gradYear = randomInt(gradYear, maxYear);
@@ -871,11 +930,17 @@ function randomlyGenerateGraduate() {
         var program = programs[randomInt(0, programs.length)];
         var degree = 'BS';
         switch (program) {
-            case 'EE': if (gradYear < 2017 || (gradYear === 2017 && gradTerm != 'AUT')) {
-                            program = 'CSS'; degree = 'BS'
-                       } break;
-            case 'CSS': degree = degrees[randomInt(0, degrees.length)]; break;
-            default: break;
+            case 'EE':
+                if (gradYear < 2017 || (gradYear === 2017 && gradTerm != 'AUT')) {
+                    program = 'CSS';
+                    degree = 'BS'
+                }
+                break;
+            case 'CSS':
+                degree = degrees[randomInt(0, degrees.length)];
+                break;
+            default:
+                break;
         }
         var degree = degrees[randomInt(0, degrees.length)];
         var gender = genders[Math.random() < 0.99 ? randomInt(0, 2) : 2];
@@ -884,9 +949,26 @@ function randomlyGenerateGraduate() {
         var generation = generations[randomInt(0, generations.length)];
         var studentId = randomInt(1000000, 10000000);
         var stats = {
-            'updatedAt': updatedAt, 'canContact': canContact, 'contactStatus': contactStatus, 'canTrack': canTrack, 'surveyFreq': surveyFreq,
-            'firstName': firstName, 'lastName': lastName, 'UWemail': UWemail, 'email': email, 'gpa': gpa, 'appDate': appDate, 'program': program, 'degree': degree,
-            'gradTerm': gradTerm, 'gradYear': gradYear, 'gender': gender, 'ethnicity': ethnicity, 'age': age, 'generation': generation, 'studentId': studentId
+            'updatedAt': updatedAt,
+            'canContact': canContact,
+            'contactStatus': contactStatus,
+            'canTrack': canTrack,
+            'surveyFreq': surveyFreq,
+            'firstName': firstName,
+            'lastName': lastName,
+            'UWemail': UWemail,
+            'email': email,
+            'gpa': gpa,
+            'appDate': appDate,
+            'program': program,
+            'degree': degree,
+            'gradTerm': gradTerm,
+            'gradYear': gradYear,
+            'gender': gender,
+            'ethnicity': ethnicity,
+            'age': age,
+            'generation': generation,
+            'studentId': studentId
         };
         var query = "INSERT INTO Graduate (status";
         var values = ") VALUES ('" + status;
@@ -896,7 +978,7 @@ function randomlyGenerateGraduate() {
         }
         var date = [gradYear + (Math.random() < 0.5 ? -1 : 0), 0];
         try {
-            connection.query(query + values + "')", function (err, rows) {
+            connection.query(query + values + "')", function(err, rows) {
 
                 if (debug) {
                     if (err) console.log(err);
@@ -904,22 +986,32 @@ function randomlyGenerateGraduate() {
                 }
 
                 switch (gradTerm) {
-                    case 'AUT': date[1] = 11; break;
-                    case 'WIN': date[1] = 2; break;
-                    case 'SPR': date[1] = 5; break;
-                    case 'SUM': date[1] = 7; break;
-                    default: break;
+                    case 'AUT':
+                        date[1] = 11;
+                        break;
+                    case 'WIN':
+                        date[1] = 2;
+                        break;
+                    case 'SPR':
+                        date[1] = 5;
+                        break;
+                    case 'SUM':
+                        date[1] = 7;
+                        break;
+                    default:
+                        break;
                 }
 
                 var i = 1;
                 if (debug) console.log("TERM pre-loop: " + term);
+
                 function loop(term, rank) {
                     if (term[0] <= maxYear && term[0] >= gradYear - 1 && Math.random() < 0.95) {
                         if (debug) console.log("job " + i++);
-                        randomlyGenerateJob(gradYear, term[0], term[1], rank, err, connection, function (err, data) {
+                        randomlyGenerateJob(gradYear, term[0], term[1], rank, err, connection, function(err, data) {
                             if (debug) console.log("JOB CALLBACK: " + data);
                             jobCode = data;
-                            if (jobCode != null && jobCode > 0) connectGradToJob(term, studentId, jobCode, err, connection, function (err, data2) {
+                            if (jobCode != null && jobCode > 0) connectGradToJob(term, studentId, jobCode, err, connection, function(err, data2) {
                                 if (debug) console.log("HAS_JOB CALLBACK: " + data);
                                 term = data2;
                                 if (term.length > 2) rank = term[2];
@@ -952,13 +1044,14 @@ function connectGradToJob(term, studentId, jobCode, err, connection, callback) {
     var upmob, year, end, gpa;
     try {
         var query = "SELECT * FROM graduate WHERE studentId = '" + studentId + "'";
-        connection.query(query, function (err, rows) {
+        connection.query(query, function(err, rows) {
 
-            if (err) { if (debug) console.log(err); }
-            else if (rows.length) sid = rows[0].id;
+            if (err) {
+                if (debug) console.log(err);
+            } else if (rows.length) sid = rows[0].id;
 
             query = "SELECT * FROM job WHERE jobCode = '" + jobCode + "'";
-            connection.query(query, function (err, rows) {
+            connection.query(query, function(err, rows) {
                 if (err) {
                     if (debug) console.log(err);
                 } else if (rows.length) {
@@ -980,7 +1073,7 @@ function connectGradToJob(term, studentId, jobCode, err, connection, callback) {
 
                 if (sid != null && !isNaN(sid) && sid > 0 && jid != null && !isNaN(jid) && jid > 0) {
                     query = "INSERT INTO graduate_has_job (employmentId, graduateId) VALUES ('" + jid + "', '" + sid + "')";
-                    connection.query(query, function (err, rows) {
+                    connection.query(query, function(err, rows) {
                         if (err) {
                             if (debug) console.log("\nError with job creation\n" + err);
                         } else {
@@ -1005,7 +1098,7 @@ function connectGradToJob(term, studentId, jobCode, err, connection, callback) {
         if (debug) {
             console.log("\nError: UNABLE TO CONNECT GRAD TO JOB  " + err);
             console.log("term: " + term + "   oldTerm: " + oldTerm + "   scode: " + studentId + "   sid: " + sid + "   jcode: " + jobCode + "   jid: " + jid + "   upmob: " + upmob);
-            try { console.log("year: " + year + "   month: " + end.substr(4, 3) + "   month #: " + months[end.substr(4, 3)]); } catch (e) { }
+            try { console.log("year: " + year + "   month: " + end.substr(4, 3) + "   month #: " + months[end.substr(4, 3)]); } catch (e) {}
         }
         callback(null, oldTerm);
     }
@@ -1013,19 +1106,27 @@ function connectGradToJob(term, studentId, jobCode, err, connection, callback) {
 }
 
 function randomlyGenerateJob(grad, year, month, gpa, err, connection, callback) {
-    year = parseInt(year+'');
-    month = parseInt(month+'');
+    year = parseInt(year + '');
+    month = parseInt(month + '');
     var oldMonth = month;
-    gpa = parseInt(gpa+'');
+    gpa = parseInt(gpa + '');
     var jobCode = 0;
     var employerName, employerType, employerDesc, jobProgram, jobTitle, salary, endDate, goodJob;
     var employmentType = "Full Time";
 
     switch (year - grad) {
-        case -1: employmentType = "Intern"; break;
-        case 0: employmentType = employmentTypes[randomInt(0, employmentTypes.length)]; break;
-        case 1: employmentType = Math.random() < 0.1 ? (Math.random() < 0.8 ? "Intern" : "Residency") : (Math.random() < 0.3 ? "Part Time" : "Full Time"); break;
-        default: employmentType = Math.random() * gpa < 0.5 ? "Part Time" : "Full Time"; break;
+        case -1:
+            employmentType = "Intern";
+            break;
+        case 0:
+            employmentType = employmentTypes[randomInt(0, employmentTypes.length)];
+            break;
+        case 1:
+            employmentType = Math.random() < 0.1 ? (Math.random() < 0.8 ? "Intern" : "Residency") : (Math.random() < 0.3 ? "Part Time" : "Full Time");
+            break;
+        default:
+            employmentType = Math.random() * gpa < 0.5 ? "Part Time" : "Full Time";
+            break;
     }
 
     if (employmentType === "Intern" || employmentType === "Residency") {
@@ -1043,7 +1144,7 @@ function randomlyGenerateJob(grad, year, month, gpa, err, connection, callback) 
 
     year += Math.floor(month / 12);
     month = month % 12;
-    if (year === maxYear+1) {
+    if (year === maxYear + 1) {
         year = maxYear;
         month = randomInt(oldMonth, 12);
     } else if (year > maxYear + 1) {
@@ -1052,8 +1153,8 @@ function randomlyGenerateJob(grad, year, month, gpa, err, connection, callback) 
         return;
     }
     var startDate = year + '-' + pad(month + 1, 2) + '-' + pad(randomInt(1, monthDays[month] + 1), 2);
-    
-       
+
+
 
     if (goodJob >= 1) {
         if (Math.random() < 0.95) {
@@ -1063,91 +1164,105 @@ function randomlyGenerateJob(grad, year, month, gpa, err, connection, callback) 
             employerName = employerNonTechNames[randomInt(0, employerNonTechNames.length)];
             employerType = 'service';
         }
-            employerDesc = 'a good job';
-            jobProgram = jobPrograms[randomInt(0, jobPrograms.length - 1)];
-            jobTitle = jobTechTitles[randomInt(0, jobTechTitles.length)];
-            salary = randomInt(salaryMinTech, salaryMaxTech);
-            if (employmentType === "Intern" || employmentType === "Residency") {
-                month += randomInt(1, 9);
-            } else {
-                if (gpa > 4 || Math.random() > 0.9) {
-                    salary += executiveBonus;
-                    pay = gpa;
-                    while (Math.random() < 0.5 * Math.max(1, --pay)) salary += executiveBonus * randomInt(1,10);
-                    jobTitle = (gpa < randomInt(4,16) && Math.random() < 0.5) ? "Chief Officer" : "Board Member";
-                    if (Math.random() < 0.5) {
-                        employerDesc = "self owned company";
-                        if (Math.random() < 0.2) employerName = "self founded company";
-                    }
-                }
-                if (gpa > goodJobGPA || Math.random() > 0.7) month += randomInt(1, 120);
-                else month += randomInt(1, 30);
-                if (Math.random() < 0.1) month += randomInt(120, 720);
-            }
+        employerDesc = 'a good job';
+        jobProgram = jobPrograms[randomInt(0, jobPrograms.length - 1)];
+        jobTitle = jobTechTitles[randomInt(0, jobTechTitles.length)];
+        salary = randomInt(salaryMinTech, salaryMaxTech);
+        if (employmentType === "Intern" || employmentType === "Residency") {
+            month += randomInt(1, 9);
         } else {
-            employerName = employerNonTechNames[randomInt(0, employerNonTechNames.length)];
-            employerType = 'service';
-            employerDesc = 'a not so good job';
-            jobProgram = 'non tech';
-            jobTitle = jobNonTechTitles[randomInt(0, jobNonTechTitles.length)];
-            salary = randomInt(salaryMinNonTech, salaryMaxNonTech);
-            if (Math.random() > 0.97) {
-                salary += executiveBonus / 4;
-                jobTitle = 'Manager';
-            }
-            if (gpa > badJobGPA || Math.random() > 0.9) month += randomInt(1, 60);
-            else month += randomInt(1, 10);
-            if (Math.random() < 0.01) month += randomInt(120, 720);
-        }
-
-        year += Math.floor(month / 12);
-        month = month % 12;
-        if (year > maxYear) endDate = 'NULL';
-        else endDate = year + '-' + pad(month + 1, 2) + '-' + pad(randomInt(1, monthDays[month] + 1), 2);
-        switch (employmentType) {
-            case 'Intern': salary /= 1.5; break;
-            case 'Part Time': salary /= 2; break;
-            case 'Residency': salary /= 2.5; break;
-            default: break;
-        }
-        if (employerName === 'Amazon') salary /= 2;
-
-        salary = Math.floor(salary / 1000) * 1000;
-
-        jobCode = randomInt(1000000, 10000000);
-        var stats = {
-            'employmentType': employmentType, 'employerName': employerName, 'employerType': employerType, 'employerDesc': employerDesc,
-            'jobProgram':jobProgram, 'jobTitle':jobTitle, 'salary':salary, 'startDate':startDate, 'endDate':endDate
-        };
-        var query = "INSERT INTO Job (jobCode";
-        var values = ") VALUES ('" + jobCode;
-        for (var stat in stats) {
-            query += ', ' + stat;
-            values += "', '" + stats[stat];
-        }
-
-        try {
-            connection.query(query + values + "')", function (err, rows) {
-                if (debug) {
-                    if (err) console.log("Job was not added" + err);
-                    else console.log("Job was successfully added");
+            if (gpa > 4 || Math.random() > 0.9) {
+                salary += executiveBonus;
+                pay = gpa;
+                while (Math.random() < 0.5 * Math.max(1, --pay)) salary += executiveBonus * randomInt(1, 10);
+                jobTitle = (gpa < randomInt(4, 16) && Math.random() < 0.5) ? "Chief Officer" : "Board Member";
+                if (Math.random() < 0.5) {
+                    employerDesc = "self owned company";
+                    if (Math.random() < 0.2) employerName = "self founded company";
                 }
-                if (err) jobCode = 0;
-                callback(null, jobCode);
-            });
-        } catch (err) {
-            if (debug) {
-                console.log("\nError: UNABLE TO ADD JOB  " + err);
-                for (var stat in stats) console.log(stat + ": " + stats[stat]);
             }
-            jobCode = 0;
-            callback(err, jobCode);
+            if (gpa > goodJobGPA || Math.random() > 0.7) month += randomInt(1, 120);
+            else month += randomInt(1, 30);
+            if (Math.random() < 0.1) month += randomInt(120, 720);
         }
-    
+    } else {
+        employerName = employerNonTechNames[randomInt(0, employerNonTechNames.length)];
+        employerType = 'service';
+        employerDesc = 'a not so good job';
+        jobProgram = 'non tech';
+        jobTitle = jobNonTechTitles[randomInt(0, jobNonTechTitles.length)];
+        salary = randomInt(salaryMinNonTech, salaryMaxNonTech);
+        if (Math.random() > 0.97) {
+            salary += executiveBonus / 4;
+            jobTitle = 'Manager';
+        }
+        if (gpa > badJobGPA || Math.random() > 0.9) month += randomInt(1, 60);
+        else month += randomInt(1, 10);
+        if (Math.random() < 0.01) month += randomInt(120, 720);
+    }
+
+    year += Math.floor(month / 12);
+    month = month % 12;
+    if (year > maxYear) endDate = 'NULL';
+    else endDate = year + '-' + pad(month + 1, 2) + '-' + pad(randomInt(1, monthDays[month] + 1), 2);
+    switch (employmentType) {
+        case 'Intern':
+            salary /= 1.5;
+            break;
+        case 'Part Time':
+            salary /= 2;
+            break;
+        case 'Residency':
+            salary /= 2.5;
+            break;
+        default:
+            break;
+    }
+    if (employerName === 'Amazon') salary /= 2;
+
+    salary = Math.floor(salary / 1000) * 1000;
+
+    jobCode = randomInt(1000000, 10000000);
+    var stats = {
+        'employmentType': employmentType,
+        'employerName': employerName,
+        'employerType': employerType,
+        'employerDesc': employerDesc,
+        'jobProgram': jobProgram,
+        'jobTitle': jobTitle,
+        'salary': salary,
+        'startDate': startDate,
+        'endDate': endDate
+    };
+    var query = "INSERT INTO Job (jobCode";
+    var values = ") VALUES ('" + jobCode;
+    for (var stat in stats) {
+        query += ', ' + stat;
+        values += "', '" + stats[stat];
+    }
+
+    try {
+        connection.query(query + values + "')", function(err, rows) {
+            if (debug) {
+                if (err) console.log("Job was not added" + err);
+                else console.log("Job was successfully added");
+            }
+            if (err) jobCode = 0;
+            callback(null, jobCode);
+        });
+    } catch (err) {
+        if (debug) {
+            console.log("\nError: UNABLE TO ADD JOB  " + err);
+            for (var stat in stats) console.log(stat + ": " + stats[stat]);
+        }
+        jobCode = 0;
+        callback(err, jobCode);
+    }
+
 }
 
 function randomlyGenerateFaculty() {
-    pool.getConnection(function (err, connection) {
+    pool.getConnection(function(err, connection) {
         var firstName = firstNames[randomInt(0, firstNames.length)];
         var lastName = lastNames[randomInt(0, lastNames.length)];
         var email = firstName.charAt(0) + lastName + '@uw.edu';
@@ -1157,8 +1272,13 @@ function randomlyGenerateFaculty() {
         var permissionUpdate = Math.random() < 0.9 ? 1 : 0;
         var permissionReport = Math.random() < 0.9 ? 1 : 0;
         var stats = {
-            'firstName': firstName, 'lastName': lastName, 'password': password, 'status': status,
-            'permissionAccess': permissionAccess, 'permissionUpdate': permissionUpdate, 'permissionReport': permissionReport
+            'firstName': firstName,
+            'lastName': lastName,
+            'password': password,
+            'status': status,
+            'permissionAccess': permissionAccess,
+            'permissionUpdate': permissionUpdate,
+            'permissionReport': permissionReport
         };
         var query = "INSERT INTO Faculty (email";
         var values = ") VALUES ('" + email;
@@ -1168,7 +1288,7 @@ function randomlyGenerateFaculty() {
         }
 
         try {
-            connection.query(query + values + "')", function (err, rows) {
+            connection.query(query + values + "')", function(err, rows) {
                 if (debug) {
                     if (err) console.log(err);
                     else console.log("Faculty was successfully added");
@@ -1195,13 +1315,12 @@ function randomlyGenerateFaculty() {
  * @return {int}          -   random number in [l, h-1]
  */
 function randomInt(l, h) {
-    return Math.floor(Math.random() * (h-l)) + l;
+    return Math.floor(Math.random() * (h - l)) + l;
 };
 
 function pad(n, s) {
     return (Array(s).join('0') + n).slice(-s);
-} 
+}
 
 //For testing
 module.exports = app;
-
