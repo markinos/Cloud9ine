@@ -155,7 +155,7 @@
                         <div class="modal-body">
 
 
-                        <form class="form-horizontal" form id="addGradForm" action="/addGrad" method="post" ">
+                        <form class="form-horizontal" id="addGradForm" action="/addGrad" method="post" >
                             <fieldset>
 
                             <!-- Form Name -->
@@ -165,7 +165,7 @@
                             <div class="form-group">
                               <label class="col-md-4 control-label" for="studentId">Student Id</label>  
                               <div class="col-md-6">
-                              <input id="studentId" name="studentId" type="text" placeholder="1234567" class="form-control input-md" required="">
+                              <input id="studentId" name="studentId" type="text" placeholder="1234567" class="form-control input-md" required=""><span id="errmsg"></span>
                                 
                               </div>
                             </div>
@@ -212,7 +212,7 @@
                             <div class="form-group">
                               <label class="col-md-4 control-label" for="studentGPA">GPA</label>  
                               <div class="col-md-6">
-                              <input id="studentGPA" name="gpa" type="text" placeholder="3.0" class="form-control input-md" required="">
+                              <input id="studentGPA" name="gpa" type="text" placeholder="3.0" class="form-control input-md" required=""> <span id="errmsg"></span>
                                 
                               </div>
                             </div>
@@ -221,7 +221,7 @@
                             <div class="form-group">
                               <label class="col-md-4 control-label" for="studentGradYear">Grad Year</label>  
                               <div class="col-md-6">
-                              <input id="studentGradYear" name="gradYear" type="text" placeholder="YYYY" class="form-control input-md" required="">
+                              <input id="studentGradYear" name="gradYear" type="text" placeholder="YYYY" class="form-control input-md" required=""><span id="errmsg"></span>
                                 
                               </div>
                             </div>
@@ -242,7 +242,7 @@
                               <label class="col-md-4 control-label" for="studentAge">Age</label>
                               <div class="col-md-6">
                                     <select class="form-control" name="age" id="studentAge" required="">
-                                      <option>18<</option>
+                                      <option> <18 </option>
                                       <option>18-23</option>
                                       <option>24-29</option>
                                       <option>30-39</option>
@@ -323,13 +323,13 @@
                               <div class="col-md-4">
                               <div class="radio">
                                 <label for="radios-0">
-                                  <input type="radio" name="radios" id="radios-0" value="0" checked="checked">
+                                  <input type="radio" name="radios" id="radios-0" value="1" checked="checked">
                                   Yes
                                 </label>
                                 </div>
                               <div class="radio">
                                 <label for="radios-1">
-                                  <input type="radio" name="radios" id="radios-1" value="1">
+                                  <input type="radio" name="radios" id="radios-1" value="0">
                                   No
                                 </label>
                                 </div>
@@ -348,117 +348,7 @@
                             </fieldset>
                             </form>
 
-
-                          <!-- <form id="addGradForm" class="form-inline" action="/addGrad" method="post" class="addGrad-Form">
-                              <form class="form-inline" role="form" class="row">
-                                <div class="form-group">
-                                    <label for="message-text" class="col-sm-2 col-form-label" >Student Id:</label>
-                                          <div class="col-sm-10">
-                                              <input type="text" name="studentId" class="form-control" id="studentId" placeholder="1234567">
-                                          </div>
-                                </div>
-                                <div class="form-group">
-                                     <label for="message-text" class="col-sm-2 col-form-label" >First Name:</label>
-                                        <div class="col-sm-10">
-                                            <input type="text" name="firstName" class="form-control" id="studentFirstName" placeholder="Jane">
-                                        </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-sm-10">
-                                        <label for="message-text" class="col-sm-2 col-form-label" >Last Name:</label>
-                                        <input type="text" name="lastName" class="form-control" id="studentLastName" placeholder="Doe">
-                                    </div>
-                                </div>
-                             
-        
-                               </form>
-
-                               
-                                <label for="message-text" class="form-control-label" >Email:</label>
-                                <input type="text" name="email" class="form-control" id="studentEmail" placeholder="example@uw.edu">
-
-                                <label for="message-text" class="form-control-label">Age:</label>
-                                <input type="text" name="age" class="form-control" id="studentAge" placeholder="20">
-
-
-                               <div class="form-group">
-                                        <label>Gender</label>
-                                        <select class="form-control" name="gender" id="studentGender">
-                                            <option>Male</option>
-                                            <option>Female</option>
-                                        </select>
-                                    </div>
-
-                                <div class="form-group">
-                                        <label>Generation</label>
-                                        <select class="form-control" name="generation" id="studentGen">
-                                            <option>1st</option>
-                                            <option>2nd</option>
-                                            <option>Parents Alumni</option>
-                                        </select>
-                                    </div>
-
-                                     <div class="form-group">
-                                        <label>Ethnicity</label>
-                                        <select class="form-control" name="ethnicity" id="studentEthnicity">
-                                            <option>Asian</option>
-                                            <option>African/Black</option>
-                                            <option>Caucasian/White</option>
-                                            <option>Native/Indigenous</option>
-                                            <option>Hispanic/Latino/a</option>
-                                            <option>Mixed</option>
-                                            <option>Pacific Islander</option>
-                                            <option>Other</option>
-                                        </select>
-                                    </div>
-                                     <div class="form-group">
-                                        <label>Degree</label>
-                                        <select class="form-control" name="degree" id="studentDegree">
-                                            <option>BS</option>
-                                            <option>BA</option>
-                                            <option>MS</option>
-                                        </select>
-                                    </div>
-                               <!--  <label for="message-text" class="form-control-label" style="font-size: 16px;">Gender:</label>
-                                <input type="text" name="gender" class="form-control" id="studentAge" placeholder="Male"> -->
-
-                              <!--   <label for="message-text" class="form-control-label" style="font-size: 16px;">Generation:</label>
-                                <input type="text" name="generation" class="form-control" id="studentGen" placeholder="2nd"> -->
-<!-- 
-                                 <label for="message-text" class="form-control-label" style="font-size: 16px;">Ethnicity:</label>
-                                <input type="text" name="ethnicity" class="form-control" id="studentEthnicity" placeholder="Hispanic"> -->
-                             <!--    
-                                <label for="message-text" class="form-control-label" style="font-size: 16px;">GPA:</label>
-                                <input type="text" name="gpa" class="form-control" id="studentGPA" placeholder="3.2">
-                             
-                                <label for="message-text" class="form-control-label" style="font-size: 16px;">Program:</label>
-                                <input type="text" name="program" class="form-control" id="studentProgram" placeholder="CSS"> -->
-                                
-                             <!--    <label for="message-text" class="form-control-label" style="font-size: 16px;">Degree:</label>
-                                <input type="text" name="degree" class="form-control" id="studentDegree" placeholder="BS">
-                                -->
-                             <!--    <label for="message-text" class="form-control-label" style="font-size: 16px;">Grad Year:</label>
-                                <input type="text" name="gradYear" class="form-control" id="studentGradYear" placeholder="YYYY">
-                                
-                                <label for="message-text" class="form-control-label" style="font-size: 16px;">Grad Term:</label>
-                                <input type="text" name="gradTerm" class="form-control" id="studentGradTerm" placeholder="SPR">
-
-                                <label for="message-text" class="form-control-label" id="canContact" style="font-size: 16px;">Contact: </label>
-                                <label class="custom-control custom-radio">
-                                    <input id="radio1Edit" name="canContact" type="radio" class="custom-control-input">
-                                    <span class="custom-control-indicator"></span>
-                                    <span class="custom-control-description" style="font-size: 16px;">Yes</span>
-                                </label>
-                                <label class="custom-control custom-radio">
-                                    <input id="radio2Edit" name="canContact" type="radio" class="custom-control-input">
-                                    <span class="custom-control-indicator"></span>
-                                    <span class="custom-control-description" style="font-size: 16px;">No</span>
-                                </label>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                   <button type="submit" class="btn btn-primary" id="addGradToDataBtn" form="addGradForm">Add</button>
-                                </div>
-                          </form>  -->
+                          
                         </div>
                        
                       </div>
@@ -492,6 +382,7 @@
                                             <th>Gender</th>
                                             <th>Ethnicity</th>
                                             <th>Generation</th>
+                                            <th>UW Email</th>
                                             <th>Email</th>
                                             <th>Program</th>
                                             <th>Degree</th>
@@ -541,6 +432,9 @@
                                                         <%= graduates[i].UWemail  %>
                                                     </td>
                                                     <td>
+                                                        <%= graduates[i].email  %>
+                                                    </td>
+                                                    <td>
                                                         <%= graduates[i].program  %>
                                                     </td>
                                                     <td>
@@ -576,6 +470,7 @@
                                             <th>Gender</th>
                                             <th>Ethnicity</th>
                                             <th>Generation</th>
+                                            <th>UW Email</th>
                                             <th>Email</th>
                                             <th>Program</th>
                                             <th>Degree</th>
@@ -609,48 +504,169 @@
                         <h4 class="modal-title" id="exampleModalLabel" style="font-size: 24px;"><b>Edit a Graduate</b></h4>
                     </div>
                     <div class="modal-body">
-                        <form style="display: block;" action="/editGrad" method="post" id="editGradForm">
-                            <div class="form-group">
-                                <!-- <label for="recipient-name" class="form-control-label" style="font-size: 16px;">Student Id:</label> -->
-                                <input type="hidden" name="studentId" class="form-control" id="studentIdEdit">
-                                <label for="message-text" class="form-control-label" style="font-size: 16px;">First Name:</label>
-                                <input type="text" name="firstName" class="form-control" id="studentFirstNameEdit">
-                                <label for="message-text" class="form-control-label" style="font-size: 16px;">Last Name:</label>
-                                <input type="text" name="lastName" class="form-control" id="studentLastNameEdit">
-                                <label for="message-text" class="form-control-label" style="font-size: 16px;">Email:</label>
-                                <input type="text" name="email" class="form-control" id="studentEmailEdit">
-                                <label for="message-text" class="form-control-label" style="font-size: 16px;">Age:</label>
-                                <input type="text" name="age" class="form-control" id="studentAgeEdit">
-                                <label for="message-text" class="form-control-label" style="font-size: 16px;">Generation:</label>
-                                <input type="text" name="generation" class="form-control" id="studentGenEdit">
-                                <label for="message-text" class="form-control-label" style="font-size: 16px;">Ethnicity:</label>
-                                <input type="text" name="ethnicity" class="form-control" id="studentEthnicityEdit">
-                                <label for="message-text" class="form-control-label" style="font-size: 16px;">GPA:</label>
-                                <input type="text" name="gpa" class="form-control" id="studentGPAEdit">
-                                <label for="message-text" class="form-control-label" style="font-size: 16px;">Program:</label>
-                                <input type="text" name="program" class="form-control" id="studentProgramEdit">
-                                <label for="message-text" class="form-control-label" style="font-size: 16px;">Degree:</label>
-                                <input type="text" name="degree" class="form-control" id="studentDegreeEdit">
-                                <label for="message-text" class="form-control-label" style="font-size: 16px;">Grad Year:</label>
-                                <input type="text" name="gradYear" class="form-control" id="studentGradYearEdit">
-                                <label for="message-text" class="form-control-label" style="font-size: 16px;">Grad Term:</label>
-                                <input type="text" name="gradTerm" class="form-control" id="studentGradTermEdit">
-                                <label for="message-text" class="form-control-label" id="canContact" style="font-size: 16px;">Contact: </label>
-                                <label class="custom-control custom-radio">
-                                    <input id="radio1Edit" name="canContact" type="radio" class="custom-control-input">
-                                    <span class="custom-control-indicator"></span>
-                                    <span class="custom-control-description" style="font-size: 16px;">Yes</span>
-                                </label>
-                                <label class="custom-control custom-radio">
-                                    <input id="radio2Edit" name="canContact" type="radio" class="custom-control-input">
-                                    <span class="custom-control-indicator"></span>
-                                    <span class="custom-control-description" style="font-size: 16px;">No</span>
-                                </label>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary" id="editGradToDataBtn" form="editGradForm">Edit</button>
-                            </div>
+                        <form class="form-horizontal" id="editGradForm" action="/editGrad" method="post">
+                            <fieldset>
+                                <!-- Form Name -->
+                                <!-- <legend>Add a Graduate</legend> -->
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <!-- <label class="col-md-4 control-label" for="studentId">Student Id</label> -->
+                                    <div class="col-md-6">
+                                        <input id="studentIdEdit" type="hidden" name="studentId" type="text" placeholder="1234567" class="form-control input-md" required=""><span id="errmsg"></span>
+                                    </div>
+                                </div>
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="studentLastName">Last Name</label>
+                                    <div class="col-md-6">
+                                        <input id="studentLastNameEdit" name="lastName" type="text" placeholder="Doe" class="form-control input-md" required="">
+                                    </div>
+                                </div>
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="firstName">First Name</label>
+                                    <div class="col-md-6">
+                                        <input id="studentFirstNameEdit" name="firstName" type="text" placeholder="Jane" class="form-control input-md" required="">
+                                    </div>
+                                </div>
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="studentEmail">Email</label>
+                                    <div class="col-md-6">
+                                        <input id="studentEmailEdit" name="email" type="text" placeholder="email@example.com" class="form-control input-md">
+                                    </div>
+                                </div>
+                                <!-- Appended Input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="studentUWEmail">UW Email</label>
+                                    <div class="col-md-7">
+                                        <div class="input-group">
+                                            <input id="studentUWEmailEdit" name="UWemail" class="form-control input-md" placeholder="uw net id" type="text" required="">
+                                            <span class="input-group-addon">@uw.edu</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="studentGPA">GPA</label>
+                                    <div class="col-md-6">
+                                        <input id="studentGPAEdit" name="gpa" type="text" placeholder="3.0" class="form-control input-md" required=""> <span id="errmsg"></span>
+                                    </div>
+                                </div>
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="studentGradYear">Grad Year</label>
+                                    <div class="col-md-6">
+                                        <input id="studentGradYearEdit" name="gradYear" type="text" placeholder="YYYY" class="form-control input-md" required=""><span id="errmsg"></span>
+                                    </div>
+                                </div>
+                                <!-- Button Drop Down -->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="studentGender">Gender</label>
+                                    <div class="col-md-6">
+                                        <select class="form-control" name="gender" id="studentGenderEdit" required="">
+                                            <option>Male</option>
+                                            <option>Female</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="studentAge">Age</label>
+                                    <div class="col-md-6">
+                                        <select class="form-control" name="age" id="studentAgeEdit" required="">
+                                            <option>
+                                                <18 </option>
+                                                    <option>18-23</option>
+                                                    <option>24-29</option>
+                                                    <option>30-39</option>
+                                                    <option>40-49</option>
+                                                    <option>50-59</option>
+                                                    <option>60+</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="studentGen">Generation</label>
+                                    <div class="col-md-6">
+                                        <select class="form-control" name="generation" id="studentGenEdit">
+                                            <option value="null" selected> </option>
+                                            <option>1st</option>
+                                            <option>2nd</option>
+                                            <option>Parent(s) Alumni</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="studentGen">Ethnicity</label>
+                                    <div class="col-md-6">
+                                        <select class="form-control" name="ethnicity" id="studentEthnicityEdit" required="">
+                                            <option>Hispanic/Latino</option>
+                                            <option>Asian</option>
+                                            <option>Pacific Islander</option>
+                                            <option>Caucasian/White</option>
+                                            <option>African/Black</option>
+                                            <option>Native American</option>
+                                            <option>Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="studentGradTerm">Grad Term</label>
+                                    <div class="col-md-6">
+                                        <select class="form-control" name="gradTerm" id="studentGradTermEdit" required="">
+                                            <option>AUT</option>
+                                            <option>WIN</option>
+                                            <option>SPR</option>
+                                            <option>SUM</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="studentProgram">Program</label>
+                                    <div class="col-md-6">
+                                        <select class="form-control" name="program" id="studentProgramEdit" required="">
+                                            <option>CSS</option>
+                                            <option>CES</option>
+                                            <option>IT</option>
+                                            <option>EE</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="studentDegree">Degree</label>
+                                    <div class="col-md-6">
+                                        <select class="form-control" name="degree" id="studentDegreeEdit" required="">
+                                            <option>BS</option>
+                                            <option>BA</option>
+                                            <option>MS</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <!-- Multiple Radios -->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="radios">Contact</label>
+                                    <div class="col-md-4">
+                                        <div class="radio">
+                                            <label for="radios-0">
+                                                <input type="radio" name="radios" id="radios-0" value="1" checked="checked"> Yes
+                                            </label>
+                                        </div>
+                                        <div class="radio">
+                                            <label for="radios-1">
+                                                <input type="radio" name="radios" id="radios-1" value="0"> No
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Button (Double) -->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="button1id"></label>
+                                    <div class="col-md-8">
+                                        <button id="button1id" name="button1id" class="btn btn-default">Close</button>
+                                        <button id="button2id" name="button2id" class="btn btn-info" id="editGradToDataBtn" form="editGradForm">Edit</button>
+                                    </div>
+                                </div>
+                            </fieldset>
                         </form>
                     </div>
                 </div>
@@ -852,18 +868,93 @@
     <!-- Graduate functionality -->
     <script src="js/pages/graduate.js" type="text/javascript"></script>
     <!-- page script -->
+
+    <!-- TABLE ATTRIBUTES -->
     <script>
     $(function() {
-        $("#example1").DataTable();
-        $('#example2').DataTable({
+        // $("#example1").DataTable();
+        $('#example1').DataTable({
             "paging": true,
             "lengthChange": false,
             "searching": false,
             "ordering": true,
             "info": true,
             "autoWidth": false
+            "defaultContent": "<i>null</i>",
+            "targets": "_all",
+            "scrollX": true,
+            "sScrollX": '100%',
+            "sScrollXInner": "110%",
+            "bScrollCollapse": true,
+
+             fixedHeader: {
+                header: true,
+                footer: true
+            },
+
         });
     });
+    </script>
+    <!-- For add graduate form validation -->
+    <script type="text/javascript">
+    $(document).ready(function() {
+        $('input:required,textarea:required').on('blur', function() {
+
+            if ($(this).val() !== '') { //assuming the form doesn't have some fields populated by default.
+                $(this).addClass('green-border');
+            } else {
+                $(this).removeClass('green-border');
+            }
+        });
+
+    });
+
+    // adding validation to student id and gpa
+
+    $(document).ready(function() {
+        // called when key is pressed in textbox 
+        // for id
+        $("#studentId").keypress(function(e) {
+            //if the letter is not digit then display error and don't type anything
+            if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                //display error message
+                $("#errmsg").html("Digits Only").show().fadeOut("slow");
+                return false;
+            }
+        });
+
+        // for grad year
+        $("#studentGradYear").keypress(function(e) {
+            //if the letter is not digit then display error and don't type anything
+            if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                //display error message
+                $("#errmsg").html("Digits Only").show().fadeOut("slow");
+                return false;
+            }
+        });
+
+    });
+    </script>
+    <script type="text/javascript">
+    var txt = document.getElementById('studentGPA');
+    txt.addEventListener('keyup', myFunc);
+
+    function myFunc(e) {
+        var val = this.value;
+        var re = /^([0-9]+[\.]?[0-9]?[0-9]?|[0-9]+)$/g;
+        var re1 = /^([0-9]+[\.]?[0-9]?[0-9]?|[0-9]+)/g;
+        if (re.test(val)) {
+            //do something here
+
+        } else {
+            val = re1.exec(val);
+            if (val) {
+                this.value = val[0];
+            } else {
+                this.value = "";
+            }
+        }
+    }
     </script>
     <!-- adding a graduate -->
     <script type="text/javascript">
@@ -913,6 +1004,7 @@
         var table = $('#example1').DataTable();
 
         $('#example1 tbody').on('click', '.btn-info', function() {
+            $('#editGradModal').modal('show');
             console.log("edit grad");
             var gradInfo = table.row($(this).parents('tr')).data();
 
@@ -923,16 +1015,22 @@
             var gender = gradInfo[5];
             var ethnicity = gradInfo[6];
             var generation = gradInfo[7];
-            var email = gradInfo[8];
-            var program = gradInfo[9];
-            var degree = gradInfo[10];
-            var gradYr = gradInfo[11];
-            var gradTrm = gradInfo[12];
-            var gpa = gradInfo[13];
-            var contact = gradInfo[14];
+            var UWemail = gradInfo[8];
+            var email = gradInfo[9];
+            var program = gradInfo[10];
+            var degree = gradInfo[11];
+            var gradYr = gradInfo[12];
+            var gradTrm = gradInfo[13];
+            var gpa = gradInfo[14];
+            var contact = gradInfo[15];
 
 
-            console.log("grad info: " + firstName + " " + lastName + " " + id + " " + program + " " + contact);
+            console.log("grad info: " + id + lastName + " " + firstName + " " + email + " " + UWemail + " " + gpa  + " " + gradYr
+                + " " + gender + " " + age + " " + generation + " " + ethnicity + " " + gradTrm + " " + program + " " + contact);
+
+
+            var parsedEmail = UWemail.split('@');
+            console.log(parsedEmail[0]);
 
 
             $('#studentIdEdit').val(id);
@@ -949,13 +1047,17 @@
             $('#studentGradTermEdit').val(gradTrm);
             $('#studentDegreeEdit').val(degree);
             $('#studentGPAEdit').val(gpa);
+            $('#studentUWEmailEdit').val(parsedEmail[0])
 
-            if (contact == "Yes") {
-                $('#radio1Edit').prop("interdeterminate", true);
+            if(contact == "Yes") {
+                contact = 1;
 
+            } else{
+                contact = 0;
+            
             }
 
-            $("#editGradModal").modal('show');
+             $('#radios').val(contact);
 
 
 
@@ -972,29 +1074,7 @@
         });
     });
     </script>
-    <!-- fix the header and footer  of table-->
-    <script type="text/javascript">
-    $(document).ready(function() {
-        var table = $('#example1').DataTable({
-            fixedHeader: {
-                header: true,
-                footer: true
-            }
-        });
-    });
-    </script>
-    <!-- Enable Scrolling -->
-    <script type="text/javascript">
-    var table;
-    $(document).ready(function() {
-        table = $('#example1').DataTable({
-            "scrollX": true,
-            "sScrollX": '100%',
-            // "sScrollXInner": "110%",
-            "bScrollCollapse": true,
-        });
-    });
-    </script>
+   
     <script type="text/javascript">
     $(document).ready(function() {
         // Setup - add a text input to each footer cell

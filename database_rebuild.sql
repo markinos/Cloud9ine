@@ -179,15 +179,15 @@ CREATE TABLE IF NOT EXISTS `heroku_50a8c0371a0e6f5`.`Skill` (
 
 
 -- -----------------------------------------------------
--- Table `heroku_50a8c0371a0e6f5`.`Skill_has_Job`
+-- Table `heroku_50a8c0371a0e6f5`.`Skill_Has_Job`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `heroku_50a8c0371a0e6f5`.`Skill_Has_Job`;
 CREATE TABLE IF NOT EXISTS `heroku_50a8c0371a0e6f5`.`Skill_Has_Job` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `skillId` INT NOT NULL,
   `jobId` INT NOT NULL,
-  INDEX `fk_Skill_has_Job_Job1_idx` (`jobId` ASC),
   INDEX `fk_Skill_has_Job_Skill1_idx` (`skillId` ASC),
+  INDEX `fk_Skill_has_Job_Job1_idx` (`jobId` ASC),
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_Skill_has_Job_Skill1`
     FOREIGN KEY (`skillId`)
@@ -199,9 +199,6 @@ CREATE TABLE IF NOT EXISTS `heroku_50a8c0371a0e6f5`.`Skill_Has_Job` (
     REFERENCES `heroku_50a8c0371a0e6f5`.`Job` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
-
-
-
 
 
 

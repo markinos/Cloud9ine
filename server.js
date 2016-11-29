@@ -79,8 +79,8 @@ app.get('/login', function(req, res) {
 
 var generateGraduatesForDatabase = false;
 var generateFacultyForDatabase = false;
-var newGrads = 50;
-var newFaculty = 20;
+var newGrads = 25;
+var newFaculty = 10;
 var depreciation = 0.25;
 
 app.post('/login', function(req, res) {
@@ -226,6 +226,7 @@ app.post('/addGrad', function(req, res) {
     var id = req.body.studentId;
     var firstName = req.body.firstName;
     var lastName = req.body.lastName;
+    var UWemail = req.body.UWemail;
     var email = req.body.email;
     var GPA = req.body.gpa;
     var gender = req.body.gender;
@@ -245,14 +246,18 @@ app.post('/addGrad', function(req, res) {
         contact = 0;
     }
 
+      UWemail = UWemail + "@uw.edu";
+
+    console.log(UWemail);
+
     /** This will insert a new graduate into the system. **/
 
     pool.getConnection(function(error, connection) {
         //query database
-        connection.query("INSERT INTO graduate (studentId, firstName, lastName, gender, UWemail, gpa, program, gradTerm, gradYear,"+
+        connection.query("INSERT INTO graduate (studentId, firstName, lastName, gender, UWemail, email, gpa, program, gradTerm, gradYear,"+
             " ethnicity, age, degree, generation, canContact)" +
-            "VALUES ('" + id + "'" + "," + "'" + firstName + "'" + "," + "'" + lastName + "'" + "," + "'" + gender + "'" + "," + "'" + email + "'" +
-            "," + "'" + GPA + "'" + "," + "'" + program + "'" + "," + "'" + gradTerm + "'" + "," + "'" + gradYear + "'" +
+            "VALUES ('" + id + "'" + "," + "'" + firstName + "'" + "," + "'" + lastName + "'" + "," + "'" + gender + "'" + "," + "'" + UWemail + "'" +
+            "," + "'" + email + "'" + "," + "'" + GPA + "'" + "," + "'" + program + "'" + "," + "'" + gradTerm + "'" + "," + "'" + gradYear + "'" +
             "," + "'" + ethnicity + "'" + "," + "'" + age + "'" + "," + "'" + degree + "'" + "," + "'" + generation + "'" + "," +
             "'" + contact + "'" + ")",
             function(err, rows) {
@@ -334,6 +339,10 @@ app.post('/editGrad', function(req, res) {
     } else {
         contact = 0;
     }
+
+    UWemail = UWemail + "@uw.edu";
+
+    console.log(UWemail);
 
     console.log("edit {" + id + " " + firstName + " " + lastName + " " + UWemail + " " + gpa + " " + program + " " + gradYear + " " +
         gradTerm + " " + ethnicity + " " + age + " " + degree + " " + generation + " " + contact);
@@ -1622,6 +1631,8 @@ var employerNonTechNames = ['Safeway', 'McDonalds', 'Hooters'];
 var jobPrograms = ['CSS', 'CES', 'EE', 'IT', 'tech other', 'non tech'];
 var jobTechTitles = ['Software Engineer', 'Programmer', 'Senior Programmer', 'Debugger', 'Circuit Design', 'Graphic Designer', 'Web Developer'];
 var jobNonTechTitles = ['Clerk', 'Food Chef', 'Greeter', 'Dishwasher', 'Server', 'Custodian'];
+var skillsTech = ['Java', 'Python', 'C', 'Graphics', 'Debugging', 'Project Management', 'IT', 'C++', 'Javascript', 'SQL', 'HTML', 'Web Dev', 'Ruby', 'Internet', 'Group Leader','AI'];
+var skillsNonTech = ['Flipping Burgers', 'Register', 'Janitorial', 'Getting coffee for the boss', 'Kitchen'];
 var salaryMinTech = 50000;
 var salaryMaxTech = 150000;
 var executiveBonus = 200000;
@@ -1765,6 +1776,67 @@ function connectGradToJob(term, studentId, jobCode, err, connection, callback) {
     var sid = 0;
     var jid = 0;
     var upmob, year, end, gpa;
+    var tech = false;
+
+    function addTechSkills(t, i, j, a) {
+        connection.query("SELECT * FROM skill WHERE skill = '" + skillsTech[i] + "'", function (err, rows) {
+            if (!err) {
+                if (rows.length === 0) {
+                    insertTechSkill(t, i, j, a);
+                    //console.log("adding skill" + skillsTech[i]);
+                } else {
+                    var q = "INSERT INTO skill_has_job (jobId, skillId) VALUES ('" + j + "', '" + rows[0].id + "')";
+                    connection.query(q, function (err, rows) {
+                        if (!err && t < 2) {
+                            a.push(i);
+                            var r = i;
+                            while (a.includes(r)) r = Math.floor(Math.random() * skillsTech.length);// console.log("r" + r);}
+                            //console.log(i + " " + t);
+                            addTechSkills(--t, r, j, a);
+                        }// else console.log(err);
+                    });
+                }
+            }
+        });
+    }
+
+
+    function addNonTechSkills(t,i,j, a) {
+        connection.query("SELECT * FROM skill WHERE skill = '" + skillsNonTech[i] + "'", function (err, rows) {
+            if (!err) {
+                if (rows.length === 0) {
+                    insertNonTechSkill(t, i, j, a);
+                    //console.log("adding skill" + skillsNonTech[i]);
+                } else {
+                    var q = "INSERT INTO skill_has_job (jobId, skillId) VALUES ('" + j + "', '" + rows[0].id + "')";
+                    connection.query(q, function (err, rows) {
+                        if (!err && t < 2) {
+                            a.push(i);
+                            var r = i;
+                            while (a.includes(r)) r = Math.floor(Math.random() * skillsNonTech.length); //console.log("r" + r); }
+                            //console.log(i + " " + t);
+                            addNonTechSkills(--t, r, j, a);
+                        } //else console.log(err);
+                    });
+                }
+            }
+        });
+    }
+
+
+    function insertTechSkill(t, i, j, a) {
+            connection.query("INSERT INTO skill (skill) VALUES ('" + skillsTech[i] + "')", function (err, rows) {
+                if (!err) addTechSkills(t, i, j, a);
+            });
+        }
+
+    function insertNonTechSkill(t, i, j, a) {
+            connection.query("INSERT INTO skill (skill) VALUES ('" + skillsNonTech[i] + "')", function (err, rows) {
+                if (!err) addNonTechSkills(t, i, j, a);
+            });
+        }
+
+
     try {
         var query = "SELECT * FROM graduate WHERE studentId = '" + studentId + "'";
         connection.query(query, function(err, rows) {
@@ -1780,6 +1852,8 @@ function connectGradToJob(term, studentId, jobCode, err, connection, callback) {
                 } else if (rows.length) {
                     jid = rows[0].id;
                     end = rows[0].endDate + '';
+                    tech = rows[0].employerType === "tech";
+
                     year = parseInt(end.substr(11, 15));
                     try {
                         gpa = parseDouble(rows[0].gpa);
@@ -1806,6 +1880,10 @@ function connectGradToJob(term, studentId, jobCode, err, connection, callback) {
                                 term[1] = months[end.substr(4, 3)];
                             } else term = [maxYear + 1, 0];
                             if (upmob > 0) term.push(gpa + upmob);
+
+                            if (tech) addTechSkills(Math.floor(Math.random() * skillsTech.length), Math.floor(Math.random() * skillsTech.length), jid, []);
+                            else addNonTechSkills(Math.floor(Math.random() * skillsNonTech.length), Math.floor(Math.random() * skillsNonTech.length), jid, []);
+                            
                         }
                         callback(null, term);
                     });
