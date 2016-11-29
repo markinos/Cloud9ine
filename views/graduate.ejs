@@ -116,18 +116,29 @@
                 <!-- sidebar menu: : style can be found in sidebar.less -->
                 <ul class="sidebar-menu">
                     <li class="header">MAIN NAVIGATION</li>
-                    <li>
-                        <a href="/dashboard"><i class="fa fa-tachometer"></i> Dashboard </a>
-                    </li>
-                    <li><a href="/report"><i class="fa fa-pie-chart"></i> Report </a></li>
-                    <li class="active">
-                        <a href="/graduates">
-                            <i class="fa fa-th"></i> <span>Graduates</span>
+                    <li><a href="/dashboard"><i class="fa fa-tachometer"></i> Dashboard </a></li>
+                    <li><a href="/report"><i class="fa fa-pie-chart"></i> Report </a></li>   
+                    <li class="active treeview">
+                        <a href="#"><i class="fa fa-th"></i> <span>Graduates</span>
                             <span class="pull-right-container">
-                                <small class="label pull-right bg-green">new</small>
+                                <i class="fa fa-angle-left pull-right"></i>
                             </span>
                         </a>
+                        <ul class="treeview-menu">
+                            <li class="active"><a href="/graduates"><i class="fa fa-graduation-cap"></i> Student Info</a></li>
+                            <li><a href="/job"><i class="fa fa-briefcase"></i> Job info</a></li>
+                        </ul>
                     </li>
+                       
+                        <!-- <li >
+                          <a href="/graduates">
+                              <i class="fa fa-th"></i> <span>Graduates</span>
+                              <span class="pull-right-container">
+                                  <small class="label pull-right bg-green">new</small>
+                              </span>
+                          </a>
+                      </li> -->
+                    
                 </ul>
             </section>
             <!-- /.sidebar -->
@@ -360,6 +371,7 @@
             </h1>
                 <ol class="breadcrumb">
                     <li><a href="/graduates"><i class="fa fa-th"></i> Graduates</a></li>
+                    <li class="active">Student Info</li>
                 </ol>
             </section>
             <!-- Main content -->
