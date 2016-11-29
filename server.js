@@ -325,12 +325,13 @@ app.get('/report', function(req, res) {
                 getTotalFaculty,
                 getTotalSurveys,
                 getSurveysCompletedPercent,
-                getTotalGradsWithBSCSS,
-                getTotalGradsWithBSCES,
-                getTotalGradsWithBSIT,
-                getTotalGradsWithMSCSS,
-                getTotalGradsWithBSEE,
-                getTotalGradsWithBACSS,
+                getGradsInPrograms,
+                // getTotalGradsWithBSCSS,
+                // getTotalGradsWithBSCES,
+                // getTotalGradsWithBSIT,
+                // getTotalGradsWithMSCSS,
+                // getTotalGradsWithBSEE,
+                // getTotalGradsWithBACSS,
                 getUndergradDegreesIn01,
                 getUndergradDegreesIn02,
                 getUndergradDegreesIn03,
@@ -587,6 +588,37 @@ function getSurveysCompletedPercent(connection, results, callback) {
     });
 }
 
+function getGradsInPrograms(connection, results, callback) {
+    let query = "SELECT COUNT(*) AS total, program, degree FROM graduate " +
+                "WHERE (program = 'CSS' AND degree = 'BA') " +
+                "OR (program = 'CSS' AND degree = 'BS') " +
+                "OR (program = 'CSS' AND degree = 'MS') " +
+                "OR (program = 'CES' AND degree = 'BS') " +
+                "OR (program = 'IT' AND degree = 'BS') " +
+                "OR (program = 'EE' AND degree = 'BS') " +
+                "GROUP BY program, degree";
+
+    connection.query(query, (err, rows) => {
+        if (err) {
+            console.log(err);
+            callback(err);
+            return;
+        }
+
+        results['totalBACSS'] = rows[0].total;
+        results['totalBSCSS'] = rows[1].total;
+        results['totalMSCSS'] = rows[2].total;
+        results['totalBSCES'] = rows[3].total;
+        results['totalBSEE'] = rows[4].total;
+        results['totalBSIT'] = rows[5].total;
+        callback(null, connection, results);
+    });
+}
+
+function getSkillsUsedInWorkPlace(connection, results, callback) {
+    
+}
+
 /**
  * Get the total number of graduates with a Bachelors of
  * Science in Computer Science and Systems
@@ -607,7 +639,7 @@ function getTotalGradsWithBSCSS(connection, results, callback) {
             return;
         }
 
-        results['totalBSCSS'] = rows[0].total;
+        results['totalBACSS'] = rows[0].total;
         callback(null, connection, results);
     });
 }
@@ -735,6 +767,12 @@ function getTotalGradsWithBACSS(connection, results, callback) {
         callback(null, connection, results);
     })
 }
+
+function getTotalSkillsUsed(connection, results, callback) {
+
+}
+
+
 
 /**
  * Get the total number of undergraduate degrees granted in 2001
