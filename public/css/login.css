@@ -44,6 +44,14 @@ body {
 	}
 }
 
+
+.app-name {
+	font-family: 'Roboto'; 
+	font-size: 65px; 
+	position: relative; 
+	text-align: center;
+	color: #fff;
+}
 .myBtn {
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
