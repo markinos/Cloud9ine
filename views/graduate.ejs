@@ -36,11 +36,7 @@
         <header class="main-header">
             <!-- Logo -->
             <a href="/dashboard" class="logo">
-                <!-- mini logo for sidebar mini 50x50 pixels -->
-                <!-- <span class="fa fa-cloud"></span> -->
-                <!-- logo for regular state and mobile devices -->
                 <i class="fa fa-cloud" style="margin-right: 5px;"></i><b>Grad</b>Track
-                <!-- <span class="logo-lg"></span> -->
             </a>
             <!-- Header Navbar: style can be found in header.less -->
             <nav class="navbar navbar-static-top">
@@ -910,7 +906,7 @@
     <!-- For add graduate form validation -->
     <script type="text/javascript">
     $(document).ready(function() {
-        $('input:required,textarea:required').on('blur', function() {
+        $('input:required,textarea:required, select:required').on('blur', function() {
 
             if ($(this).val() !== '') { //assuming the form doesn't have some fields populated by default.
                 $(this).addClass('green-border');
@@ -948,8 +944,29 @@
     });
     </script>
     <script type="text/javascript">
-    var txt = document.getElementById('studentGPA');
-    txt.addEventListener('keyup', myFunc);
+    var gpa = document.getElementById('studentGPA');
+    gpa.addEventListener('keyup', myFunc);
+
+    function myFunc(e) {
+        var val = this.value;
+        var re = /^([0-9]+[\.]?[0-9]?[0-9]?|[0-9]+)$/g;
+        var re1 = /^([0-9]+[\.]?[0-9]?[0-9]?|[0-9]+)/g;
+        if (re.test(val)) {
+            //do something here
+
+        } else {
+            val = re1.exec(val);
+            if (val) {
+                this.value = val[0];
+            } else {
+                this.value = "";
+            }
+        }
+    }
+    var gpa1 = document.getElementById('studentGPAEdit');
+
+
+    gpa1.addEventListener('keyup', myFunc);
 
     function myFunc(e) {
         var val = this.value;
