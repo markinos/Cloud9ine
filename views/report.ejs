@@ -723,68 +723,38 @@
         pieChart.Doughnut(PieData, pieOptions);
 
         //-------------
-        //- BAR CHART -
+        //- Skills Pie CHART -
         //-------------
-        var barChartCanvas = $("#barChart").get(0).getContext("2d");
-        var barChart = new Chart(barChartCanvas);
+        var skillChartCanvas = $("#barChart").get(0).getContext("2d");
+        var skillChart = new Chart(skillChartCanvas);
 
-         var barChartData = {
-            labels: ["2009", "2010", "2011", "2012", "2013", "2014", "2015"],
-            datasets: [
-            {
-                label: "Undergraduate Degrees Granted",
-                fillColor: "rgba(60,141,188,0.9)",
-                strokeColor: "rgba(60,141,188,0.8)",
-                pointColor: "#3b8bba",
-                pointStrokeColor: "rgba(60,141,188,1)",
-                pointHighlightFill: "#fff",
-                pointHighlightStroke: "rgba(60,141,188,1)",
-                data: [30, 35, 31, 46, 60, 55, 61]
-            },
-            {
-                label: "Undergraduate Degrees Granted",
-                fillColor: "rgba(60,141,188,0.9)",
-                strokeColor: "rgba(60,141,188,0.8)",
-                pointColor: "#3b8bba",
-                pointStrokeColor: "rgba(60,141,188,1)",
-                pointHighlightFill: "#fff",
-                pointHighlightStroke: "rgba(60,141,188,1)",
-                data: [30, 35, 31, 46, 60, 55, 61]
-            }]
-        };
+        var skillData = [];
+        var colors = ["#f56954", "#00a65a", "#f39c12", "#00c0ef", "#3c8dbc", "#d2d6de",
+                        "#39cccc", "#001f3f", "#3d9970", "#01ff70", "#ff851b", "#f012be",
+                        "#605ca8", "#d81b60"];
+        var colorIndex = 0;
 
-       
-        barChartData.datasets[1].fillColor = "#00a65a";
-        barChartData.datasets[1].strokeColor = "#00a65a";
-        barChartData.datasets[1].pointColor = "#00a65a";
-        var barChartOptions = {
-            //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
-            scaleBeginAtZero: true,
-            //Boolean - Whether grid lines are shown across the chart
-            scaleShowGridLines: true,
-            //String - Colour of the grid lines
-            scaleGridLineColor: "rgba(0,0,0,.05)",
-            //Number - Width of the grid lines
-            scaleGridLineWidth: 1,
-            //Boolean - Whether to show horizontal lines (except X axis)
-            scaleShowHorizontalLines: true,
-            //Boolean - Whether to show vertical lines (except Y axis)
-            scaleShowVerticalLines: true,
-            //Boolean - If there is a stroke on each bar
-            barShowStroke: true,
-            //Number - Pixel width of the bar stroke
-            barStrokeWidth: 2,
-            //Number - Spacing between each of the X value sets
-            barValueSpacing: 5,
-            //Number - Spacing between data sets within X values
-            barDatasetSpacing: 1,
-            //Boolean - whether to make the chart responsive
-            responsive: true,
-            maintainAspectRatio: true
-        };
+        var skills = <%- JSON.stringify(skills) %>;
 
-        //barChartOptions.datasetFill = false;
-        barChart.Doughnut(PieData, pieOptions);
+        for (var skill in skills) {
+            var skillName = skill;
+            var count = skills[skill];
+
+            var skillObj = {
+                value: count,
+                color: colors[colorIndex],
+                highlight: "#f56954",
+                label: skillName
+            }
+
+            skillData.push(skillObj);
+            colorIndex++;
+            if (colorIndex == colors.length) {
+                colorIndex = 0;
+            }
+        }
+
+        skillChart.Doughnut(skillData, pieOptions);
     });
     </script>
 </body>
