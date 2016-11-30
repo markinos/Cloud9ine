@@ -372,6 +372,33 @@ app.post('/editGrad', function(req, res) {
 
 });
 
+app.get('/job', function(req, res) {
+    res.render("jobs.ejs");
+
+});
+
+app.post('/job', function(req, res) {
+    if(req.session.user) {
+        pool.getConnection(function (err, connection) {
+
+            connection.query('SELECT * FROM graduate', function(err, rows) {
+
+                if(err) {
+                    console.log(err);
+                } else {
+                     var data = {
+                        'graduates': rows,
+                        'user': req.session.user
+                    };
+                }
+
+            });
+
+        })
+    }
+
+});
+
 app.get('/report', function(req, res) {
     if (req.session.user) {
         pool.getConnection(function(err, connection) {
