@@ -112,13 +112,16 @@
                     <li class="active">
                         <a href="/report"><i class="fa fa-pie-chart"></i> Report </a>
                     </li>
-                    <li>
-                        <a href="/graduates">
-                            <i class="fa fa-th"></i> <span>Graduates</span>
+                    <li class="treeview">
+                        <a href="#"><i class="fa fa-th"></i> <span>Graduates</span>
                             <span class="pull-right-container">
-                                <small class="label pull-right bg-green">new</small>
+                                <i class="fa fa-angle-left pull-right"></i>
                             </span>
                         </a>
+                        <ul class="treeview-menu">
+                            <li class=""><a href="/graduates"><i class="fa fa-graduation-cap"></i> Student Info</a></li>
+                            <li><a href="/job"><i class="fa fa-briefcase"></i> Job info</a></li>
+                        </ul>
                     </li>
                 </ul>
             </section>
@@ -296,7 +299,7 @@
                         <!-- LINE CHART -->
                         <div class="box box-info">
                             <div class="box-header with-border">
-                                <h3 class="box-title">Undergraduate Degrees Granted Per Year <small>2001-2016<small></h3>
+                                <h3 class="box-title">Undergraduate Degrees Granted Per Year</h3>
                                 <div class="box-tools pull-right">
                                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                                     </button>
@@ -543,9 +546,22 @@
         // This will get the first returned node in the jQuery collection.
         var areaChart = new Chart(areaChartCanvas);
 
+        var gradDegreesPerYear = <%- JSON.stringify(totalGradDegreesPerYear) %>;
+        //console.log(gradDegreesPerYear);
+
+        var gradLabels = [];
+        var gradData = [];
+
+        for (var year in gradDegreesPerYear) {
+            gradLabels.push(year);
+            gradData.push(gradDegreesPerYear[year]);
+        }
+
+        console.log(gradLabels);
+        console.log(gradData);
+
         var areaChartData = {
-            labels: ["01", "02", "03", "04", "05", "06", "07", "08",
-                    "09", "10", "11", "12", "13", "14", "15", "16"],
+            labels: gradLabels,
             datasets: [
             {
                 label: "Graduate Degrees Granted",
@@ -555,22 +571,7 @@
                 pointStrokeColor: "rgba(60,141,188,1)",
                 pointHighlightFill: "#fff",
                 pointHighlightStroke: "rgba(60,141,188,1)",
-                data: [<%= gradDegreesGranted01 %>, 
-                       <%= gradDegreesGranted02 %>, 
-                       <%= gradDegreesGranted03 %>,
-                       <%= gradDegreesGranted04 %>,
-                       <%= gradDegreesGranted05 %>,
-                       <%= gradDegreesGranted06 %>,
-                       <%= gradDegreesGranted07 %>,
-                       <%= gradDegreesGranted08 %>,
-                       <%= gradDegreesGranted09 %>,
-                       <%= gradDegreesGranted10 %>,
-                       <%= gradDegreesGranted11 %>,
-                       <%= gradDegreesGranted12 %>,
-                       <%= gradDegreesGranted13 %>,
-                       <%= gradDegreesGranted14 %>,
-                       <%= gradDegreesGranted15 %>,
-                       <%= gradDegreesGranted16 %>]
+                data: gradData
             }]
         };
 
@@ -619,9 +620,23 @@
         //- LINE CHART -
         //--------------
 
+        var undergradDegreesPerYear = <%-JSON.stringify(totalUndergradDegreesPerYear)%>;
+        //console.log(undergradDegreesPerYear);
+
+        var undergradDegreesData = [];
+        var undergradDegreesLabel = [];
+
+        for (var year in undergradDegreesPerYear) {
+            //console.log(undergradDegreesPerYear[year]);
+            undergradDegreesLabel.push(year);
+            undergradDegreesData.push(undergradDegreesPerYear[year]);
+        }
+
+        //console.log(undergradDegreesLabel);
+        //console.log(undergradDegreesData);
+
         var underGradLineChartData = {
-            labels: ["01", "02", "03", "04", "05", "06", "07", "08",
-                    "09", "10", "11", "12", "13", "14", "15", "16"],
+            labels: undergradDegreesLabel,
             datasets: [{
                 label: "Undergraduate Degrees Granted",
                 fillColor: "#00c0ef",
@@ -630,22 +645,7 @@
                 pointStrokeColor: "#00c0ef",
                 pointHighlightFill: "#fff",
                 pointHighlightStroke: "#00c0ef",
-                data: [<%= undergradDegreesGranted01 %>, 
-                       <%= undergradDegreesGranted02 %>, 
-                       <%= undergradDegreesGranted03 %>,
-                       <%= undergradDegreesGranted04 %>,
-                       <%= undergradDegreesGranted05 %>,
-                       <%= undergradDegreesGranted06 %>,
-                       <%= undergradDegreesGranted07 %>,
-                       <%= undergradDegreesGranted08 %>,
-                       <%= undergradDegreesGranted09 %>,
-                       <%= undergradDegreesGranted10 %>,
-                       <%= undergradDegreesGranted11 %>,
-                       <%= undergradDegreesGranted12 %>,
-                       <%= undergradDegreesGranted13 %>,
-                       <%= undergradDegreesGranted14 %>,
-                       <%= undergradDegreesGranted15 %>,
-                       <%= undergradDegreesGranted16 %>]
+                data: undergradDegreesData
                 
             }]
         };
