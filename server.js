@@ -1,7 +1,7 @@
 'use strict';
 
 //node modules
-require('events').EventEmitter.prototype._maxListeners = 100;
+// require('events').EventEmitter.prototype._maxListeners = 100;
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
@@ -9,7 +9,7 @@ const server = require('http').Server(app);
 const mysql = require('mysql');
 const session = require('express-session');
 const async = require('async');
-var io = require('socket.io')(server);
+// var io = require('socket.io')(server);
 
 
 
