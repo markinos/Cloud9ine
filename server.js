@@ -1,6 +1,7 @@
 'use strict';
 
 //node modules
+require('events').EventEmitter.prototype._maxListeners = 100;
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
@@ -8,6 +9,10 @@ const server = require('http').Server(app);
 const mysql = require('mysql');
 const session = require('express-session');
 const async = require('async');
+var io = require('socket.io')(server);
+
+
+
 
 //setup heroku database
 const pool = mysql.createPool({
@@ -86,41 +91,63 @@ var depreciation = 0.25;
 app.post('/login', function(req, res) {
     var email = req.body.email;
     var password = req.body.password;
+    var isPass = false;
 
     try {
         generateRandomDatabase(true, function(wait) {
             if (wait === 0 || wait === 1) generateGraduatesForDatabase = false;
             generateRandomDatabase(false, function(wait) {
                 if (wait === 2) generateFacultyForDatabase = false;
-                pool.getConnection(function(err, connection) {
-                    try {
-                        connection.query("SELECT * FROM faculty WHERE faculty.email = " + "'" + email + "'" + "AND faculty.password = " + "'" + password + "'", function(err, rows) {
-                            if (err) {
-                                console.log(err);
-                                res.render('/login', { err: err.message });
-                            }
+                // io.on('connection', function(socket) {
+                    // console.log('client connected');
 
-                            //user found
-                            if (rows.length) {
-                                //set session data
-                                req.session.user = {
-                                    'id': rows[0].id,
-                                    'email': rows[0].email,
-                                    'firstName': rows[0].firstName,
-                                    'lastName': rows[0].lastName
-                                }
+                    // socket.on('login-page', function(data) {
+                        pool.getConnection(function(err, connection) {
+                            try {
+                                connection.query("SELECT * FROM faculty WHERE faculty.email = " + "'" + email + "'" + "AND faculty.password = " + "'" + password + "'", function(err, rows) {
+                                    if (err) {
+                                        console.log(err);
+                                        res.render('/login', { err: err.message });
+                                    }
 
-                                res.redirect('/dashboard');
-                            } else {
-                                console.log('user not found');
-                                res.send('error user not found');
+                                    //user found
+                                    if (rows.length) {
+                                        isPass = true;
+                                        //set session data
+                                        req.session.user = {
+                                            'id': rows[0].id,
+                                            'email': rows[0].email,
+                                            'firstName': rows[0].firstName,
+                                            'lastName': rows[0].lastName
+                                        }
+
+                                        res.redirect('/dashboard');
+                                    } else {
+
+                                        connection.query("SELECT * FROM faculty WHERE faculty.email = " + "'" + email + "'" + "AND faculty.password !=" +
+                                            +"'" + password + "'",
+                                            function(err, rows1) {
+                                                isPass = false;
+                                                console.log('user not found');
+                                                var data = {
+                                                    'isPass': isPass
+                                                }
+
+                                                // io.emit('incorrect-pass', {isPass: isPass});
+
+                                                res.render("login.ejs", isPass);
+
+                                            })
+
+                                    }
+                                    connection.release();
+                                });
+                            } catch (err) {
+                                res.redirect('/');
                             }
-                            connection.release();
                         });
-                    } catch (err) {
-                        res.redirect('/');
-                    }
-                });
+                    // });
+                // });
             });
         });
     } catch (err) {
@@ -247,7 +274,7 @@ app.post('/addGrad', function(req, res) {
         contact = 0;
     }
 
-      UWemail = UWemail + "@uw.edu";
+    UWemail = UWemail + "@uw.edu";
 
     console.log(UWemail);
 
@@ -255,7 +282,7 @@ app.post('/addGrad', function(req, res) {
 
     pool.getConnection(function(error, connection) {
         //query database
-        connection.query("INSERT INTO graduate (studentId, firstName, lastName, gender, UWemail, email, gpa, program, gradTerm, gradYear,"+
+        connection.query("INSERT INTO graduate (studentId, firstName, lastName, gender, UWemail, email, gpa, program, gradTerm, gradYear," +
             " ethnicity, age, degree, generation, canContact)" +
             "VALUES ('" + id + "'" + "," + "'" + firstName + "'" + "," + "'" + lastName + "'" + "," + "'" + gender + "'" + "," + "'" + UWemail + "'" +
             "," + "'" + email + "'" + "," + "'" + GPA + "'" + "," + "'" + program + "'" + "," + "'" + gradTerm + "'" + "," + "'" + gradYear + "'" +
@@ -374,36 +401,57 @@ app.post('/editGrad', function(req, res) {
 });
 
 app.get('/job', function(req, res) {
-    res.render("jobs.ejs");
-
-});
-
-app.post('/job', function(req, res) {
-    if(req.session.user) {
-        pool.getConnection(function (err, connection) {
+    if (req.session.user) {
+        pool.getConnection(function(err, connection) {
 
             connection.query('SELECT * FROM graduate', function(err, rows) {
 
-                if(err) {
+                if (err) {
                     console.log(err);
                 } else {
-                     var data = {
-                        'graduates': rows,
-                        'user': req.session.user
-                    };
+                    connection.query("SELECT * FROM job", function(err, rows1) {
+                        if (err) {
+                            console.log(err);
+                        } else {
+
+                            var data = {
+                                'jobs': rows1,
+                                'graduates': rows,
+                                'user': req.session.user
+                            };
+
+                            console.log(data.jobs);
+
+                            res.render('jobs.ejs', data);
+
+                            connection.release();
+
+                        }
+                    });
                 }
 
             });
 
-        })
+
+        });
+
+    } else {
+        res.redirect('/login');
     }
+
+
+});
+
+app.post('/job', function(req, res) {
+
+
 
 });
 
 app.get('/report', function(req, res) {
     if (req.session.user) {
         pool.getConnection(function(err, connection) {
-           //perform asyncronous queries one by one 
+            //perform asyncronous queries one by one 
             async.waterfall([
                 //getTotalGrads must return a callback function
                 //so that async will know how to call the next function
@@ -470,7 +518,7 @@ function getTotalGrads(connection) {
             //calls getTotalFaculty
             callback(null, connection, results);
         });
-    } 
+    }
 }
 
 /**
@@ -483,12 +531,12 @@ function getTotalGrads(connection) {
  */
 function getJobPlacementRate(connection, results, callback) {
     let query = "SELECT ROUND(COUNT(DISTINCT graduate.id, firstName, lastName) / " +
-                    "(SELECT COUNT(*) FROM graduate) * 100) AS jobPlacementRate " +
-                "FROM graduate " + 
-                "JOIN graduate_has_job ON graduate_has_job.graduateId = graduate.id " +
-                "JOIN job ON job.id = graduate_has_job.employmentId " +
-                "WHERE jobProgram IN ('CSS', 'EE', 'CES', 'tech other') " +
-                "AND startDate >= gradYear";
+        "(SELECT COUNT(*) FROM graduate) * 100) AS jobPlacementRate " +
+        "FROM graduate " +
+        "JOIN graduate_has_job ON graduate_has_job.graduateId = graduate.id " +
+        "JOIN job ON job.id = graduate_has_job.employmentId " +
+        "WHERE jobProgram IN ('CSS', 'EE', 'CES', 'tech other') " +
+        "AND startDate >= gradYear";
 
     connection.query(query, (err, rows) => {
         if (err) {
@@ -505,10 +553,10 @@ function getJobPlacementRate(connection, results, callback) {
 
 function getNumberOfGradsWithJobs(connection, results, callback) {
     let query = "SELECT COUNT(DISTINCT graduate.id) as gradsWithJobs FROM graduate " +
-                "JOIN graduate_has_job ON graduate_has_job.graduateId = graduate.id " +
-                "JOIN job ON job.id = graduate_has_job.employmentId " +
-                "WHERE jobProgram IN ('CSS', 'EE', 'CES', 'tech other') " +
-                "AND startDate >= gradYear; "
+        "JOIN graduate_has_job ON graduate_has_job.graduateId = graduate.id " +
+        "JOIN job ON job.id = graduate_has_job.employmentId " +
+        "WHERE jobProgram IN ('CSS', 'EE', 'CES', 'tech other') " +
+        "AND startDate >= gradYear; "
 
     connection.query(query, (err, rows) => {
         if (err) {
@@ -524,9 +572,9 @@ function getNumberOfGradsWithJobs(connection, results, callback) {
 
 function getNumberOfGradsWithInternships(connection, results, callback) {
     let query = "SELECT COUNT(DISTINCT graduate.id) AS gradsWithInternships FROM graduate " +
-                "JOIN graduate_has_job ON graduate_has_job.graduateId = graduate.id " +
-                "JOIN job ON job.id = graduate_has_job.employmentId " +
-                "WHERE employmentType = 'Intern'";
+        "JOIN graduate_has_job ON graduate_has_job.graduateId = graduate.id " +
+        "JOIN job ON job.id = graduate_has_job.employmentId " +
+        "WHERE employmentType = 'Intern'";
 
     connection.query(query, (err, rows) => {
         if (err) {
@@ -542,15 +590,15 @@ function getNumberOfGradsWithInternships(connection, results, callback) {
 
 function getGradsThatInternedAndFoundAJob(connection, results, callback) {
     let query = "SELECT COUNT(DISTINCT graduate.id) AS gradsThatInternedAndFoundAJob FROM graduate " +
-                "JOIN graduate_has_job ON graduate_has_job.graduateId = graduate.id " +
-                "JOIN job ON job.id = graduate_has_job.employmentId " +
-                "WHERE jobProgram IN ('CSS', 'EE', 'CES', 'tech other') " +
-                "AND graduate.id IN (SELECT graduate.id FROM graduate " +
-                    "JOIN graduate_has_job ON graduate_has_job.graduateId = graduate.id " +
-                    "JOIN job ON job.id = graduate_has_job.employmentId " +
-                    "WHERE employmentType = 'Intern') " +
-                "AND startDate >= gradYear " +
-                "AND employmentType != 'Intern'";
+        "JOIN graduate_has_job ON graduate_has_job.graduateId = graduate.id " +
+        "JOIN job ON job.id = graduate_has_job.employmentId " +
+        "WHERE jobProgram IN ('CSS', 'EE', 'CES', 'tech other') " +
+        "AND graduate.id IN (SELECT graduate.id FROM graduate " +
+        "JOIN graduate_has_job ON graduate_has_job.graduateId = graduate.id " +
+        "JOIN job ON job.id = graduate_has_job.employmentId " +
+        "WHERE employmentType = 'Intern') " +
+        "AND startDate >= gradYear " +
+        "AND employmentType != 'Intern'";
 
     connection.query(query, (err, rows) => {
         if (err) {
@@ -647,13 +695,13 @@ function getSurveysCompletedPercent(connection, results, callback) {
 
 function getGradsInPrograms(connection, results, callback) {
     let query = "SELECT COUNT(*) AS total, program, degree FROM graduate " +
-                "WHERE (program = 'CSS' AND degree = 'BA') " +
-                "OR (program = 'CSS' AND degree = 'BS') " +
-                "OR (program = 'CSS' AND degree = 'MS') " +
-                "OR (program = 'CES' AND degree = 'BS') " +
-                "OR (program = 'IT' AND degree = 'BS') " +
-                "OR (program = 'EE' AND degree = 'BS') " +
-                "GROUP BY program, degree";
+        "WHERE (program = 'CSS' AND degree = 'BA') " +
+        "OR (program = 'CSS' AND degree = 'BS') " +
+        "OR (program = 'CSS' AND degree = 'MS') " +
+        "OR (program = 'CES' AND degree = 'BS') " +
+        "OR (program = 'IT' AND degree = 'BS') " +
+        "OR (program = 'EE' AND degree = 'BS') " +
+        "GROUP BY program, degree";
 
     connection.query(query, (err, rows) => {
         if (err) {
@@ -674,8 +722,8 @@ function getGradsInPrograms(connection, results, callback) {
 
 function getSkillsUsedInWorkPlace(connection, results, callback) {
     let query = "SELECT COUNT(*) AS total, skill FROM skill " +
-                "JOIN skill_has_job ON skill_has_job.skillId = skill.id " +
-                "GROUP BY skill";
+        "JOIN skill_has_job ON skill_has_job.skillId = skill.id " +
+        "GROUP BY skill";
 
     connection.query(query, (err, rows) => {
         if (err) {
@@ -700,8 +748,8 @@ function getSkillsUsedInWorkPlace(connection, results, callback) {
 
 function getUndergradDegreesPerYear(connection, results, callback) {
     let query = "SELECT COUNT(*) AS total, gradYear FROM graduate " +
-                "WHERE (degree = 'BA' OR degree = 'BS') " +
-                "GROUP BY gradYear";
+        "WHERE (degree = 'BA' OR degree = 'BS') " +
+        "GROUP BY gradYear";
 
     connection.query(query, (err, rows) => {
         if (err) {
@@ -712,7 +760,7 @@ function getUndergradDegreesPerYear(connection, results, callback) {
 
         //console.log(rows);
         var undergradDegrees = {};
-            
+
         for (let i = 0; i < rows.length; i++) {
             undergradDegrees[rows[i].gradYear] = rows[i].total;
         }
@@ -724,8 +772,8 @@ function getUndergradDegreesPerYear(connection, results, callback) {
 
 function getGradDegreesPerYear(connection, results, callback) {
     let query = "SELECT COUNT(*) AS total, gradYear FROM graduate " +
-                "WHERE degree = 'MS' " +
-                "GROUP BY gradYear";
+        "WHERE degree = 'MS' " +
+        "GROUP BY gradYear";
 
     connection.query(query, (err, rows) => {
         if (err) {
@@ -921,7 +969,7 @@ var employerNonTechNames = ['Safeway', 'McDonalds', 'Hooters'];
 var jobPrograms = ['CSS', 'CES', 'EE', 'IT', 'tech other', 'non tech'];
 var jobTechTitles = ['Software Engineer', 'Programmer', 'Senior Programmer', 'Debugger', 'Circuit Design', 'Graphic Designer', 'Web Developer'];
 var jobNonTechTitles = ['Clerk', 'Food Chef', 'Greeter', 'Dishwasher', 'Server', 'Custodian'];
-var skillsTech = ['Java', 'Python', 'C', 'Graphics', 'Debugging', 'Project Management', 'IT', 'C++', 'Javascript', 'SQL', 'HTML', 'Web Dev', 'Ruby', 'Internet', 'Group Leader','AI'];
+var skillsTech = ['Java', 'Python', 'C', 'Graphics', 'Debugging', 'Project Management', 'IT', 'C++', 'Javascript', 'SQL', 'HTML', 'Web Dev', 'Ruby', 'Internet', 'Group Leader', 'AI'];
 var skillsNonTech = ['Flipping Burgers', 'Register', 'Janitorial', 'Getting coffee for the boss', 'Kitchen'];
 var salaryMinTech = 50000;
 var salaryMaxTech = 150000;
@@ -1069,21 +1117,21 @@ function connectGradToJob(term, studentId, jobCode, err, connection, callback) {
     var tech = false;
 
     function addTechSkills(t, i, j, a) {
-        connection.query("SELECT * FROM skill WHERE skill = '" + skillsTech[i] + "'", function (err, rows) {
+        connection.query("SELECT * FROM skill WHERE skill = '" + skillsTech[i] + "'", function(err, rows) {
             if (!err) {
                 if (rows.length === 0) {
                     insertTechSkill(t, i, j, a);
                     //console.log("adding skill" + skillsTech[i]);
                 } else {
                     var q = "INSERT INTO skill_has_job (jobId, skillId) VALUES ('" + j + "', '" + rows[0].id + "')";
-                    connection.query(q, function (err, rows) {
+                    connection.query(q, function(err, rows) {
                         if (!err && t < 2) {
                             a.push(i);
                             var r = i;
-                            while (a.includes(r)) r = Math.floor(Math.random() * skillsTech.length);// console.log("r" + r);}
+                            while (a.includes(r)) r = Math.floor(Math.random() * skillsTech.length); // console.log("r" + r);}
                             //console.log(i + " " + t);
                             addTechSkills(--t, r, j, a);
-                        }// else console.log(err);
+                        } // else console.log(err);
                     });
                 }
             }
@@ -1091,15 +1139,15 @@ function connectGradToJob(term, studentId, jobCode, err, connection, callback) {
     }
 
 
-    function addNonTechSkills(t,i,j, a) {
-        connection.query("SELECT * FROM skill WHERE skill = '" + skillsNonTech[i] + "'", function (err, rows) {
+    function addNonTechSkills(t, i, j, a) {
+        connection.query("SELECT * FROM skill WHERE skill = '" + skillsNonTech[i] + "'", function(err, rows) {
             if (!err) {
                 if (rows.length === 0) {
                     insertNonTechSkill(t, i, j, a);
                     //console.log("adding skill" + skillsNonTech[i]);
                 } else {
                     var q = "INSERT INTO skill_has_job (jobId, skillId) VALUES ('" + j + "', '" + rows[0].id + "')";
-                    connection.query(q, function (err, rows) {
+                    connection.query(q, function(err, rows) {
                         if (!err && t < 2) {
                             a.push(i);
                             var r = i;
@@ -1115,16 +1163,16 @@ function connectGradToJob(term, studentId, jobCode, err, connection, callback) {
 
 
     function insertTechSkill(t, i, j, a) {
-            connection.query("INSERT INTO skill (skill) VALUES ('" + skillsTech[i] + "')", function (err, rows) {
-                if (!err) addTechSkills(t, i, j, a);
-            });
-        }
+        connection.query("INSERT INTO skill (skill) VALUES ('" + skillsTech[i] + "')", function(err, rows) {
+            if (!err) addTechSkills(t, i, j, a);
+        });
+    }
 
     function insertNonTechSkill(t, i, j, a) {
-            connection.query("INSERT INTO skill (skill) VALUES ('" + skillsNonTech[i] + "')", function (err, rows) {
-                if (!err) addNonTechSkills(t, i, j, a);
-            });
-        }
+        connection.query("INSERT INTO skill (skill) VALUES ('" + skillsNonTech[i] + "')", function(err, rows) {
+            if (!err) addNonTechSkills(t, i, j, a);
+        });
+    }
 
 
     try {
@@ -1173,7 +1221,7 @@ function connectGradToJob(term, studentId, jobCode, err, connection, callback) {
 
                             if (tech) addTechSkills(Math.floor(Math.random() * skillsTech.length), Math.floor(Math.random() * skillsTech.length), jid, []);
                             else addNonTechSkills(Math.floor(Math.random() * skillsNonTech.length), Math.floor(Math.random() * skillsNonTech.length), jid, []);
-                            
+
                         }
                         callback(null, term);
                     });
