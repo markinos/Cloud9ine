@@ -409,11 +409,16 @@ app.get('/job', function(req, res) {
     if (req.session.user) {
         pool.getConnection(function(err, connection) {
 
-            connection.query('SELECT graduate.id, graduate.studentId, graduate.firstName, graduate.lastName, job.employmentType, job.employerName, ' +
-                'job.employerType, job.employerDesc, job.jobProgram, ' +
-                'job.jobTitle, job.salary, job.jobCode FROM graduate JOIN  graduate_has_job ON graduate_has_job.graduateId = graduate.id ' +
-                'JOIN job ON job.id = graduate_has_job.employmentId;',
-                function(err, rows) {
+            var query = "SELECT graduate.id AS graduateId, studentId, firstName, lastName, " +
+                            "graduate_has_job.id AS jobId, employmentType, employerName, " +
+                            "employerType, employerDesc, jobProgram, jobTitle, salary, jobCode " +
+                        "FROM graduate " +
+                        "JOIN  graduate_has_job ON graduate_has_job.graduateId = graduate.id " +
+                        "JOIN job ON job.id = graduate_has_job.graduateId";
+
+            //console.log(query);
+
+            connection.query(query, function(err, rows) {
 
                     if (err) {
                         console.log(err);
@@ -428,13 +433,8 @@ app.get('/job', function(req, res) {
                         res.render('jobs.ejs', data);
 
                         connection.release();
-
-
                     }
-
                 });
-
-
         });
 
     } else {
