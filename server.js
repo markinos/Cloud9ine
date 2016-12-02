@@ -99,54 +99,54 @@ app.post('/login', function(req, res) {
             generateRandomDatabase(false, function(wait) {
                 if (wait === 2) generateFacultyForDatabase = false;
                 // io.on('connection', function(socket) {
-                    // console.log('client connected');
+                // console.log('client connected');
 
-                    // socket.on('login-page', function(data) {
-                        pool.getConnection(function(err, connection) {
-                            try {
-                                connection.query("SELECT * FROM faculty WHERE faculty.email = " + "'" + email + "'" + "AND faculty.password = " + "'" + password + "'", function(err, rows) {
-                                    if (err) {
-                                        console.log(err);
-                                        res.render('/login', { err: err.message });
-                                    }
+                // socket.on('login-page', function(data) {
+                pool.getConnection(function(err, connection) {
+                    try {
+                        connection.query("SELECT * FROM faculty WHERE faculty.email = " + "'" + email + "'" + "AND faculty.password = " + "'" + password + "'", function(err, rows) {
+                            if (err) {
+                                console.log(err);
+                                res.render('/login', { err: err.message });
+                            }
 
-                                    //user found
-                                    if (rows.length) {
-                                        isPass = true;
-                                        //set session data
-                                        req.session.user = {
-                                            'id': rows[0].id,
-                                            'email': rows[0].email,
-                                            'firstName': rows[0].firstName,
-                                            'lastName': rows[0].lastName
+                            //user found
+                            if (rows.length) {
+                                isPass = true;
+                                //set session data
+                                req.session.user = {
+                                    'id': rows[0].id,
+                                    'email': rows[0].email,
+                                    'firstName': rows[0].firstName,
+                                    'lastName': rows[0].lastName
+                                }
+
+                                res.redirect('/dashboard');
+                            } else {
+
+                                connection.query("SELECT * FROM faculty WHERE faculty.email = " + "'" + email + "'" + "AND faculty.password !=" +
+                                    +"'" + password + "'",
+                                    function(err, rows1) {
+                                        isPass = false;
+                                        console.log('user not found');
+                                        var data = {
+                                            'isPass': isPass
                                         }
 
-                                        res.redirect('/dashboard');
-                                    } else {
+                                        // io.emit('incorrect-pass', {isPass: isPass});
 
-                                        connection.query("SELECT * FROM faculty WHERE faculty.email = " + "'" + email + "'" + "AND faculty.password !=" +
-                                            +"'" + password + "'",
-                                            function(err, rows1) {
-                                                isPass = false;
-                                                console.log('user not found');
-                                                var data = {
-                                                    'isPass': isPass
-                                                }
+                                        res.render("login.ejs", isPass);
 
-                                                // io.emit('incorrect-pass', {isPass: isPass});
+                                    })
 
-                                                res.render("login.ejs", isPass);
-
-                                            })
-
-                                    }
-                                    connection.release();
-                                });
-                            } catch (err) {
-                                res.redirect('/');
                             }
+                            connection.release();
                         });
-                    // });
+                    } catch (err) {
+                        res.redirect('/');
+                    }
+                });
+                // });
                 // });
             });
         });
@@ -400,37 +400,88 @@ app.post('/editGrad', function(req, res) {
 
 });
 
+// 'SELECT graduate.studentId, graduate.firstName, graduate.lastName, job.employmentType, job.employerName, '+
+//                 'job.employerType, job.employerDesc, job.jobProgram,' +
+//                 'job.jobTitle, job.salary FROM graduate JOIN  graduate_has_job ON graduate_has_job.graduateId = graduate.id' + 
+//                 'JOIN job ON job.id = graduate_has_job.graduateId;'
+
 app.get('/job', function(req, res) {
     if (req.session.user) {
         pool.getConnection(function(err, connection) {
 
-            connection.query('SELECT * FROM graduate', function(err, rows) {
+            connection.query('SELECT graduate.id, graduate.studentId, graduate.firstName, graduate.lastName, job.employmentType, job.employerName, ' +
+                'job.employerType, job.employerDesc, job.jobProgram, ' +
+                'job.jobTitle, job.salary, job.jobCode FROM graduate JOIN  graduate_has_job ON graduate_has_job.graduateId = graduate.id ' +
+                'JOIN job ON job.id = graduate_has_job.employmentId;',
+                function(err, rows) {
 
-                if (err) {
-                    console.log(err);
-                } else {
-                    connection.query("SELECT * FROM job", function(err, rows1) {
-                        if (err) {
-                            console.log(err);
-                        } else {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        var data = {
+                            'graduates': rows,
+                            'user': req.session.user
+                        };
 
-                            var data = {
-                                'jobs': rows1,
-                                'graduates': rows,
-                                'user': req.session.user
-                            };
+                        // console.log(data.graduates);
 
-                            console.log(data.jobs);
+                        res.render('jobs.ejs', data);
 
-                            res.render('jobs.ejs', data);
+                        connection.release();
 
-                            connection.release();
 
-                        }
-                    });
-                }
+                    }
 
-            });
+                });
+
+
+        });
+
+    } else {
+        res.redirect('/login');
+    }
+});
+
+app.post('/addJob', function(req, res) {
+    console.dir(req.body);
+
+    // var lastName = req.body.lastName;
+    var gradId = req.body.id;
+    var jobCode = req.body.jobCode;
+    var employerName = req.body.employerName;
+    var employerType = req.body.employerType;
+    var employmentType = req.body.employmentType;
+    var jobTitle = req.body.jobTitle;
+    var description = req.body.description;
+    var salary = req.body.salary;
+    var program = req.body.program;
+
+    var id = req.session.user;
+    if (req.session.user) {
+        pool.getConnection(function(err, connection) {
+
+            connection.query('INSERT INTO job (jobCode,employmentType,employerName,employerType,jobProgram,jobTitle,employerDesc,salary) ' + 'VALUES(' + "'" + jobCode + "'" + "," + "'" + employmentType + "'" + "," + "'" + employerName + "'" +
+                "," + "'" + employerType + "'" + "," + "'" + program + "'" + "," + "'" + jobTitle + "'" + "," + "'" + description + "'" +
+                "," + "'" + salary + "'" + ")",
+                function(err, rows) {
+
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        connection.query('INSERT INTO graduate_has_job (employmentId, graduateId) ' +
+                            'VALUES( (SELECT id FROM job WHERE id = LAST_INSERT_ID()),' + "'" + gradId + "'" + ");",
+                            function(err, rows) {
+                                console.log("Job was added!");
+
+                                res.redirect("/job");
+
+                                connection.release();
+
+                            });
+
+                    }
+
+                });
 
 
         });
@@ -439,12 +490,22 @@ app.get('/job', function(req, res) {
         res.redirect('/login');
     }
 
-
 });
 
-app.post('/job', function(req, res) {
+
+app.post('/editJob', function(req,res) {
+    console.dir(req.body);
+
+    if(req.session.user) {
+        pool.getConnection(function(err, connection) {
+            // connection.query('UPDATE job SET')
+
+        });
 
 
+    } else {
+        res.redirect('/login');
+    }
 
 });
 

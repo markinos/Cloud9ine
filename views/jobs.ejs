@@ -115,14 +115,14 @@
                     <li><a href="/dashboard"><i class="fa fa-tachometer"></i> Dashboard </a></li>
                     <li><a href="/report"><i class="fa fa-pie-chart"></i> Report </a></li>
                     <li class="active treeview">
-                        <a href="#"><i class="fa fa-th"></i> <span>Graduates</span>
+                        <a href="#"><i class="fa fa-th"></i> <span>Jobs</span>
                             <span class="pull-right-container">
                                 <i class="fa fa-angle-left pull-right"></i>
                             </span>
                         </a>
                         <ul class="treeview-menu">
                             <li class="active"><a href="/graduates"><i class="fa fa-graduation-cap"></i> Student Info</a></li>
-                            <li><a href="/job"><i class="fa fa-briefcase"></i> Job info</a></li>
+                            <li><a href="/job"><i class="fa fa-briefcase"></i> Job Info</a></li>
                         </ul>
                     </li>
                     <!-- <li >
@@ -142,35 +142,42 @@
             <!-- Content Header (Page header) -->
             <section class="content-header">
                 <h1>
-                 Graduates 
+                 Jobs 
 
-                <a href="#" id="addGradBtn" class="btn btn-primary " style="margin-right: 5px;">
-                    <i class="fa fa-plus-square" style="margin-right: 5px;"></i>  Add Graduate
-                </a>
+<!--                 <a href="#" id="addGradBtn" class="btn btn-primary " style="margin-right: 5px;">
+                    <i class="fa fa-plus-square" style="margin-right: 5px;"></i>  Add Job
+                </a> -->
 
-                <div class="modal modal-wide fade" id="addGradModal" id="shortModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal modal-wide fade" id="addJobModal" id="shortModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                       <div class="modal-content">
                         <div class="modal-header">
                           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                           </button>
-                          <h4 class="modal-title" id="exampleModalLabel" style="font-size: 24px;"><b>Add a Graduate</b></h4>
+                          <h4 class="modal-title" id="exampleModalLabel" style="font-size: 24px;"><b>Add a Job</b></h4>
                         </div>
                         <div class="modal-body">
 
 
-                        <form class="form-horizontal" id="addGradForm" action="/addGrad" method="post" >
+                        <form class="form-horizontal" id="addJobForm" action="/addJob" method="post" >
                             <fieldset>
 
                             <!-- Form Name -->
                             <!-- <legend>Add a Graduate</legend> -->
 
                             <!-- Text input-->
+
+                            <div class="form-group">
+                              <div class="col-md-6">
+                              <input id="id" name="id" type="hidden" class="form-control input-md" required=""><span id="errmsg"></span>
+                                
+                              </div>
+                            </div>
                             <div class="form-group">
                               <label class="col-md-4 control-label" for="studentId">Student Id</label>  
                               <div class="col-md-6">
-                              <input id="studentId" name="studentId" type="text" placeholder="1234567" class="form-control input-md" required=""><span id="errmsg"></span>
+                              <input disabled id="studentId" name="studentId" type="text" placeholder="1234567" class="form-control input-md" required=""><span id="errmsg"></span>
                                 
                               </div>
                             </div>
@@ -179,7 +186,7 @@
                             <div class="form-group">
                               <label class="col-md-4 control-label" for="studentLastName">Last Name</label>  
                               <div class="col-md-6">
-                              <input id="studentLastName" name="lastName" type="text" placeholder="Doe" class="form-control input-md" required="">
+                              <input disabled id="studentLastName" name="lastName" type="text" placeholder="Doe" class="form-control input-md" required="">
                                 
                               </div>
                             </div>
@@ -188,45 +195,58 @@
                             <div class="form-group">
                               <label class="col-md-4 control-label" for="firstName">First Name</label>  
                               <div class="col-md-6">
-                              <input id="studentFirstName" name="firstName" type="text" placeholder="Jane" class="form-control input-md" required="">
+                              <input disabled id="studentFirstName" name="firstName" type="text" placeholder="Jane" class="form-control input-md" required="">
                                 
                               </div>
                             </div>
 
                             <!-- Text input-->
                             <div class="form-group">
-                              <label class="col-md-4 control-label" for="email">Email</label>  
+                              <label class="col-md-4 control-label" for="jobCode">Job Code</label>  
                               <div class="col-md-6">
-                              <input id="studentEmail" name="email" type="text" placeholder="email@example.com" class="form-control input-md">
+                                <input id="jobCode" name="jobCode" type="text" placeholder="" class="form-control input-md" required="">
                                 
                               </div>
                             </div>
 
                             <!-- Appended Input-->
                             <div class="form-group">
-                              <label class="col-md-4 control-label" for="studentEmail">UW Email</label>
+                              <label class="col-md-4 control-label" for="employerName">Employer Name</label>
                               <div class="col-md-6">
-                                <div class="input-group">
-                                  <input id="studentUWEmail" name="UWemail" class="form-control" placeholder="uw net id" type="text" required="">
-                                  <span class="input-group-addon">@uw.edu</span>
-                                </div>
+                                  <input id="employerName" name="employerName" class="form-control input-md"  placeholder="" type="text" required="">
+                                  <!-- <span class="input-group-addon">@uw.edu</span> -->
                                 
                               </div>
                             </div>
                             <!-- Text input-->
                             <div class="form-group">
-                              <label class="col-md-4 control-label" for="studentGPA">GPA</label>  
+                              <label class="col-md-4 control-label" for="employerType">Employer Type</label>  
                               <div class="col-md-6">
-                              <input id="studentGPA" name="gpa" type="text" placeholder="3.0" class="form-control input-md" required=""> <span id="errmsg"></span>
+                              <input id="employerType" name="employerType" type="text" placeholder="e.g tech" class="form-control input-md" required=""> 
+                                
+                              </div>
+                            </div>
+                             <div class="form-group">
+                              <label class="col-md-4 control-label" for="employerType">Job Title</label>  
+                              <div class="col-md-6">
+                              <input id="jobTitle" name="jobTitle" type="texta" placeholder="e.g Graphic Designer" class="form-control input-md" required=""> 
                                 
                               </div>
                             </div>
 
                             <!-- Text input-->
                             <div class="form-group">
-                              <label class="col-md-4 control-label" for="studentGradYear">Grad Year</label>  
+                              <label class="col-md-4 control-label" for="description">Description</label>  
                               <div class="col-md-6">
-                              <input id="studentGradYear" name="gradYear" type="text" placeholder="YYYY" class="form-control input-md" required=""><span id="errmsg"></span>
+                              <textarea rows="4" cols="50" name="description" id="description" class="form-control input-md"> </textarea>
+                                
+                              </div>
+                            </div>
+
+                            <div class="form-group">
+                              <label class="col-md-4 control-label" for="employerType">Salary</label>  
+                              <div class="col-md-6">
+                              <input id="salary" name="salary" type="text" placeholder="e.g 40,000" class="form-control input-md" required=""> 
                                 
                               </div>
                             </div>
@@ -234,119 +254,41 @@
                             <!-- Button Drop Down -->
 
                              <div class="form-group">
-                              <label class="col-md-4 control-label" for="studentGender">Gender</label>
+                              <label class="col-md-4 control-label" for="program">Program</label>
                               <div class="col-md-6">
-                                    <select class="form-control" name="gender" id="studentGender" required="">
-                                      <option>Male</option>
-                                      <option>Female</option>
-                                    </select>
-                              </div>
-                            </div>
-
-                            <div class="form-group">
-                              <label class="col-md-4 control-label" for="studentAge">Age</label>
-                              <div class="col-md-6">
-                                    <select class="form-control" name="age" id="studentAge" required="">
-                                      <option> <18 </option>
-                                      <option>18-23</option>
-                                      <option>24-29</option>
-                                      <option>30-39</option>
-                                      <option>40-49</option>
-                                      <option>50-59</option>
-                                      <option>60+</option>
-                                    </select>
-                              </div>
-                            </div>
-
-                            <div class="form-group">
-                              <label class="col-md-4 control-label" for="studentGen">Generation</label>
-                              <div class="col-md-6">
-                                    <select class="form-control" name="generation" id="studentGen">
-                                      <option value="null" selected> </option>
-                                      <option>1st</option>
-                                      <option>2nd</option>
-                                      <option>Parent(s) Alumni</option>
-                                    </select>
-                              </div>
-                            </div>
-
-
-                            <div class="form-group">
-                              <label class="col-md-4 control-label" for="studentGen">Ethnicity</label>
-                              <div class="col-md-6">
-                                    <select class="form-control" name="ethnicity" id="studentEthnicity" required="">
-                                      <option>Hispanic/Latino</option>
-                                      <option>Asian</option>
-                                      <option>Pacific Islander</option>
-                                      <option>Caucasian/White</option>
-                                      <option>African/Black</option>
-                                      <option>Native American</option>
-                                      <option>Other</option>
-                                    </select>
-                              </div>
-                            </div>
-
-                            <div class="form-group">
-                              <label class="col-md-4 control-label" for="studentGradTerm">Grad Term</label>
-                              <div class="col-md-6">
-                                    <select class="form-control" name="gradTerm" id="studentGradTerm" required="">
-                                      <option>AUT</option>
-                                      <option>WIN</option>
-                                      <option>SPR</option>
-                                      <option>SUM</option>
-                                    </select>
-                              </div>
-                            </div>
-
-
-                            <div class="form-group">
-                              <label class="col-md-4 control-label" for="studentProgram">Program</label>
-                              <div class="col-md-6">
-                                    <select class="form-control" name="program" id="studentProgram" required="">
+                                    <select class="form-control" name="program" id="program" required="">
                                       <option>CSS</option>
                                       <option>CES</option>
-                                      <option>IT</option>
                                       <option>EE</option>
+                                      <option>IT</option>
+
+
                                     </select>
                               </div>
                             </div>
 
-                            <div class="form-group">
-                              <label class="col-md-4 control-label" for="studentDegree">Degree</label>
+
+                             <div class="form-group">
+                              <label class="col-md-4 control-label" for="employmentType">Employment Type</label>
                               <div class="col-md-6">
-                                    <select class="form-control" name="degree" id="studentDegree" required="">
-                                      <option>BS</option>
-                                      <option>BA</option>
-                                      <option>MS</option>
+                                    <select class="form-control" name="employmentType" id="employmentType" required="">
+                                      <option>Intern</option>
+                                      <option>Part Time</option>
+                                      <option>Full Time</option>
+                                      <option>Residency</option>
+
+
                                     </select>
                               </div>
                             </div>
 
-                            <!-- Multiple Radios -->
-                            <div class="form-group">
-                              <label class="col-md-4 control-label" for="radios">Contact</label>
-                              <div class="col-md-4">
-                              <div class="radio">
-                                <label for="radios-0">
-                                  <input type="radio" name="radios" id="radios-0" value="1" checked="checked">
-                                  Yes
-                                </label>
-                                </div>
-                              <div class="radio">
-                                <label for="radios-1">
-                                  <input type="radio" name="radios" id="radios-1" value="0">
-                                  No
-                                </label>
-                                </div>
-                              </div>
-                            </div>
 
                             <!-- Button (Double) -->
                             <div class="form-group">
                               <label class="col-md-4 control-label" for="button1id"></label>
                               <div class="col-md-8">
                                 <button id="button1id" name="button1id" class="btn btn-secondary">Close</button>
-                                <button id="button2id" name="button2id" class="btn btn-primary" id="addGradToDataBtn" form="addGradForm">Add</button>
+                                <button id="button2id" name="button2id" class="btn btn-primary" id="addJobToDataBtn" form="addJobForm">Add</button>
                               </div>
                             </div>
 
@@ -365,7 +307,7 @@
             </h1>
                 <ol class="breadcrumb">
                     <li><a href="/graduates"><i class="fa fa-th"></i> Graduates</a></li>
-                    <li class="active">Student Info</li>
+                    <li class="active">Job Info</li>
                 </ol>
             </section>
             <!-- Main content -->
@@ -386,12 +328,13 @@
                                             <th>First Name</th>
                                             <th>Job Program</th>
                                             <th>Job Title</th>
+                                            <th>Employment Type</th>
                                             <th>Employer Name</th>
                                             <th>Employer Type</th>
                                             <th>Description</th>
                                             <th>Salary</th>
-                                            <th>Start Date</th>
-                                            <th>End Date</th>
+                                            <th>Id</th>
+                                            <th>Job Code</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -400,10 +343,8 @@
                                                 <tr>
                                                     <div id="actionBtns">
                                                         <td>
-                                                            <a href="#" class="btn btn-danger btn-xs">
-                                                                <span class="glyphicon glyphicon-trash" id="deleteBtn" class="deleteClass"></span> Del</a>
                                                             <a href="#" class="btn btn-success btn-xs">
-                                                                <i class="fa fa-paper-plane" aria-hidden="true"></i> Survey</a>
+                                                                <i class="fa fa-plus-square" aria-hidden="true"></i> Add Job</a>
                                                             <a class='btn btn-info btn-xs' href="#">
                                                                 <span class="glyphicon glyphicon-edit"> </span> Edit
                                                             </a>
@@ -418,18 +359,36 @@
                                                     <td>
                                                         <%= graduates[i].firstName %>
                                                     </td>
+                                                    <td>
+                                                        <%= graduates[i].jobProgram %>
+                                                    </td>
+                                                    <td>
+                                                        <%= graduates[i].jobTitle %>
+                                                    </td>
+                                                    <td>
+                                                        <%= graduates[i].employmentType %>
+                                                    </td>
+                                                    <td>
+                                                        <%= graduates[i].employerName %>
+                                                    </td>
+                                                    <td>
+                                                        <%= graduates[i].employerType %>
+                                                    </td>
+                                                    <td>
+                                                        <%= graduates[i].employerDesc %>
+                                                    </td>
+                                                    <td>
+                                                        <%= graduates[i].salary %>
+                                                    </td>
+                                                    <td>
+                                                        <%=graduates[i].id %>
+                                                    </td>
+                                                    <td>
+                                                        <%=graduates[i].jobCode %>
+                                                    </td>
                                             </div>
                                             <%}%>
-                                            <% for (var j = 0; j < jobs.length; j++) { %>
-
-                                                
-
-                                               
-                                                 
-                                            <%} %>
-
-                                             </tr>
-
+                                                </tr>
                                     </tbody>
                                     <tfoot>
                                         <tr>
@@ -439,12 +398,13 @@
                                             <th>First Name</th>
                                             <th>Job Program</th>
                                             <th>Job Title</th>
+                                            <th>Employment Type</th>
                                             <th>Employer Name</th>
                                             <th>Employer Type</th>
                                             <th>Description</th>
                                             <th>Salary</th>
-                                            <th>Start Date</th>
-                                            <th>End Date</th>
+                                            <th>Id</th>
+                                            <th>Job Code</th>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -471,166 +431,105 @@
                         <h4 class="modal-title" id="exampleModalLabel" style="font-size: 24px;"><b>Edit a Graduate</b></h4>
                     </div>
                     <div class="modal-body">
-                        <form class="form-horizontal" id="editGradForm" action="/editGrad" method="post">
+                        <form class="form-horizontal" id="editJobForm" action="/editJob" method="post">
                             <fieldset>
-                                <!-- Form Name -->
-                                <!-- <legend>Add a Graduate</legend> -->
                                 <!-- Text input-->
                                 <div class="form-group">
-                                    <!-- <label class="col-md-4 control-label" for="studentId">Student Id</label> -->
                                     <div class="col-md-6">
-                                        <input id="studentIdEdit" type="hidden" name="studentId" type="text" placeholder="1234567" class="form-control input-md" required=""><span id="errmsg"></span>
+                                        <input id="idEdit" name="idEdit" type="hidden" class="form-control input-md" required="">
                                     </div>
                                 </div>
-                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="studentIdE">StudentId</label>
+                                    <div class="col-md-6">
+                                        <input disabled id="studentIdE" name="studentIdE" type="text" class="form-control input-md" required="">
+                                    </div>
+                                </div>
                                 <div class="form-group">
                                     <label class="col-md-4 control-label" for="studentLastName">Last Name</label>
                                     <div class="col-md-6">
-                                        <input id="studentLastNameEdit" name="lastName" type="text" placeholder="Doe" class="form-control input-md" required="">
+                                        <input disabled id="studentLastNameE" name="lastName" type="text" placeholder="Doe" class="form-control input-md" required="">
                                     </div>
                                 </div>
                                 <!-- Text input-->
                                 <div class="form-group">
                                     <label class="col-md-4 control-label" for="firstName">First Name</label>
                                     <div class="col-md-6">
-                                        <input id="studentFirstNameEdit" name="firstName" type="text" placeholder="Jane" class="form-control input-md" required="">
+                                        <input disabled id="studentFirstNameE" name="firstName" type="text" placeholder="Jane" class="form-control input-md" required="">
                                     </div>
                                 </div>
                                 <!-- Text input-->
                                 <div class="form-group">
-                                    <label class="col-md-4 control-label" for="studentEmail">Email</label>
+                                    <label class="col-md-4 control-label" for="jobCode">Job Code</label>
                                     <div class="col-md-6">
-                                        <input id="studentEmailEdit" name="email" type="text" placeholder="email@example.com" class="form-control input-md">
+                                        <input id="jobCodeE" name="jobCode" type="text" placeholder="" class="form-control input-md">
                                     </div>
                                 </div>
                                 <!-- Appended Input-->
                                 <div class="form-group">
-                                    <label class="col-md-4 control-label" for="studentUWEmail">UW Email</label>
-                                    <div class="col-md-7">
+                                    <label class="col-md-4 control-label" for="employerName">Employer Name</label>
+                                    <div class="col-md-6">
                                         <div class="input-group">
-                                            <input id="studentUWEmailEdit" name="UWemail" class="form-control input-md" placeholder="uw net id" type="text" required="">
-                                            <span class="input-group-addon">@uw.edu</span>
+                                            <input id="employerNameE" name="employerName" class="form-control input-md" placeholder="" type="text" required="">
+                                            <!-- <span class="input-group-addon">@uw.edu</span> -->
                                         </div>
                                     </div>
                                 </div>
                                 <!-- Text input-->
                                 <div class="form-group">
-                                    <label class="col-md-4 control-label" for="studentGPA">GPA</label>
+                                    <label class="col-md-4 control-label" for="employerType">Employer Type</label>
                                     <div class="col-md-6">
-                                        <input id="studentGPAEdit" name="gpa" type="text" placeholder="3.0" class="form-control input-md" required=""> <span id="errmsg"></span>
+                                        <input id="employerTypeE" name="employerType" type="text" placeholder="e.g tech" class="form-control input-md" required="">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="employerType">Job Title</label>
+                                    <div class="col-md-6">
+                                        <input id="jobTitleE" name="jobTitle" type="texta" placeholder="e.g Graphic Designer" class="form-control input-md" required="">
                                     </div>
                                 </div>
                                 <!-- Text input-->
                                 <div class="form-group">
-                                    <label class="col-md-4 control-label" for="studentGradYear">Grad Year</label>
+                                    <label class="col-md-4 control-label" for="description">Description</label>
                                     <div class="col-md-6">
-                                        <input id="studentGradYearEdit" name="gradYear" type="text" placeholder="YYYY" class="form-control input-md" required=""><span id="errmsg"></span>
+                                        <textarea rows="4" cols="50" name="description" id="descriptionE" class="form-control input-md"> </textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="employerType">Salary</label>
+                                    <div class="col-md-6">
+                                        <input id="salaryE" name="salary" type="text" placeholder="e.g 40,000" class="form-control input-md" required="">
                                     </div>
                                 </div>
                                 <!-- Button Drop Down -->
                                 <div class="form-group">
-                                    <label class="col-md-4 control-label" for="studentGender">Gender</label>
+                                    <label class="col-md-4 control-label" for="program">Program</label>
                                     <div class="col-md-6">
-                                        <select class="form-control" name="gender" id="studentGenderEdit" required="">
-                                            <option>Male</option>
-                                            <option>Female</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-4 control-label" for="studentAge">Age</label>
-                                    <div class="col-md-6">
-                                        <select class="form-control" name="age" id="studentAgeEdit" required="">
-                                            <option>
-                                                <18 </option>
-                                                    <option>18-23</option>
-                                                    <option>24-29</option>
-                                                    <option>30-39</option>
-                                                    <option>40-49</option>
-                                                    <option>50-59</option>
-                                                    <option>60+</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-4 control-label" for="studentGen">Generation</label>
-                                    <div class="col-md-6">
-                                        <select class="form-control" name="generation" id="studentGenEdit">
-                                            <option value="null" selected> </option>
-                                            <option>1st</option>
-                                            <option>2nd</option>
-                                            <option>Parent(s) Alumni</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-4 control-label" for="studentGen">Ethnicity</label>
-                                    <div class="col-md-6">
-                                        <select class="form-control" name="ethnicity" id="studentEthnicityEdit" required="">
-                                            <option>Hispanic/Latino</option>
-                                            <option>Asian</option>
-                                            <option>Pacific Islander</option>
-                                            <option>Caucasian/White</option>
-                                            <option>African/Black</option>
-                                            <option>Native American</option>
-                                            <option>Other</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-4 control-label" for="studentGradTerm">Grad Term</label>
-                                    <div class="col-md-6">
-                                        <select class="form-control" name="gradTerm" id="studentGradTermEdit" required="">
-                                            <option>AUT</option>
-                                            <option>WIN</option>
-                                            <option>SPR</option>
-                                            <option>SUM</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-4 control-label" for="studentProgram">Program</label>
-                                    <div class="col-md-6">
-                                        <select class="form-control" name="program" id="studentProgramEdit" required="">
+                                        <select class="form-control" name="program" id="programE" required="">
                                             <option>CSS</option>
                                             <option>CES</option>
-                                            <option>IT</option>
                                             <option>EE</option>
+                                            <option>IT</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-4 control-label" for="studentDegree">Degree</label>
+                                    <label class="col-md-4 control-label" for="employmentType">Employment Type</label>
                                     <div class="col-md-6">
-                                        <select class="form-control" name="degree" id="studentDegreeEdit" required="">
-                                            <option>BS</option>
-                                            <option>BA</option>
-                                            <option>MS</option>
+                                        <select class="form-control" name="employmentType" id="employmentTypeE" required="">
+                                            <option>Intern</option>
+                                            <option>Part Time</option>
+                                            <option>Full Time</option>
+                                            <option>Residency</option>
                                         </select>
-                                    </div>
-                                </div>
-                                <!-- Multiple Radios -->
-                                <div class="form-group">
-                                    <label class="col-md-4 control-label" for="radios">Contact</label>
-                                    <div class="col-md-4">
-                                        <div class="radio">
-                                            <label for="radios-0">
-                                                <input type="radio" name="radios" id="radios-0" value="1" checked="checked"> Yes
-                                            </label>
-                                        </div>
-                                        <div class="radio">
-                                            <label for="radios-1">
-                                                <input type="radio" name="radios" id="radios-1" value="0"> No
-                                            </label>
-                                        </div>
                                     </div>
                                 </div>
                                 <!-- Button (Double) -->
                                 <div class="form-group">
                                     <label class="col-md-4 control-label" for="button1id"></label>
                                     <div class="col-md-8">
-                                        <button id="button1id" name="button1id" class="btn btn-default">Close</button>
-                                        <button id="button2id" name="button2id" class="btn btn-info" id="editGradToDataBtn" form="editGradForm">Edit</button>
+                                        <button id="button1Edit" name="button1id" class="btn btn-secondary">Close</button>
+                                        <button id="button2Edit" name="button2id" class="btn btn-primary" id="editJobBtn" form="editJobForm">Edit</button>
                                     </div>
                                 </div>
                             </fieldset>
@@ -838,7 +737,7 @@
     <!-- TABLE ATTRIBUTES -->
     <script>
     $(function() {
-        // $("#example1").DataTable();
+        var table = $('#example1').DataTable();
         $('#example1').DataTable({
             "paging": true,
             "lengthChange": false,
@@ -852,13 +751,15 @@
             "sScrollXInner": "110%",
             "bScrollCollapse": true,
 
-            fixedHeader: {
-                header: true,
-                footer: true
-            },
+            "aoColumnDefs": [{
+                "bVisible": false,
+                "aTargets": [1]
+            }]
+
 
         });
     });
+    </script>
     </script>
     <!-- For add graduate form validation -->
     <script type="text/javascript">
@@ -882,48 +783,32 @@
         $("#studentId").keypress(function(e) {
             //if the letter is not digit then display error and don't type anything
             if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
-                //display error message
-                $("#errmsg").html("Digits Only").show().fadeOut("slow");
                 return false;
             }
         });
 
-        // for grad year
-        $("#studentGradYear").keypress(function(e) {
+        // for job code
+        $("#jobCode").keypress(function(e) {
             //if the letter is not digit then display error and don't type anything
             if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
-                //display error message
-                $("#errmsg").html("Digits Only").show().fadeOut("slow");
+                return false;
+            }
+        });
+
+
+        $("#salary").keypress(function(e) {
+            //if the letter is not digit then display error and don't type anything
+            if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
                 return false;
             }
         });
 
     });
     </script>
+    <!-- VALIDATION - Making sure you can insert decimals -->
     <script type="text/javascript">
-    var gpa = document.getElementById('studentGPA');
-    gpa.addEventListener('keyup', myFunc);
-
-    function myFunc(e) {
-        var val = this.value;
-        var re = /^([0-9]+[\.]?[0-9]?[0-9]?|[0-9]+)$/g;
-        var re1 = /^([0-9]+[\.]?[0-9]?[0-9]?|[0-9]+)/g;
-        if (re.test(val)) {
-            //do something here
-
-        } else {
-            val = re1.exec(val);
-            if (val) {
-                this.value = val[0];
-            } else {
-                this.value = "";
-            }
-        }
-    }
-    var gpa1 = document.getElementById('studentGPAEdit');
-
-
-    gpa1.addEventListener('keyup', myFunc);
+    var salary = document.getElementById('salary');
+    salary.addEventListener('keyup', myFunc);
 
     function myFunc(e) {
         var val = this.value;
@@ -942,50 +827,42 @@
         }
     }
     </script>
-    <!-- adding a graduate -->
+    <!-- adding a job -->
     <script type="text/javascript">
-    $(document).ready(function() {
-        $("#addGradBtn").click(function() {
-
-            $("#addGradModal").modal('show');
-        });
-    });
-    $(document).ready(function() {
-        $("#addGradToDataBtn").click(function() {
-            $("#addGradModal").modal('hide');
-
-
-        });
-    });
-    </script>
-    <script type="text/javascript">
-    // for deleting a graduate from the system
     $(document).ready(function() {
         var table = $('#example1').DataTable();
-        $('#example1 tbody').on('click', '.btn-danger', function() {
 
-            var gradId = table.row($(this).parents('tr')).data();
+        $('#example1 tbody').on('click', '.btn-success', function() {
+            var gradInfo = table.row($(this).parents('tr')).data();
 
-            console.log("delete this id: " + gradId[1]);
+            var studentId = gradInfo[1];
+            var firstName = gradInfo[2];
+            var lastName = gradInfo[3];
+            var id = gradInfo[11];
 
-            table
-                .row($(this).parents('tr'))
-                .remove()
-                .draw();
+            $('#id').val(id);
+            $('#studentId').val(studentId);
+            $('#studentFirstName').val(firstName);
+            $('#studentLastName').val(lastName);
 
-            $.ajax({
-                url: '/delete',
-                data: {
-                    gradId: gradId[1]
-                },
-                type: 'POST',
-            });
+            console.log(studentId + " " + firstName + " " + lastName + " " + id);
+
+            $("#addJobModal").modal('show');
+
         });
+    });
+    $(document).ready(function() {
+        $("#button1id").click(function() {
+            $("#addJobModal").modal('hide');
 
+
+        });
     });
     </script>
+
+    
     <script type="text/javascript">
-    // for editing a current graduate
+    // for editing a current job
     $(document).ready(function() {
         var table = $('#example1').DataTable();
 
@@ -994,56 +871,36 @@
             console.log("edit grad");
             var gradInfo = table.row($(this).parents('tr')).data();
 
-            var id = gradInfo[1];
+            var studentId = gradInfo[1];
             var lastName = gradInfo[2];
             var firstName = gradInfo[3];
-            var age = gradInfo[4];
-            var gender = gradInfo[5];
-            var ethnicity = gradInfo[6];
-            var generation = gradInfo[7];
-            var UWemail = gradInfo[8];
-            var email = gradInfo[9];
-            var program = gradInfo[10];
-            var degree = gradInfo[11];
-            var gradYr = gradInfo[12];
-            var gradTrm = gradInfo[13];
-            var gpa = gradInfo[14];
-            var contact = gradInfo[15];
+            var jobProgram = gradInfo[4];
+            var jobTitle = gradInfo[5];
+            var employmentType = gradInfo[6];
+            var employerName = gradInfo[7]
+            var employerType = gradInfo[8];
+            var description = gradInfo[9];
+            var salary = gradInfo[10];
+            var id = gradInfo[11];
+            var jobCode = gradInfo[12];
 
 
-            console.log("grad info: " + id + lastName + " " + firstName + " " + email + " " + UWemail + " " + gpa + " " + gradYr + " " + gender + " " + age + " " + generation + " " + ethnicity + " " + gradTrm + " " + program + " " + contact);
+            console.log("grad info: " + studentId + lastName + " " + firstName + " " + jobProgram + " " + jobTitle + " " + employmentType +
+                " " + employerType + " " + description + " " + employerName + " " + salary + " " + id + " " + jobCode);
 
 
-            var parsedEmail = UWemail.split('@');
-            console.log(parsedEmail[0]);
-
-
-            $('#studentIdEdit').val(id);
-            $('#studentLastNameEdit').val(lastName);
-            $('#studentFirstNameEdit').val(firstName);
-            $('#studentProgramEdit').val(program);
-            $('#studentGenderEdit').val(gender);
-            $('#studentAgeEdit').val(age);
-            $('#studentEthnicityEdit').val(ethnicity);
-            $('#studentGenEdit').val(generation);
-            $('#studentEmailEdit').val(email);
-            $('#studentDegreeEdit').val(degree);
-            $('#studentGradYearEdit').val(gradYr);
-            $('#studentGradTermEdit').val(gradTrm);
-            $('#studentDegreeEdit').val(degree);
-            $('#studentGPAEdit').val(gpa);
-            $('#studentUWEmailEdit').val(parsedEmail[0])
-
-            if (contact == "Yes") {
-                contact = 1;
-
-            } else {
-                contact = 0;
-
-            }
-
-            $('#radios').val(contact);
-
+            $('#studentLastNameE').val(lastName);
+            $('#studentFirstNameE').val(firstName);
+            $('#jobProgramE').val(jobProgram);
+            $('#jobTitleE').val(jobTitle);
+            $('#employerTypeE').val(employerType);
+            $('#employmentTypeE').val(employmentType);
+            $('#employerNameE').val(employerName);
+            $('#descriptionE').val(description);
+            $('#salaryE').val(salary);
+            $('#idEdit').val(id);
+            $('#jobCodeE').val(jobCode);
+            $('#studentIdE').val(studentId);
 
 
         });
@@ -1051,6 +908,7 @@
 
     });
     </script>
+    <!-- Hide the Modal when pressing add button -->
     <script type="text/javascript">
     $(document).ready(function() {
         $("#editGradToDataBtn").click(function() {
@@ -1059,6 +917,7 @@
         });
     });
     </script>
+    <!-- SEARCHING -->
     <script type="text/javascript">
     $(document).ready(function() {
         // Setup - add a text input to each footer cell
