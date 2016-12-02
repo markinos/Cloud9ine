@@ -460,7 +460,8 @@ app.post('/addJob', function(req, res) {
     if (req.session.user) {
         pool.getConnection(function(err, connection) {
 
-            connection.query('INSERT INTO job (jobCode,employmentType,employerName,employerType,jobProgram,jobTitle,employerDesc,salary) ' + 'VALUES(' + "'" + jobCode + "'" + "," + "'" + employmentType + "'" + "," + "'" + employerName + "'" +
+            connection.query('INSERT INTO job (jobCode,employmentType,employerName,employerType,jobProgram,jobTitle,employerDesc,salary) ' +
+               'VALUES(' + "'" + jobCode + "'" + "," + "'" + employmentType + "'" + "," + "'" + employerName + "'" +
                 "," + "'" + employerType + "'" + "," + "'" + program + "'" + "," + "'" + jobTitle + "'" + "," + "'" + description + "'" +
                 "," + "'" + salary + "'" + ")",
                 function(err, rows) {
