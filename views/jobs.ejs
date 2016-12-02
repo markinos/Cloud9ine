@@ -2,866 +2,861 @@
 <html>
 
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>GradTrack | Graduates</title>
-	<!-- Tell the browser to be responsive to screen width -->
-	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-	<!-- Bootstrap 3.3.6 -->
-	<link rel="stylesheet" href="css/bootstrap.min.css">
-	<!-- Font Awesome -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
-	<!-- Ionicons -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
-	<!-- DataTables -->
-	<link rel="stylesheet" href="plugins/datatables/dataTables.bootstrap.css">
-	<!-- Theme style -->
-	<link rel="stylesheet" href="css/AdminLTE.min.css">
-	<!-- AdminLTE Skins. Choose a skin from the css/skins
-			 folder instead of downloading all of them to reduce the load. -->
-	<link rel="stylesheet" href="css/skins/_all-skins.min.css">
-	<link rel='shortcut icon' href='/public/favicon.ico' type='image/x-icon' />
-	<link rel="stylesheet" type="text/css" href="/css/graduate.css">
-	<!-- <link rel="stylesheet" type="text/css" href="/css/login.css"> -->
-	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-	<!--[if lt IE 9]>
-	<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-	<![endif]-->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>GradTrack | Graduates</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.6 -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- DataTables -->
+    <link rel="stylesheet" href="plugins/datatables/dataTables.bootstrap.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+             folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="css/skins/_all-skins.min.css">
+    <link rel='shortcut icon' href='/public/favicon.ico' type='image/x-icon' />
+    <link rel="stylesheet" type="text/css" href="/css/graduate.css">
+    <!-- <link rel="stylesheet" type="text/css" href="/css/login.css"> -->
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
-	<div class="wrapper">
-		<header class="main-header">
-			<!-- Logo -->
-			<a href="/dashboard" class="logo">
-				<i class="fa fa-cloud" style="margin-right: 5px;"></i><b>Grad</b>Track
-			</a>
-			<!-- Header Navbar: style can be found in header.less -->
-			<nav class="navbar navbar-static-top">
-				<!-- Sidebar toggle button-->
-				<a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
-					<span class="sr-only">Toggle navigation</span>
-				</a>
-				<div class="navbar-custom-menu">
-					<ul class="nav navbar-nav">
-						<!-- User Account: style can be found in dropdown.less -->
-						<li class="dropdown user user-menu">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-								<img src="/img/user-icon1.svg" class="user-image" alt="User Image">
-								<span class="hidden-xs"><%=user.firstName %> <%= user.lastName%></span>
-							</a>
-							<ul class="dropdown-menu">
-								<!-- User image -->
-								<li class="user-header">
-									<img src="/img/user-icon1.svg" class="img-circle" alt="User Image">
-									<p>
-										<%=user.firstName %>
-											<%= user.lastName%> - Faculty Advisor
-												<small>Member since Nov. 2012</small>
-									</p>
-								</li>
-								<!-- Menu Footer-->
-								<li class="user-footer">
-									<div class="pull-left">
-										<a href="#" class="btn btn-default btn-flat">Profile</a>
-									</div>
-									<div class="pull-right">
-										<a href="#" class="btn btn-default btn-flat">Sign out</a>
-									</div>
-								</li>
-							</ul>
-						</li>
-						<!-- Control Sidebar Toggle Button -->
-						<li>
-							<a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
-						</li>
-					</ul>
-				</div>
-			</nav>
-		</header>
-		<!-- Left side column. contains the logo and sidebar -->
-		<aside class="main-sidebar">
-			<!-- sidebar: style can be found in sidebar.less -->
-			<section class="sidebar">
-				<!-- Sidebar user panel -->
-				<div class="user-panel">
-					<div class="pull-left image">
-						<img src="/img/user-icon1.svg" class="img-circle" alt="User Image">
-					</div>
-					<div class="pull-left info">
-						<p>
-							<%=user.firstName %>
-								<%= user.lastName%>
-						</p>
-						<a href="#"><i class="fa fa-circle text-success"></i> Online</a>
-					</div>
-				</div>
-				<!-- search form -->
-				<form action="#" method="get" class="sidebar-form">
-					<div class="input-group">
-						<input type="text" name="q" class="form-control" placeholder="Search...">
-						<span class="input-group-btn">
-								<button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-								</button>
-							</span>
-					</div>
-				</form>
-				<!-- /.search form -->
-				<!-- sidebar menu: : style can be found in sidebar.less -->
-				<ul class="sidebar-menu">
-					<li class="header">MAIN NAVIGATION</li>
-					<li><a href="/dashboard"><i class="fa fa-tachometer"></i> Dashboard </a></li>
-					<li><a href="/report"><i class="fa fa-pie-chart"></i> Report </a></li>
-					<li class="active treeview">
-						<a href="#"><i class="fa fa-th"></i> <span>Jobs</span>
-							<span class="pull-right-container">
-								<i class="fa fa-angle-left pull-right"></i>
-							</span>
-						</a>
-						<ul class="treeview-menu">
-							<li class="active"><a href="/graduates"><i class="fa fa-graduation-cap"></i> Student Info</a></li>
-							<li><a href="/job"><i class="fa fa-briefcase"></i> Job Info</a></li>
-						</ul>
-					</li>
-					<!-- <li >
-						  <a href="/graduates">
-							  <i class="fa fa-th"></i> <span>Graduates</span>
-							  <span class="pull-right-container">
-								  <small class="label pull-right bg-green">new</small>
-							  </span>
-						  </a>
-					  </li> -->
-				</ul>
-			</section>
-			<!-- /.sidebar -->
-		</aside>
-		<!-- Content Wrapper. Contains page content -->
-		<div class="content-wrapper">
-			<!-- Content Header (Page header) -->
-			<section class="content-header">
-				<h1>
-				 Jobs 
+    <div class="wrapper">
+        <header class="main-header">
+            <!-- Logo -->
+            <a href="/dashboard" class="logo">
+                <i class="fa fa-cloud" style="margin-right: 5px;"></i><b>Grad</b>Track
+            </a>
+            <!-- Header Navbar: style can be found in header.less -->
+            <nav class="navbar navbar-static-top">
+                <!-- Sidebar toggle button-->
+                <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        <!-- User Account: style can be found in dropdown.less -->
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <img src="/img/user-icon1.svg" class="user-image" alt="User Image">
+                                <span class="hidden-xs"><%=user.firstName %> <%= user.lastName%></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- User image -->
+                                <li class="user-header">
+                                    <img src="/img/user-icon1.svg" class="img-circle" alt="User Image">
+                                    <p>
+                                        <%=user.firstName %>
+                                            <%= user.lastName%> - Faculty Advisor
+                                                <small>Member since Nov. 2012</small>
+                                    </p>
+                                </li>
+                                <!-- Menu Footer-->
+                                <li class="user-footer">
+                                    <div class="pull-left">
+                                        <a href="#" class="btn btn-default btn-flat">Profile</a>
+                                    </div>
+                                    <div class="pull-right">
+                                        <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- Control Sidebar Toggle Button -->
+                        <li>
+                            <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <!-- Left side column. contains the logo and sidebar -->
+        <aside class="main-sidebar">
+            <!-- sidebar: style can be found in sidebar.less -->
+            <section class="sidebar">
+                <!-- Sidebar user panel -->
+                <div class="user-panel">
+                    <div class="pull-left image">
+                        <img src="/img/user-icon1.svg" class="img-circle" alt="User Image">
+                    </div>
+                    <div class="pull-left info">
+                        <p>
+                            <%=user.firstName %>
+                                <%= user.lastName%>
+                        </p>
+                        <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                    </div>
+                </div>
+                <!-- search form -->
+                <form action="#" method="get" class="sidebar-form">
+                    <div class="input-group">
+                        <input type="text" name="q" class="form-control" placeholder="Search...">
+                        <span class="input-group-btn">
+                                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                    </div>
+                </form>
+                <!-- /.search form -->
+                <!-- sidebar menu: : style can be found in sidebar.less -->
+                <ul class="sidebar-menu">
+                    <li class="header">MAIN NAVIGATION</li>
+                    <li><a href="/dashboard"><i class="fa fa-tachometer"></i> Dashboard </a></li>
+                    <li><a href="/report"><i class="fa fa-pie-chart"></i> Report </a></li>
+                    <li class="active treeview">
+                        <a href="#"><i class="fa fa-th"></i> <span>Jobs</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li class="active"><a href="/graduates"><i class="fa fa-graduation-cap"></i> Student Info</a></li>
+                            <li><a href="/job"><i class="fa fa-briefcase"></i> Job Info</a></li>
+                        </ul>
+                    </li>
+                    <!-- <li >
+                          <a href="/graduates">
+                              <i class="fa fa-th"></i> <span>Graduates</span>
+                              <span class="pull-right-container">
+                                  <small class="label pull-right bg-green">new</small>
+                              </span>
+                          </a>
+                      </li> -->
+                </ul>
+            </section>
+            <!-- /.sidebar -->
+        </aside>
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <h1>
+                 Jobs 
 
-					<!-- <i class="fa fa-plus-square" style="margin-right: 5px;"></i>  Add Job
-				</a>  -->
+                    <!-- <i class="fa fa-plus-square" style="margin-right: 5px;"></i>  Add Job
+                </a>  -->
 
-				<div class="modal modal-wide fade" id="addJobModal" id="shortModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-					<div class="modal-dialog" role="document">
-					  <div class="modal-content">
-						<div class="modal-header">
-						  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						  </button>
-						  <h4 class="modal-title" id="exampleModalLabel" style="font-size: 24px;"><b>Add a Job</b></h4>
-						</div>
-						<div class="modal-body">
-
-
-						<form class="form-horizontal" id="addJobForm" action="/addJob" method="post" >
-							<fieldset>
-
-							<!-- Form Name -->
-							<!-- <legend>Add a Graduate</legend> -->
-
-							<!-- Text input-->
-
-							<div class="form-group">
-							  <div class="col-md-6">
-							  <input id="id" name="id" type="hidden" class="form-control input-md" required=""><span id="errmsg"></span>
-								
-							  </div>
-							</div>
-							<div class="form-group">
-							  <label class="col-md-4 control-label" for="studentId">Student Id</label>  
-							  <div class="col-md-6">
-							  <input disabled id="studentId" name="studentId" type="text" placeholder="1234567" class="form-control input-md" required=""><span id="errmsg"></span>
-								
-							  </div>
-							</div>
-
-							<!-- Text input-->
-							<div class="form-group">
-							  <label class="col-md-4 control-label" for="studentLastName">Last Name</label>  
-							  <div class="col-md-6">
-							  <input disabled id="studentLastName" name="lastName" type="text" placeholder="Doe" class="form-control input-md" required="">
-								
-							  </div>
-							</div>
-
-							<!-- Text input-->
-							<div class="form-group">
-							  <label class="col-md-4 control-label" for="firstName">First Name</label>  
-							  <div class="col-md-6">
-							  <input disabled id="studentFirstName" name="firstName" type="text" placeholder="Jane" class="form-control input-md" required="">
-								
-							  </div>
-							</div>
-
-							<!-- Text input-->
-							<div class="form-group">
-							  <label class="col-md-4 control-label" for="jobCode">Job Code</label>  
-							  <div class="col-md-6">
-								<input id="jobCode" name="jobCode" type="text" placeholder="" class="form-control input-md" required="">
-								
-							  </div>
-							</div>
-
-							<!-- Appended Input-->
-							<div class="form-group">
-							  <label class="col-md-4 control-label" for="employerName">Employer Name</label>
-							  <div class="col-md-6">
-								  <input id="employerName" name="employerName" class="form-control input-md"  placeholder="" type="text" required="">
-								  <!-- <span class="input-group-addon">@uw.edu</span> -->
-								
-							  </div>
-							</div>
-							<!-- Text input-->
-							<div class="form-group">
-							  <label class="col-md-4 control-label" for="employerType">Employer Type</label>  
-							  <div class="col-md-6">
-							  <input id="employerType" name="employerType" type="text" placeholder="e.g tech" class="form-control input-md" required=""> 
-								
-							  </div>
-							</div>
-							 <div class="form-group">
-							  <label class="col-md-4 control-label" for="employerType">Job Title</label>  
-							  <div class="col-md-6">
-							  <input id="jobTitle" name="jobTitle" type="texta" placeholder="e.g Graphic Designer" class="form-control input-md" required=""> 
-								
-							  </div>
-							</div>
-
-							<!-- Text input-->
-							<div class="form-group">
-							  <label class="col-md-4 control-label" for="description">Description</label>  
-							  <div class="col-md-6">
-							  <textarea rows="4" cols="50" name="description" id="description" class="form-control input-md"> </textarea>
-								
-							  </div>
-							</div>
-
-							<div class="form-group">
-							  <label class="col-md-4 control-label" for="employerType">Salary</label>  
-							  <div class="col-md-6">
-							  <input id="salary" name="salary" type="text" placeholder="e.g 40,000" class="form-control input-md" required=""> 
-								
-							  </div>
-							</div>
-
-							<!-- Button Drop Down -->
-
-							 <div class="form-group">
-							  <label class="col-md-4 control-label" for="program">Program</label>
-							  <div class="col-md-6">
-									<select class="form-control" name="program" id="program" required="">
-									  <option>CSS</option>
-									  <option>CES</option>
-									  <option>EE</option>
-									  <option>IT</option>
+                <div class="modal modal-wide fade" id="addJobModal" id="shortModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                          <h4 class="modal-title" id="exampleModalLabel" style="font-size: 24px;"><b>Add a Job</b></h4>
+                        </div>
+                        <div class="modal-body">
 
 
-									</select>
-							  </div>
-							</div>
+                        <form class="form-horizontal" id="addJobForm" action="/addJob" method="post" >
+                            <fieldset>
+
+                            <!-- Form Name -->
+                            <!-- <legend>Add a Graduate</legend> -->
+
+                            <!-- Text input-->
+
+                            <div class="form-group">
+                              <div class="col-md-6">
+                              <input id="id" name="id" type="hidden" class="form-control input-md" required=""><span id="errmsg"></span>
+                                
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-md-4 control-label" for="studentId">Student Id</label>  
+                              <div class="col-md-6">
+                              <input disabled id="studentId" name="studentId" type="text" placeholder="1234567" class="form-control input-md" required=""><span id="errmsg"></span>
+                                
+                              </div>
+                            </div>
+
+                            <!-- Text input-->
+                            <div class="form-group">
+                              <label class="col-md-4 control-label" for="studentLastName">Last Name</label>  
+                              <div class="col-md-6">
+                              <input disabled id="studentLastName" name="lastName" type="text" placeholder="Doe" class="form-control input-md" required="">
+                                
+                              </div>
+                            </div>
+
+                            <!-- Text input-->
+                            <div class="form-group">
+                              <label class="col-md-4 control-label" for="firstName">First Name</label>  
+                              <div class="col-md-6">
+                              <input disabled id="studentFirstName" name="firstName" type="text" placeholder="Jane" class="form-control input-md" required="">
+                                
+                              </div>
+                            </div>
+
+                            <!-- Text input-->
+                            <div class="form-group">
+                              <label class="col-md-4 control-label" for="jobCode">Job Code</label>  
+                              <div class="col-md-6">
+                                <input id="jobCode" name="jobCode" type="text" placeholder="" class="form-control input-md" required="">
+                                
+                              </div>
+                            </div>
+
+                            <!-- Appended Input-->
+                            <div class="form-group">
+                              <label class="col-md-4 control-label" for="employerName">Employer Name</label>
+                              <div class="col-md-6">
+                                  <input id="employerName" name="employerName" class="form-control input-md"  placeholder="" type="text" required="">
+                                  <!-- <span class="input-group-addon">@uw.edu</span> -->
+                                
+                              </div>
+                            </div>
+                            <!-- Text input-->
+                            <div class="form-group">
+                              <label class="col-md-4 control-label" for="employerType">Employer Type</label>  
+                              <div class="col-md-6">
+                              <input id="employerType" name="employerType" type="text" placeholder="e.g tech" class="form-control input-md" required=""> 
+                                
+                              </div>
+                            </div>
+                             <div class="form-group">
+                              <label class="col-md-4 control-label" for="employerType">Job Title</label>  
+                              <div class="col-md-6">
+                              <input id="jobTitle" name="jobTitle" type="texta" placeholder="e.g Graphic Designer" class="form-control input-md" required=""> 
+                                
+                              </div>
+                            </div>
+
+                            <!-- Text input-->
+                            <div class="form-group">
+                              <label class="col-md-4 control-label" for="description">Description</label>  
+                              <div class="col-md-6">
+                              <textarea rows="4" cols="50" name="description" id="description" class="form-control input-md"> </textarea>
+                                
+                              </div>
+                            </div>
+
+                            <div class="form-group">
+                              <label class="col-md-4 control-label" for="employerType">Salary</label>  
+                              <div class="col-md-6">
+                              <input id="salary" name="salary" type="text" placeholder="e.g 40,000" class="form-control input-md" required=""> 
+                                
+                              </div>
+                            </div>
+
+                            <!-- Button Drop Down -->
+
+                             <div class="form-group">
+                              <label class="col-md-4 control-label" for="program">Program</label>
+                              <div class="col-md-6">
+                                    <select class="form-control" name="program" id="program" required="">
+                                      <option>CSS</option>
+                                      <option>CES</option>
+                                      <option>EE</option>
+                                      <option>IT</option>
 
 
-							 <div class="form-group">
-							  <label class="col-md-4 control-label" for="employmentType">Employment Type</label>
-							  <div class="col-md-6">
-									<select class="form-control" name="employmentType" id="employmentType" required="">
-									  <option>Intern</option>
-									  <option>Part Time</option>
-									  <option>Full Time</option>
-									  <option>Residency</option>
+                                    </select>
+                              </div>
+                            </div>
 
 
-									</select>
-							  </div>
-							</div>
+                             <div class="form-group">
+                              <label class="col-md-4 control-label" for="employmentType">Employment Type</label>
+                              <div class="col-md-6">
+                                    <select class="form-control" name="employmentType" id="employmentType" required="">
+                                      <option>Intern</option>
+                                      <option>Part Time</option>
+                                      <option>Full Time</option>
+                                      <option>Residency</option>
 
 
-							<!-- Button (Double) -->
-							<div class="form-group">
-							  <label class="col-md-4 control-label" for="button1id"></label>
-							  <div class="col-md-8">
-								<button id="button1id" name="button1id" class="btn btn-secondary">Close</button>
-								<button id="button2id" name="button2id" class="btn btn-primary" id="addJobToDataBtn" form="addJobForm">Add</button>
-							  </div>
-							</div>
+                                    </select>
+                              </div>
+                            </div>
 
-							</fieldset>
-							</form>
 
-						  
-						</div>
-					   
-					  </div>
-					</div>
-				  </div>
+                            <!-- Button (Double) -->
+                            <div class="form-group">
+                              <label class="col-md-4 control-label" for="button1id"></label>
+                              <div class="col-md-8">
+                                <button id="button1id" name="button1id" class="btn btn-secondary">Close</button>
+                                <button id="button2id" name="button2id" class="btn btn-primary" id="addJobToDataBtn" form="addJobForm">Add</button>
+                              </div>
+                            </div>
 
-				  <!-- end modal -->
-								 
-			</h1>
-				<ol class="breadcrumb">
-					<li><a href="/graduates"><i class="fa fa-th"></i> Graduates</a></li>
-					<li class="active">Job Info</li>
-				</ol>
-			</section>
-			<!-- Main content -->
-			<section class="content">
-				<div class="row">
-					<div class="col-xs-12">
-						<div class="box">
-							<div class="box-header">
-							</div>
-							<!-- /.box-header -->
-							<div class="box-body">
-								<table id="example1" class="table table-bordered table-striped" class="display nowrap" width="100%;" cellspacing="0">
-									<thead>
-										<tr>
-											<th>Action</th>
+                            </fieldset>
+                            </form>
+
+                          
+                        </div>
+                       
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- end modal -->
+                                 
+            </h1>
+                <ol class="breadcrumb">
+                    <li><a href="/graduates"><i class="fa fa-th"></i> Graduates</a></li>
+                    <li class="active">Job Info</li>
+                </ol>
+            </section>
+            <!-- Main content -->
+            <section class="content">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="box">
+                            <div class="box-header">
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body">
+                                <table id="example1" class="table table-bordered table-striped" class="display nowrap" width="100%;" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Action</th>
                                             <th>Graduate ID</th>
-											<th>Student ID</th>
-											<th>Last Name</th>
-											<th>First Name</th>
-											<th>Job ID</th>
-											<th>Job Title</th>
+                                            <th>Student ID</th>
+                                            <th>Last Name</th>
+                                            <th>First Name</th>
+                                            <th>Job ID</th>
+                                            <th>Job Title</th>
                                             <th>Employment Type</th>
-											<th>Job Program</th>
-											<th>Employer Name</th>
-											<th>Employer Type</th>
-											<th>Description</th>
-											<th>Salary</th>
-											<th>Job Code</th>
-										</tr>
-									</thead>
-									<tbody>
-										<% for (var i = 0; i < graduates.length; i++) { %>
-											<div action="post" method="/addGrad" class="gradIdTbl">
-												<tr id="rowId<%=i%>">
-													<div id="actionBtns">
-														<td>
-															<a href="#" class="btn btn-success btn-xs">
-																<i class="fa fa-plus-square" aria-hidden="true"></i> Add Job</a>
-															<a id="editBut<%=i%>" class='btn btn-info btn-xs' href="#">
-																<span class="glyphicon glyphicon-edit"> </span> Edit
-															</a>
-														</td>
-													</div>
+                                            <th>Job Program</th>
+                                            <th>Employer Name</th>
+                                            <th>Employer Type</th>
+                                            <th>Description</th>
+                                            <th>Salary</th>
+                                            <th>Job Code</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% for (var i = 0; i < graduates.length; i++) { %>
+                                            <div action="post" method="/addGrad" class="gradIdTbl">
+                                                <tr id="rowId<%=i%>">
+                                                    <div id="actionBtns">
+                                                        <td>
+                                                            <a href="#" class="btn btn-success btn-xs">
+                                                                <i class="fa fa-plus-square" aria-hidden="true"></i> Add Job</a>
+                                                            <a id="editBut<%=i%>" class='btn btn-info btn-xs' href="#">
+                                                                <span class="glyphicon glyphicon-edit"> </span> Edit
+                                                            </a>
+                                                        </td>
+                                                    </div>
                                                     <td>
                                                         <%=graduates[i].graduateId %>
                                                     </td>
-													<td>
-														<%= graduates[i].studentId %>
-													</td>
-													<td>
-														<%= graduates[i].lastName %>
-													</td>
-													<td>
-														<%= graduates[i].firstName %>
-													</td>
+                                                    <td>
+                                                        <%= graduates[i].studentId %>
+                                                    </td>
+                                                    <td>
+                                                        <%= graduates[i].lastName %>
+                                                    </td>
+                                                    <td>
+                                                        <%= graduates[i].firstName %>
+                                                    </td>
                                                     <td>
                                                         <%= graduates[i].jobId %>
                                                     </td>
-													<td>
-														<%= graduates[i].jobTitle %>
-													</td>
+                                                    <td>
+                                                        <%= graduates[i].jobTitle %>
+                                                    </td>
                                                     <td>
                                                         <%= graduates[i].employmentType %>
                                                     </td>
-													<td>
-														<%= graduates[i].jobProgram %>
-													</td>
-													<td>
-														<%= graduates[i].employerName %>
-													</td>
-													<td>
-														<%= graduates[i].employerType %>
-													</td>
-													<td>
-														<%= graduates[i].employerDesc %>
-													</td>
-													<td>
-														<%= graduates[i].salary %>
-													</td>
-													<td>
-														<%= graduates[i].jobCode %>
-													</td>
-											</div>
-											<%}%>
-												</tr>
-									</tbody>
-									<tfoot>
-										<tr>
-											<th>Action</th>
+                                                    <td>
+                                                        <%= graduates[i].jobProgram %>
+                                                    </td>
+                                                    <td>
+                                                        <%= graduates[i].employerName %>
+                                                    </td>
+                                                    <td>
+                                                        <%= graduates[i].employerType %>
+                                                    </td>
+                                                    <td>
+                                                        <%= graduates[i].employerDesc %>
+                                                    </td>
+                                                    <td>
+                                                        <%= graduates[i].salary %>
+                                                    </td>
+                                                    <td>
+                                                        <%= graduates[i].jobCode %>
+                                                    </td>
+                                            </div>
+                                            <%}%>
+                                                </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Action</th>
                                             <th>Graduate ID</th>
-											<th>Student Id</th>
-											<th>Last Name</th>
-											<th>First Name</th>
-											<th>Job Program</th>
-											<th>Job Title</th>
-											<th>Employment Type</th>
-											<th>Employer Name</th>
-											<th>Employer Type</th>
-											<th>Description</th>
-											<th>Salary</th>
-											<th>Job Code</th>
-										</tr>
-									</tfoot>
-								</table>
-							</div>
-							<!-- /.box-body -->
-						</div>
-						<!-- /.box -->
-					</div>
-					<!-- /.col -->
-				</div>
-				<!-- /.row -->
-			</section>
-			<!-- /.content -->
-		</div>
-		<!-- /.content-wrapper -->
-		<!-- start edit modal -->
-		<div class="modal fade" id="editGradModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						<h4 class="modal-title" id="exampleModalLabel" style="font-size: 24px;"><b>Edit Job</b></h4>
-					</div>
-					<div class="modal-body">
-						<form class="form-horizontal" id="editJobForm" action="/editJob" method="post">
-							<fieldset>
-								<!-- Text input-->
-								<div class="form-group">
-									<div class="form-group">
+                                            <th>Student ID</th>
+                                            <th>Last Name</th>
+                                            <th>First Name</th>
+                                            <th>Job ID</th>
+                                            <th>Job Title</th>
+                                            <th>Employment Type</th>
+                                            <th>Job Program</th>
+                                            <th>Employer Name</th>
+                                            <th>Employer Type</th>
+                                            <th>Description</th>
+                                            <th>Salary</th>
+                                            <th>Job Code</th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+        <!-- start edit modal -->
+        <div class="modal fade" id="editGradModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="exampleModalLabel" style="font-size: 24px;"><b>Edit Job</b></h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" id="editJobForm" action="/editJob" method="post">
+                            <fieldset>
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <div class="form-group">
                                         <label class="col-md-4 control-label" for="studentIdE">Graduate ID</label>
                                         <div class="col-md-6">
                                             <input disabled id="graduateIdE" name="graduateId" type="text" class="form-control input-md" required="">
                                         </div>
                                     </div>
-								</div>
-								<div class="form-group">
+                                </div>
+                                <div class="form-group">
                                     <div class="form-group">
                                         <label class="col-md-4 control-label" for="studentIdE">Job ID</label>
                                         <div class="col-md-6">
-                                            <input disabled id="jobIdE" name="jobId" type="text" class="form-control input-md" required="">
+                                            <input id="jobIdE" name="jobId" type="text" class="form-control input-md" required="">
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="jobCode">Job Code</label>
+                                    <div class="col-md-6">
+                                        <input disabled id="jobCodeE" name="jobCode" type="text" placeholder="" class="form-control input-md">
+                                    </div>
+                                </div>
+                                <!-- Appended Input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="employerName">Employer Name</label>
+                                    <div class="col-md-6">
+                                        <input id="employerNameE" name="employerName" class="form-control input-md" placeholder="" type="text" required="">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="employerType">Job Title</label>
+                                    <div class="col-md-6">
+                                        <input id="jobTitleE" name="jobTitle" type="texta" placeholder="e.g Graphic Designer" class="form-control input-md" required="">
+                                    </div>
+                                </div>
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="description">Description</label>
+                                    <div class="col-md-6">
+                                        <textarea rows="4" cols="50" name="description" id="descriptionE" class="form-control input-md"> </textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="employerType">Salary</label>
+                                    <div class="col-md-6">
+                                        <input id="salaryE" name="salary" type="text" placeholder="e.g 40,000" class="form-control input-md" required="">
+                                    </div>
+                                </div>
+                                <!-- Button Drop Down -->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="program">Program</label>
+                                    <div class="col-md-6">
+                                        <select class="form-control" name="program" id="programE" required="">
+                                            <option>CSS</option>
+                                            <option>CES</option>
+                                            <option>EE</option>
+                                            <option>IT</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="employmentType">Employment Type</label>
+                                    <div class="col-md-6">
+                                        <select class="form-control" name="employmentType" id="employmentTypeE" required="">
+                                            <option>Intern</option>
+                                            <option>Part Time</option>
+                                            <option>Full Time</option>
+                                            <option>Residency</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <!-- Button (Double) -->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="button1id"></label>
+                                    <div class="col-md-8">
+                                        <button id="button1Edit" name="button1id" class="btn btn-secondary">Close</button>
+                                        <button id="button2Edit" name="button2id" class="btn btn-primary" id="editJobBtn" form="editJobForm">Edit</button>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end edit modal -->
+        <footer class="main-footer">
+            <div class="pull-right hidden-xs">
+                <b>Version</b> 2.3.8
+            </div>
+            <strong>Copyright &copy; 2014-2016 <a href="http://almsaeedstudio.com">Almsaeed Studio</a>.</strong> All rights reserved.
+        </footer>
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Create the tabs -->
+            <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+                <li><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
+                <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <!-- Home tab content -->
+                <div class="tab-pane" id="control-sidebar-home-tab">
+                    <h3 class="control-sidebar-heading">Recent Activity</h3>
+                    <ul class="control-sidebar-menu">
+                        <li>
+                            <a href="javascript:void(0)">
+                                <i class="menu-icon fa fa-birthday-cake bg-red"></i>
+                                <div class="menu-info">
+                                    <h4 class="control-sidebar-subheading">Langdon's Birthday</h4>
+                                    <p>Will be 23 on April 24th</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)">
+                                <i class="menu-icon fa fa-user bg-yellow"></i>
+                                <div class="menu-info">
+                                    <h4 class="control-sidebar-subheading">Frodo Updated His Profile</h4>
+                                    <p>New phone +1(800)555-1234</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)">
+                                <i class="menu-icon fa fa-envelope-o bg-light-blue"></i>
+                                <div class="menu-info">
+                                    <h4 class="control-sidebar-subheading">Nora Joined Mailing List</h4>
+                                    <p>nora@example.com</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)">
+                                <i class="menu-icon fa fa-file-code-o bg-green"></i>
+                                <div class="menu-info">
+                                    <h4 class="control-sidebar-subheading">Cron Job 254 Executed</h4>
+                                    <p>Execution time 5 seconds</p>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- /.control-sidebar-menu -->
+                    <h3 class="control-sidebar-heading">Tasks Progress</h3>
+                    <ul class="control-sidebar-menu">
+                        <li>
+                            <a href="javascript:void(0)">
+                                <h4 class="control-sidebar-subheading">
+                                Custom Template Design
+                                <span class="label label-danger pull-right">70%</span>
+                            </h4>
+                                <div class="progress progress-xxs">
+                                    <div class="progress-bar progress-bar-danger" style="width: 70%"></div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)">
+                                <h4 class="control-sidebar-subheading">
+                                Update Resume
+                                <span class="label label-success pull-right">95%</span>
+                            </h4>
+                                <div class="progress progress-xxs">
+                                    <div class="progress-bar progress-bar-success" style="width: 95%"></div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)">
+                                <h4 class="control-sidebar-subheading">
+                                Laravel Integration
+                                <span class="label label-warning pull-right">50%</span>
+                            </h4>
+                                <div class="progress progress-xxs">
+                                    <div class="progress-bar progress-bar-warning" style="width: 50%"></div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)">
+                                <h4 class="control-sidebar-subheading">
+                                Back End Framework
+                                <span class="label label-primary pull-right">68%</span>
+                            </h4>
+                                <div class="progress progress-xxs">
+                                    <div class="progress-bar progress-bar-primary" style="width: 68%"></div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- /.control-sidebar-menu -->
+                </div>
+                <!-- /.tab-pane -->
+                <!-- Stats tab content -->
+                <div class="tab-pane" id="control-sidebar-stats-tab">Stats Tab Content</div>
+                <!-- /.tab-pane -->
+                <!-- Settings tab content -->
+                <div class="tab-pane" id="control-sidebar-settings-tab">
+                    <form method="post">
+                        <h3 class="control-sidebar-heading">General Settings</h3>
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">
+                                Report panel usage
+                                <input type="checkbox" class="pull-right" checked>
+                            </label>
+                            <p>
+                                Some information about this general settings option
+                            </p>
+                        </div>
+                        <!-- /.form-group -->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">
+                                Allow mail redirect
+                                <input type="checkbox" class="pull-right" checked>
+                            </label>
+                            <p>
+                                Other sets of options are available
+                            </p>
+                        </div>
+                        <!-- /.form-group -->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">
+                                Expose author name in posts
+                                <input type="checkbox" class="pull-right" checked>
+                            </label>
+                            <p>
+                                Allow the user to show his name in blog posts
+                            </p>
+                        </div>
+                        <!-- /.form-group -->
+                        <h3 class="control-sidebar-heading">Chat Settings</h3>
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">
+                                Show me as online
+                                <input type="checkbox" class="pull-right" checked>
+                            </label>
+                        </div>
+                        <!-- /.form-group -->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">
+                                Turn off notifications
+                                <input type="checkbox" class="pull-right">
+                            </label>
+                        </div>
+                        <!-- /.form-group -->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">
+                                Delete chat history
+                                <a href="javascript:void(0)" class="text-red pull-right"><i class="fa fa-trash-o"></i></a>
+                            </label>
+                        </div>
+                        <!-- /.form-group -->
+                    </form>
+                </div>
+                <!-- /.tab-pane -->
+            </div>
+        </aside>
+        <!-- /.control-sidebar -->
+        <!-- Add the sidebar's background. This div must be placed
+             immediately after the control sidebar -->
+        <div class="control-sidebar-bg"></div>
+    </div>
+    <!-- ./wrapper -->
+    <!-- jQuery 2.2.3 -->
+    <script src="js/jquery.min.js"></script>
+    <!-- Bootstrap 3.3.6 -->
+    <script src="js/bootstrap.min.js"></script>
+    <!-- DataTables -->
+    <script src="plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="plugins/datatables/dataTables.bootstrap.min.js"></script>
+    <!-- SlimScroll -->
+    <script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
+    <!-- FastClick -->
+    <script src="plugins/fastclick/fastclick.js"></script>
+    <!-- AdminLTE App -->
+    <script src="js/app.min.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="js/demo.js"></script>
+    <!-- Graduate functionality -->
+    <script src="js/pages/graduate.js" type="text/javascript"></script>
+    <!-- page script -->
+    <!-- TABLE ATTRIBUTES -->
+    <script>
+    $(function() {
+        var table = $('#example1').DataTable();
+        $('#example1').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false "defaultContent": "<i>null</i>",
+            "targets": "_all",
+            "scrollX": true,
+            "sScrollX": '100%',
+            "sScrollXInner": "110%",
+            "bScrollCollapse": true,
 
-								<!-- Text input-->
-								<div class="form-group">
-									<label class="col-md-4 control-label" for="jobCode">Job Code</label>
-									<div class="col-md-6">
-										<input id="jobCodeE" name="jobCode" type="text" placeholder="" class="form-control input-md">
-									</div>
-								</div>
-								<!-- Appended Input-->
-								<div class="form-group">
-									<label class="col-md-4 control-label" for="employerName">Employer Name</label>
-									<div class="col-md-6">
-										<div class="input-group">
-											<input id="employerNameE" name="employerName" class="form-control input-md" placeholder="" type="text" required="">
-											<!-- <span class="input-group-addon">@uw.edu</span> -->
-										</div>
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-md-4 control-label" for="employerType">Job Title</label>
-									<div class="col-md-6">
-										<input id="jobTitleE" name="jobTitle" type="texta" placeholder="e.g Graphic Designer" class="form-control input-md" required="">
-									</div>
-								</div>
-								<!-- Text input-->
-								<div class="form-group">
-									<label class="col-md-4 control-label" for="description">Description</label>
-									<div class="col-md-6">
-										<textarea rows="4" cols="50" name="description" id="descriptionE" class="form-control input-md"> </textarea>
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-md-4 control-label" for="employerType">Salary</label>
-									<div class="col-md-6">
-										<input id="salaryE" name="salary" type="text" placeholder="e.g 40,000" class="form-control input-md" required="">
-									</div>
-								</div>
-								<!-- Button Drop Down -->
-								<div class="form-group">
-									<label class="col-md-4 control-label" for="program">Program</label>
-									<div class="col-md-6">
-										<select class="form-control" name="program" id="programE" required="">
-											<option>CSS</option>
-											<option>CES</option>
-											<option>EE</option>
-											<option>IT</option>
-										</select>
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-md-4 control-label" for="employmentType">Employment Type</label>
-									<div class="col-md-6">
-										<select class="form-control" name="employmentType" id="employmentTypeE" required="">
-											<option>Intern</option>
-											<option>Part Time</option>
-											<option>Full Time</option>
-											<option>Residency</option>
-										</select>
-									</div>
-								</div>
-								<!-- Button (Double) -->
-								<div class="form-group">
-									<label class="col-md-4 control-label" for="button1id"></label>
-									<div class="col-md-8">
-										<button id="button1Edit" name="button1id" class="btn btn-secondary">Close</button>
-										<button id="button2Edit" name="button2id" class="btn btn-primary" id="editJobBtn" form="editJobForm">Edit</button>
-									</div>
-								</div>
-							</fieldset>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- end edit modal -->
-		<footer class="main-footer">
-			<div class="pull-right hidden-xs">
-				<b>Version</b> 2.3.8
-			</div>
-			<strong>Copyright &copy; 2014-2016 <a href="http://almsaeedstudio.com">Almsaeed Studio</a>.</strong> All rights reserved.
-		</footer>
-		<!-- Control Sidebar -->
-		<aside class="control-sidebar control-sidebar-dark">
-			<!-- Create the tabs -->
-			<ul class="nav nav-tabs nav-justified control-sidebar-tabs">
-				<li><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
-				<li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
-			</ul>
-			<!-- Tab panes -->
-			<div class="tab-content">
-				<!-- Home tab content -->
-				<div class="tab-pane" id="control-sidebar-home-tab">
-					<h3 class="control-sidebar-heading">Recent Activity</h3>
-					<ul class="control-sidebar-menu">
-						<li>
-							<a href="javascript:void(0)">
-								<i class="menu-icon fa fa-birthday-cake bg-red"></i>
-								<div class="menu-info">
-									<h4 class="control-sidebar-subheading">Langdon's Birthday</h4>
-									<p>Will be 23 on April 24th</p>
-								</div>
-							</a>
-						</li>
-						<li>
-							<a href="javascript:void(0)">
-								<i class="menu-icon fa fa-user bg-yellow"></i>
-								<div class="menu-info">
-									<h4 class="control-sidebar-subheading">Frodo Updated His Profile</h4>
-									<p>New phone +1(800)555-1234</p>
-								</div>
-							</a>
-						</li>
-						<li>
-							<a href="javascript:void(0)">
-								<i class="menu-icon fa fa-envelope-o bg-light-blue"></i>
-								<div class="menu-info">
-									<h4 class="control-sidebar-subheading">Nora Joined Mailing List</h4>
-									<p>nora@example.com</p>
-								</div>
-							</a>
-						</li>
-						<li>
-							<a href="javascript:void(0)">
-								<i class="menu-icon fa fa-file-code-o bg-green"></i>
-								<div class="menu-info">
-									<h4 class="control-sidebar-subheading">Cron Job 254 Executed</h4>
-									<p>Execution time 5 seconds</p>
-								</div>
-							</a>
-						</li>
-					</ul>
-					<!-- /.control-sidebar-menu -->
-					<h3 class="control-sidebar-heading">Tasks Progress</h3>
-					<ul class="control-sidebar-menu">
-						<li>
-							<a href="javascript:void(0)">
-								<h4 class="control-sidebar-subheading">
-								Custom Template Design
-								<span class="label label-danger pull-right">70%</span>
-							</h4>
-								<div class="progress progress-xxs">
-									<div class="progress-bar progress-bar-danger" style="width: 70%"></div>
-								</div>
-							</a>
-						</li>
-						<li>
-							<a href="javascript:void(0)">
-								<h4 class="control-sidebar-subheading">
-								Update Resume
-								<span class="label label-success pull-right">95%</span>
-							</h4>
-								<div class="progress progress-xxs">
-									<div class="progress-bar progress-bar-success" style="width: 95%"></div>
-								</div>
-							</a>
-						</li>
-						<li>
-							<a href="javascript:void(0)">
-								<h4 class="control-sidebar-subheading">
-								Laravel Integration
-								<span class="label label-warning pull-right">50%</span>
-							</h4>
-								<div class="progress progress-xxs">
-									<div class="progress-bar progress-bar-warning" style="width: 50%"></div>
-								</div>
-							</a>
-						</li>
-						<li>
-							<a href="javascript:void(0)">
-								<h4 class="control-sidebar-subheading">
-								Back End Framework
-								<span class="label label-primary pull-right">68%</span>
-							</h4>
-								<div class="progress progress-xxs">
-									<div class="progress-bar progress-bar-primary" style="width: 68%"></div>
-								</div>
-							</a>
-						</li>
-					</ul>
-					<!-- /.control-sidebar-menu -->
-				</div>
-				<!-- /.tab-pane -->
-				<!-- Stats tab content -->
-				<div class="tab-pane" id="control-sidebar-stats-tab">Stats Tab Content</div>
-				<!-- /.tab-pane -->
-				<!-- Settings tab content -->
-				<div class="tab-pane" id="control-sidebar-settings-tab">
-					<form method="post">
-						<h3 class="control-sidebar-heading">General Settings</h3>
-						<div class="form-group">
-							<label class="control-sidebar-subheading">
-								Report panel usage
-								<input type="checkbox" class="pull-right" checked>
-							</label>
-							<p>
-								Some information about this general settings option
-							</p>
-						</div>
-						<!-- /.form-group -->
-						<div class="form-group">
-							<label class="control-sidebar-subheading">
-								Allow mail redirect
-								<input type="checkbox" class="pull-right" checked>
-							</label>
-							<p>
-								Other sets of options are available
-							</p>
-						</div>
-						<!-- /.form-group -->
-						<div class="form-group">
-							<label class="control-sidebar-subheading">
-								Expose author name in posts
-								<input type="checkbox" class="pull-right" checked>
-							</label>
-							<p>
-								Allow the user to show his name in blog posts
-							</p>
-						</div>
-						<!-- /.form-group -->
-						<h3 class="control-sidebar-heading">Chat Settings</h3>
-						<div class="form-group">
-							<label class="control-sidebar-subheading">
-								Show me as online
-								<input type="checkbox" class="pull-right" checked>
-							</label>
-						</div>
-						<!-- /.form-group -->
-						<div class="form-group">
-							<label class="control-sidebar-subheading">
-								Turn off notifications
-								<input type="checkbox" class="pull-right">
-							</label>
-						</div>
-						<!-- /.form-group -->
-						<div class="form-group">
-							<label class="control-sidebar-subheading">
-								Delete chat history
-								<a href="javascript:void(0)" class="text-red pull-right"><i class="fa fa-trash-o"></i></a>
-							</label>
-						</div>
-						<!-- /.form-group -->
-					</form>
-				</div>
-				<!-- /.tab-pane -->
-			</div>
-		</aside>
-		<!-- /.control-sidebar -->
-		<!-- Add the sidebar's background. This div must be placed
-			 immediately after the control sidebar -->
-		<div class="control-sidebar-bg"></div>
-	</div>
-	<!-- ./wrapper -->
-	<!-- jQuery 2.2.3 -->
-	<script src="js/jquery.min.js"></script>
-	<!-- Bootstrap 3.3.6 -->
-	<script src="js/bootstrap.min.js"></script>
-	<!-- DataTables -->
-	<script src="plugins/datatables/jquery.dataTables.min.js"></script>
-	<script src="plugins/datatables/dataTables.bootstrap.min.js"></script>
-	<!-- SlimScroll -->
-	<script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
-	<!-- FastClick -->
-	<script src="plugins/fastclick/fastclick.js"></script>
-	<!-- AdminLTE App -->
-	<script src="js/app.min.js"></script>
-	<!-- AdminLTE for demo purposes -->
-	<script src="js/demo.js"></script>
-	<!-- Graduate functionality -->
-	<script src="js/pages/graduate.js" type="text/javascript"></script>
-	<!-- page script -->
-	<!-- TABLE ATTRIBUTES -->
-	<script>
-	$(function() {
-		var table = $('#example1').DataTable();
-		$('#example1').DataTable({
-			"paging": true,
-			"lengthChange": false,
-			"searching": false,
-			"ordering": true,
-			"info": true,
-			"autoWidth": false "defaultContent": "<i>null</i>",
-			"targets": "_all",
-			"scrollX": true,
-			"sScrollX": '100%',
-			"sScrollXInner": "110%",
-			"bScrollCollapse": true,
-
-			"aoColumnDefs": [{
-				"bVisible": false,
-				"aTargets": [1]
-			}]
+            "aoColumnDefs": [{
+                "bVisible": false,
+                "aTargets": [1]
+            }]
 
 
-		});
-	});
-	</script>
-	</script>
-	<!-- For add graduate form validation -->
-	<script type="text/javascript">
-	$(document).ready(function() {
-		$('input:required,textarea:required, select:required').on('blur', function() {
+        });
+    });
+    </script>
+    </script>
+    <!-- For add graduate form validation -->
+    <script type="text/javascript">
+    $(document).ready(function() {
+        $('input:required,textarea:required, select:required').on('blur', function() {
 
-			if ($(this).val() !== '') { //assuming the form doesn't have some fields populated by default.
-				$(this).addClass('green-border');
-			} else {
-				$(this).removeClass('green-border');
-			}
-		});
+            if ($(this).val() !== '') { //assuming the form doesn't have some fields populated by default.
+                $(this).addClass('green-border');
+            } else {
+                $(this).removeClass('green-border');
+            }
+        });
 
-	});
+    });
 
-	// adding validation to student id and gpa
+    // adding validation to student id and gpa
 
-	$(document).ready(function() {
-		// called when key is pressed in textbox 
-		// for id
-		$("#studentId").keypress(function(e) {
-			//if the letter is not digit then display error and don't type anything
-			if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
-				return false;
-			}
-		});
+    $(document).ready(function() {
+        // called when key is pressed in textbox 
+        // for id
+        $("#studentId").keypress(function(e) {
+            //if the letter is not digit then display error and don't type anything
+            if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                return false;
+            }
+        });
 
-		// for job code
-		$("#jobCode").keypress(function(e) {
-			//if the letter is not digit then display error and don't type anything
-			if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
-				return false;
-			}
-		});
-
-
-		$("#salary").keypress(function(e) {
-			//if the letter is not digit then display error and don't type anything
-			if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
-				return false;
-			}
-		});
-
-	});
-	</script>
-	<!-- VALIDATION - Making sure you can insert decimals -->
-	<script type="text/javascript">
-	var salary = document.getElementById('salary');
-	salary.addEventListener('keyup', myFunc);
-
-	function myFunc(e) {
-		var val = this.value;
-		var re = /^([0-9]+[\.]?[0-9]?[0-9]?|[0-9]+)$/g;
-		var re1 = /^([0-9]+[\.]?[0-9]?[0-9]?|[0-9]+)/g;
-		if (re.test(val)) {
-			//do something here
-
-		} else {
-			val = re1.exec(val);
-			if (val) {
-				this.value = val[0];
-			} else {
-				this.value = "";
-			}
-		}
-	}
-	</script>
-	<!-- adding a job -->
-	<script type="text/javascript">
-	$(document).ready(function() {
-		var table = $('#example1').DataTable();
-
-		$('#example1 tbody').on('click', '.btn-success', function() {
-			var gradInfo = table.row($(this).parents('tr')).data();
-
-			var studentId = gradInfo[1];
-			var firstName = gradInfo[2];
-			var lastName = gradInfo[3];
-			var id = gradInfo[11];
-
-			$('#id').val(id);
-			$('#studentId').val(studentId);
-			$('#studentFirstName').val(firstName);
-			$('#studentLastName').val(lastName);
-
-			console.log(studentId + " " + firstName + " " + lastName + " " + id);
-
-			$("#addJobModal").modal('show');
-
-		});
-	});
-	$(document).ready(function() {
-		$("#button1id").click(function() {
-			$("#addJobModal").modal('hide');
+        // for job code
+        $("#jobCode").keypress(function(e) {
+            //if the letter is not digit then display error and don't type anything
+            if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                return false;
+            }
+        });
 
 
-		});
-	});
-	</script>
+        $("#salary").keypress(function(e) {
+            //if the letter is not digit then display error and don't type anything
+            if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                return false;
+            }
+        });
 
-	
-	<script type="text/javascript">
-	// for editing a current job
-	$(document).ready(function() {
-		var table = $('#example1').DataTable();
+    });
+    </script>
+    <!-- VALIDATION - Making sure you can insert decimals -->
+    <script type="text/javascript">
+    var salary = document.getElementById('salary');
+    salary.addEventListener('keyup', myFunc);
 
-		$('#example1 tbody').on('click', '.btn-info', function() {
+    function myFunc(e) {
+        var val = this.value;
+        var re = /^([0-9]+[\.]?[0-9]?[0-9]?|[0-9]+)$/g;
+        var re1 = /^([0-9]+[\.]?[0-9]?[0-9]?|[0-9]+)/g;
+        if (re.test(val)) {
+            //do something here
+
+        } else {
+            val = re1.exec(val);
+            if (val) {
+                this.value = val[0];
+            } else {
+                this.value = "";
+            }
+        }
+    }
+    </script>
+    <!-- adding a job -->
+    <script type="text/javascript">
+    $(document).ready(function() {
+        var table = $('#example1').DataTable();
+
+        $('#example1 tbody').on('click', '.btn-success', function() {
+            var gradInfo = table.row($(this).parents('tr')).data();
+
+            var studentId = gradInfo[2];
+            var firstName = gradInfo[3];
+            var lastName = gradInfo[4];
+            var id = gradInfo[1];
+
+            $('#id').val(id);
+            $('#studentId').val(studentId);
+            $('#studentFirstName').val(firstName);
+            $('#studentLastName').val(lastName);
+
+            console.log(studentId + " " + firstName + " " + lastName + " " + id);
+
+            $("#addJobModal").modal('show');
+
+        });
+    });
+    $(document).ready(function() {
+        $("#button1id").click(function() {
+            $("#addJobModal").modal('hide');
+
+
+        });
+    });
+    </script>
+    <script type="text/javascript">
+    // for editing a current job
+    $(document).ready(function() {
+        var table = $('#example1').DataTable();
+
+        $('#example1 tbody').on('click', '.btn-info', function() {
             console.log("edit grad");
-			
+
             var editButtonIdName = $(this).get(0).id;
             //console.log(editButtonIdName);
 
-            var rowId = editButtonIdName.substring(editButtonIdName.length-1);
+            var rowId = editButtonIdName.substring(editButtonIdName.length - 1);
             //console.log(rowId);
 
             var tableRow = $("#rowId" + rowId).get(0);
@@ -875,75 +870,80 @@
             var jobTitle = $(tableData[6]).text().trim();
             var employmentType = $(tableData[7]).text().trim();
             var employerName = $(tableData[8]).text().trim();
-            var employerType = $(tableData[9]).text().trim();
-            var description = $(tableData[10]).text().trim();
-            var salary = $(tableData[11]).text().trim();
-            var jobCode = $(tableData[12]).text().trim();
+            var jobProgram = $(tableData[9]).text().trim();
+            var employerType = $(tableData[10]).text().trim();
+            var description = $(tableData[11]).text().trim();
+            var salary = $(tableData[12]).text().trim();
+            var jobCode = $(tableData[13]).text().trim();
 
-            //console.log(graduateId);
-            //console.log(jobId);
-            //console.log(jobTitle);
+            console.log(graduateId);
+            console.log(jobId);
+            console.log(jobTitle);
             console.log(employmentType);
-            //console.log(employerName);
-            //console.log(description);
-            //console.log(salary);
-            //console.log(jobCode);
+            console.log(employerName);
+            console.log(jobProgram);
+            console.log(description);
+            console.log(salary);
+            // console.log(jobCode);
 
             $('#graduateIdE').val(graduateId);
             $('#jobIdE').val(jobId);
             $('#jobCodeE').val(jobCode);
             $('#employerNameE').val(employerName);
             $('#employmentTypeE').val(employmentType);
+            $('#programE').val(jobProgram);
             $('#employerTypeE').val(employmentType);
             $('#jobTitleE').val(jobTitle);
             $('#descriptionE').val(description);
             $('#salaryE').val(salary);
 
 
-
+            $('#jobIdE').focus(function(e) {
+                $(this).blur();
+            });
             $('#editGradModal').modal('show');
 
 
-		});
+        });
 
 
-	});
-	</script>
-	<!-- Hide the Modal when pressing add button -->
-	<script type="text/javascript">
-	$(document).ready(function() {
-		$("#editGradToDataBtn").click(function() {
-			$("#editGradModal").modal('hide');
+    });
+    </script>
+    <!-- Hide the Modal when pressing add button -->
+    <script type="text/javascript">
+    $(document).ready(function() {
+        $("#editGradToDataBtn").click(function() {
+            $("#editGradModal").modal('hide');
 
-		});
-	});
-	</script>
-	<!-- SEARCHING -->
-	<script type="text/javascript">
-	$(document).ready(function() {
-		// Setup - add a text input to each footer cell
-		$('#example tfoot th').each(function() {
-			var title = $(this).text();
-			$(this).html('<input type="text" placeholder="Search ' + title + '" />');
-		});
+        });
+    });
+    </script>
+    <!-- SEARCHING -->
+    <script type="text/javascript">
+    $(document).ready(function() {
+        // Setup - add a text input to each footer cell
+        $('#example tfoot th').each(function() {
+            var title = $(this).text();
+            $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+        });
 
-		// DataTable
-		var table = $('#example').DataTable();
+        // DataTable
+        var table = $('#example').DataTable();
 
-		// Apply the search
-		table.columns().every(function() {
-			var that = this;
+        // Apply the search
+        table.columns().every(function() {
+            var that = this;
 
-			$('input', this.footer()).on('keyup change', function() {
-				if (that.search() !== this.value) {
-					that
-						.search(this.value)
-						.draw();
-				}
-			});
-		});
-	});
-	</script>
+            $('input', this.footer()).on('keyup change', function() {
+                if (that.search() !== this.value) {
+                    that
+                        .search(this.value)
+                        .draw();
+                }
+            });
+        });
+    });
+    </script>
 </body>
 
 </html>

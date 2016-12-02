@@ -409,14 +409,28 @@ app.get('/job', function(req, res) {
     if (req.session.user) {
         pool.getConnection(function(err, connection) {
 
-            var query = "SELECT graduate.id AS graduateId, studentId, firstName, lastName, " +
-                            "graduate_has_job.id AS jobId, employmentType, employerName, " +
-                            "employerType, employerDesc, jobProgram, jobTitle, salary, jobCode " +
-                        "FROM graduate " +
-                        "JOIN  graduate_has_job ON graduate_has_job.graduateId = graduate.id " +
-                        "JOIN job ON job.id = graduate_has_job.graduateId";
+            // var query = "SELECT graduate.id AS graduateId, studentId, firstName, lastName, " +
+            //                 "graduate_has_job.id AS jobId, employmentType, employerName, " +
+            //                 "employerType, employerDesc, jobProgram, jobTitle, salary, jobCode " +
+            //             "FROM graduate " +
+            //             "JOIN  graduate_has_job ON graduate_has_job.graduateId = graduate.id " +
+            //             "JOIN job ON job.id = graduate_has_job.graduateId";
 
             //console.log(query);
+
+            // var query = "SELECT graduate.id AS graduateId, studentId, firstName, lastName, graduate_has_job.id AS jobId," + 
+            //                 " employmentType, employerName, employerType, employerDesc, jobProgram, jobTitle, salary FROM graduate " + 
+            //             "LEFT JOIN graduate_has_job ON graduate_has_job.graduateId = graduate.id " +
+            //             "LEFT JOIN job ON job.id = graduate_has_job.graduateId";
+
+            var query = "SELECT graduate.id AS graduateId, studentId, firstName, lastName, " +
+                            "graduate_has_job.id AS jobId, employmentType, employerName, employerType," +
+                            " employerDesc, jobProgram, jobTitle, salary, jobCode " +
+                        "FROM graduate " +
+                        "LEFT JOIN graduate_has_job ON graduate_has_job.graduateId = graduate.id " +
+                        "LEFT JOIN job ON job.id = graduate_has_job.employmentId";
+
+            // console.log(query);
 
             connection.query(query, function(err, rows) {
 
@@ -428,7 +442,7 @@ app.get('/job', function(req, res) {
                             'user': req.session.user
                         };
 
-                        // console.log(data.graduates);
+                        //console.log(data.graduates);
 
                         res.render('jobs.ejs', data);
 
@@ -443,7 +457,7 @@ app.get('/job', function(req, res) {
 });
 
 app.post('/addJob', function(req, res) {
-    console.dir(req.body);
+    // console.dir(req.body);
 
     // var lastName = req.body.lastName;
     var gradId = req.body.id;
@@ -455,6 +469,8 @@ app.post('/addJob', function(req, res) {
     var description = req.body.description;
     var salary = req.body.salary;
     var program = req.body.program;
+
+    console.log("id: " + gradId);
 
     var id = req.session.user;
     if (req.session.user) {
@@ -497,9 +513,37 @@ app.post('/addJob', function(req, res) {
 app.post('/editJob', function(req,res) {
     console.dir(req.body);
 
+    var jobId = req.body.jobId;
+    var salary = req.body.salary;
+    var jobProgram = req.body.jobProgram;
+    var jobTitle = req.body.jobTitle;
+    var employerName = req.body.employerName;
+    var employerDesc = req.body.employerDesc;
+    var employmentType = req.body.employmentType;
+
+    console.log(jobId);
+
     if(req.session.user) {
+
+        var query = "UPDATE job " +
+                    "JOIN graduate_has_job ON graduate_has_job.employmentId = job.id " +
+                    "SET salary= " + salary + "," + "jobProgram= " + "'" + jobProgram + "'" + ", jobTitle= " + "'" + jobTitle + "'" + ", employerName= " + "'" + employerName + "'" + ", "
+                        + "employerDesc= " + "'" + employerDesc + "', employmentType= " + "'" + employmentType +"' "  +
+                    "WHERE graduate_has_job.id = " + jobId;
+
+        console.log(query);
+       
         pool.getConnection(function(err, connection) {
-            // connection.query('UPDATE job SET')
+            connection.query(query, function(err, rows) {
+
+                    if(err) {
+                        console.log(err);
+                    } else {
+                        console.log("Job Edited!");
+                        res.redirect('/job');
+                    }
+
+                });
 
         });
 
