@@ -511,7 +511,7 @@ app.post('/addJob', function(req, res) {
 
 
 app.post('/editJob', function(req,res) {
-    console.dir(req.body);
+    // console.dir(req.body);
 
     var jobId = req.body.jobId;
     var salary = req.body.salary;
@@ -521,7 +521,8 @@ app.post('/editJob', function(req,res) {
     var employerDesc = req.body.employerDesc;
     var employmentType = req.body.employmentType;
 
-    console.log(jobId);
+    console.log(jobProgram);
+    console.log(employerDesc);
 
     if(req.session.user) {
 
@@ -661,8 +662,7 @@ function getNumberOfGradsWithJobs(connection, results, callback) {
     let query = "SELECT COUNT(DISTINCT graduate.id) as gradsWithJobs FROM graduate " +
         "JOIN graduate_has_job ON graduate_has_job.graduateId = graduate.id " +
         "JOIN job ON job.id = graduate_has_job.employmentId " +
-        "WHERE jobProgram IN ('CSS', 'EE', 'CES', 'tech other') " +
-        "AND startDate >= gradYear; "
+        "WHERE jobProgram IN ('CSS', 'EE', 'CES', 'tech other')";
 
     connection.query(query, (err, rows) => {
         if (err) {
@@ -712,7 +712,7 @@ function getGradsThatInternedAndFoundAJob(connection, results, callback) {
             return;
         }
 
-        console.log(rows[0].gradsThatInternedAndFoundAJob);
+        //console.log(rows[0].gradsThatInternedAndFoundAJob);
 
         connection.query(query, (err, rows) => {
             if (err) {
@@ -816,12 +816,14 @@ function getGradsInPrograms(connection, results, callback) {
             return;
         }
 
-        results['totalBACSS'] = rows[0].total;
-        results['totalBSCSS'] = rows[1].total;
-        results['totalMSCSS'] = rows[2].total;
-        results['totalBSCES'] = rows[3].total;
-        results['totalBSEE'] = rows[4].total;
-        results['totalBSIT'] = rows[5].total;
+        let programs = {};
+
+        for (var i = 0; i < rows.length; i++) {
+            //console.dir(rows[i]);
+            programs['total' + rows[i].degree + rows[i].program] = rows[i].total;
+        }
+
+        results['programs'] = programs;
         callback(null, connection, results);
     });
 }
@@ -864,7 +866,7 @@ function getUndergradDegreesPerYear(connection, results, callback) {
             return;
         }
 
-        //console.log(rows);
+        console.log(rows);
         var undergradDegrees = {};
 
         for (let i = 0; i < rows.length; i++) {
@@ -888,7 +890,7 @@ function getGradDegreesPerYear(connection, results, callback) {
             return;
         }
 
-        console.log(rows);
+        //console.log(rows);
 
         var gradDegrees = {};
 
