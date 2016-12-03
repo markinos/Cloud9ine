@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>AdminLTE 2 | User Profile</title>
+	<title>GradTrack | User Profile</title>
 	<!-- Tell the browser to be responsive to screen width -->
 	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 	<!-- Bootstrap 3.3.6 -->
@@ -30,12 +30,9 @@
 
 	<header class="main-header">
 		<!-- Logo -->
-		<a href="../../index2.html" class="logo">
-			<!-- mini logo for sidebar mini 50x50 pixels -->
-			<span class="logo-mini"><b>A</b>LT</span>
-			<!-- logo for regular state and mobile devices -->
-			<span class="logo-lg"><b>Admin</b>LTE</span>
-		</a>
+		 <a href="/dashboard" class="logo">
+                <i class="fa fa-cloud" style="margin-right: 5px;"></i><b>Grad</b>Track
+            </a>
 		<!-- Header Navbar: style can be found in header.less -->
 		<nav class="navbar navbar-static-top">
 			<!-- Sidebar toggle button-->
@@ -244,16 +241,16 @@
 					<!-- User Account: style can be found in dropdown.less -->
 					<li class="dropdown user user-menu">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-							<img src="../../dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
-							<span class="hidden-xs">Alexander Pierce</span>
+                         <img src="/img/user-icon1.svg" class="user-image" alt="User Image">
+							<span class="hidden-xs"><%= firstName %> <%= lastName %></span>
 						</a>
 						<ul class="dropdown-menu">
 							<!-- User image -->
 							<li class="user-header">
-								<img src="../../dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                         <img src="/img/user-icon1.svg" class="user-image" alt="User Image">
 
 								<p>
-									Alexander Pierce - Web Developer
+									<%= firstName %> <%= lastName %> - Faculty
 									<small>Member since Nov. 2012</small>
 								</p>
 							</li>
@@ -261,13 +258,13 @@
 							<li class="user-body">
 								<div class="row">
 									<div class="col-xs-4 text-center">
-										<a href="#">Followers</a>
+										<a href="#">Followers 25</a>
 									</div>
 									<div class="col-xs-4 text-center">
-										<a href="#">Sales</a>
+										<a href="#"></a>
 									</div>
 									<div class="col-xs-4 text-center">
-										<a href="#">Friends</a>
+										<a href="#">Friends 109</a>
 									</div>
 								</div>
 								<!-- /.row -->
@@ -353,8 +350,8 @@
 			</h1>
 			<ol class="breadcrumb">
 				<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-				<li><a href="#">Examples</a></li>
-				<li class="active">User profile</li>
+				<!-- <li><a href="#">Examples</a></li> -->
+				<li class="active">Profile</li>
 			</ol>
 		</section>
 
@@ -367,25 +364,26 @@
 					<!-- Profile Image -->
 					<div class="box box-primary">
 						<div class="box-body box-profile">
-							<img class="profile-user-img img-responsive img-circle" src="../../dist/img/user4-128x128.jpg" alt="User profile picture">
+						    <img src="/img/user-icon1.svg" class="profile-user-img img-responsive img-circle" alt="Profile Picture">
 
-							<h3 class="profile-username text-center">Nina Mcintire</h3>
 
-							<p class="text-muted text-center">Software Engineer</p>
+							<h3 class="profile-username text-center"><%= firstName %> <%= lastName %></h3>
+
+							<p class="text-muted text-center">Faculty</p>
 
 							<ul class="list-group list-group-unbordered">
 								<li class="list-group-item">
-									<b>Followers</b> <a class="pull-right">1,322</a>
+									<b>Tracked</b> <a class="pull-right">1,322 grads</a>
 								</li>
 								<li class="list-group-item">
-									<b>Following</b> <a class="pull-right">543</a>
+									<b>Added</b> <a class="pull-right">543 grads</a>
 								</li>
 								<li class="list-group-item">
-									<b>Friends</b> <a class="pull-right">13,287</a>
+									<b>Generated </b> <a class="pull-right">13,287 reports</a>
 								</li>
 							</ul>
 
-							<a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>
+							<!-- <a href="#" class="btn btn-primary btn-block"><b>Follow</b></a> -->
 						</div>
 						<!-- /.box-body -->
 					</div>
@@ -401,14 +399,14 @@
 							<strong><i class="fa fa-book margin-r-5"></i> Education</strong>
 
 							<p class="text-muted">
-								B.S. in Computer Science from the University of Tennessee at Knoxville
+								B.S. in Computer Science from University of Washington- Tacoma
 							</p>
 
 							<hr>
 
 							<strong><i class="fa fa-map-marker margin-r-5"></i> Location</strong>
 
-							<p class="text-muted">Malibu, California</p>
+							<p class="text-muted">Seattle, Washington</p>
 
 							<hr>
 
@@ -424,9 +422,9 @@
 
 							<hr>
 
-							<strong><i class="fa fa-file-text-o margin-r-5"></i> Notes</strong>
+							<strong><i class="fa fa-file-text-o margin-r-5"></i> Goals</strong>
 
-							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.</p>
+							<p>Add 500 grads this week. Generate 30 reports.</p>
 						</div>
 						<!-- /.box-body -->
 					</div>
@@ -445,7 +443,7 @@
 								<!-- Post -->
 								<div class="post">
 									<div class="user-block">
-										<img class="img-circle img-bordered-sm" src="../../dist/img/user1-128x128.jpg" alt="user image">
+										<img class="img-circle img-bordered-sm" src="/img/user2-160x160.jpg" alt="user image">
 												<span class="username">
 													<a href="#">Jonathan Burke Jr.</a>
 													<a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
@@ -454,11 +452,7 @@
 									</div>
 									<!-- /.user-block -->
 									<p>
-										Lorem ipsum represents a long-held tradition for designers,
-										typographers and the like. Some people hate it and argue for
-										its demise, but others ignore the hate as they create awesome
-										tools to help create filler text for everyone from bacon lovers
-										to Charlie Sheen fans.
+										Need to improve our CSS program based on GPA report. 
 									</p>
 									<ul class="list-inline">
 										<li><a href="#" class="link-black text-sm"><i class="fa fa-share margin-r-5"></i> Share</a></li>
@@ -476,7 +470,7 @@
 								<!-- Post -->
 								<div class="post clearfix">
 									<div class="user-block">
-										<img class="img-circle img-bordered-sm" src="../../dist/img/user7-128x128.jpg" alt="User Image">
+										<img class="img-circle img-bordered-sm" src="/img/user7-128x128.jpg" alt="user image">
 												<span class="username">
 													<a href="#">Sarah Ross</a>
 													<a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
@@ -485,11 +479,11 @@
 									</div>
 									<!-- /.user-block -->
 									<p>
-										Lorem ipsum represents a long-held tradition for designers,
-										typographers and the like. Some people hate it and argue for
-										its demise, but others ignore the hate as they create awesome
-										tools to help create filler text for everyone from bacon lovers
-										to Charlie Sheen fans.
+										Hey <%firstName%>! Could you generate some more reports for the meeting tomorrow? Also,
+										go ahead and add the new graduates we got in, to the system as soon as possible!
+											Thanks,
+
+											Sara
 									</p>
 
 									<form class="form-horizontal">
@@ -508,40 +502,20 @@
 								<!-- Post -->
 								<div class="post">
 									<div class="user-block">
-										<img class="img-circle img-bordered-sm" src="../../dist/img/user6-128x128.jpg" alt="User Image">
+										<img class="img-circle img-bordered-sm" src="/img/user1-128x128.jpg" alt="User Image">
 												<span class="username">
 													<a href="#">Adam Jones</a>
 													<a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
 												</span>
-										<span class="description">Posted 5 photos - 5 days ago</span>
+										<span class="description">Called a meeting - 1 day ago</span>
 									</div>
 									<!-- /.user-block -->
-									<div class="row margin-bottom">
-										<div class="col-sm-6">
-											<img class="img-responsive" src="../../dist/img/photo1.png" alt="Photo">
-										</div>
-										<!-- /.col -->
-										<div class="col-sm-6">
-											<div class="row">
-												<div class="col-sm-6">
-													<img class="img-responsive" src="../../dist/img/photo2.png" alt="Photo">
-													<br>
-													<img class="img-responsive" src="../../dist/img/photo3.jpg" alt="Photo">
-												</div>
-												<!-- /.col -->
-												<div class="col-sm-6">
-													<img class="img-responsive" src="../../dist/img/photo4.jpg" alt="Photo">
-													<br>
-													<img class="img-responsive" src="../../dist/img/photo1.png" alt="Photo">
-												</div>
-												<!-- /.col -->
-											</div>
-											<!-- /.row -->
-										</div>
-										<!-- /.col -->
-									</div>
-									<!-- /.row -->
-
+										<!-- /.user-block -->
+									<p>
+										Hey everyone! Make sure you attend the meeting on the 5th! We will be discussing ways to be able
+										to improve our program based on the generated reports. Bring ideas to the table, also there will
+										be food!
+									</p>
 									<ul class="list-inline">
 										<li><a href="#" class="link-black text-sm"><i class="fa fa-share margin-r-5"></i> Share</a></li>
 										<li><a href="#" class="link-black text-sm"><i class="fa fa-thumbs-o-up margin-r-5"></i> Like</a>
@@ -576,10 +550,11 @@
 											<h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
 
 											<div class="timeline-body">
-												Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
-												weebly ning heekya handango imeem plugg dopplr jibjab, movity
-												jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
-												quora plaxo ideeli hulu weebly balihoo...
+												Hey <%= firstName %>,
+													We got that bug fixed you mentioned, you should be able to proceed
+													with no problems now. Please let us know if you have anymore issues.
+
+													-Support team
 											</div>
 											<div class="timeline-footer">
 												<a class="btn btn-primary btn-xs">Read more</a>
@@ -595,7 +570,7 @@
 										<div class="timeline-item">
 											<span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span>
 
-											<h3 class="timeline-header no-border"><a href="#">Sarah Young</a> accepted your friend request
+											<h3 class="timeline-header no-border"><a href="#">Sarah Young</a> requested more reports
 											</h3>
 										</div>
 									</li>
