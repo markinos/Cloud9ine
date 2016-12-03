@@ -442,7 +442,7 @@ app.get('/job', function(req, res) {
                             'user': req.session.user
                         };
 
-                        //console.log(data.graduates);
+                        console.log(data.graduates);
 
                         res.render('jobs.ejs', data);
 

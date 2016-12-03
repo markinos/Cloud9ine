@@ -469,7 +469,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-4 control-label" for="employerType">Job Title</label>
+                                    <label class="col-md-4 control-label" for="jobTitle">Job Title</label>
                                     <div class="col-md-6">
                                         <input id="jobTitleE" name="jobTitle" type="texta" placeholder="e.g Graphic Designer" class="form-control input-md" required="">
                                     </div>
@@ -482,14 +482,14 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-4 control-label" for="employerType">Salary</label>
+                                    <label class="col-md-4 control-label" for="salaryE">Salary</label>
                                     <div class="col-md-6">
                                         <input id="salaryE" name="salary" type="text" placeholder="e.g 40,000" class="form-control input-md" required="">
                                     </div>
                                 </div>
                                 <!-- Button Drop Down -->
                                 <div class="form-group">
-                                    <label class="col-md-4 control-label" for="program">Program</label>
+                                    <label class="col-md-4 control-label" for="programE">Program</label>
                                     <div class="col-md-6">
                                         <select class="form-control" name="program" id="programE" required="">
                                             <option>CSS</option>
@@ -848,6 +848,8 @@
     <script type="text/javascript">
     // for editing a current job
     $(document).ready(function() {
+
+
         var table = $('#example1').DataTable();
 
         $('#example1 tbody').on('click', '.btn-info', function() {
