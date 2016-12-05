@@ -575,6 +575,11 @@ app.get('/report', function(req, res) {
     }
 });
 
+app.get('/sign-out', (req, res) => {
+    req.session.destroy();
+    res.redirect('/');
+});
+
 /** Get the total number of jobs in the database
  *
  * @param {connection} connection  -   MySQL connection object
