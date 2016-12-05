@@ -88,6 +88,7 @@ var newGrads = 25;
 var newFaculty = 10;
 var depreciation = 0.25;
 
+//Login
 app.post('/login', function(req, res) {
     var email = req.body.email;
     var password = req.body.password;
@@ -246,10 +247,10 @@ app.get('/graduates', function(req, res) {
     });
 });
 
-
+//Add graduate to database
 app.post('/addGrad', function(req, res) {
 
-    console.dir(req.body);
+    //console.dir(req.body);
 
     var id = req.body.studentId;
     var firstName = req.body.firstName;
@@ -276,7 +277,7 @@ app.post('/addGrad', function(req, res) {
 
     UWemail = UWemail + "@uw.edu";
 
-    console.log(UWemail);
+    //console.log(UWemail);
 
     /** This will insert a new graduate into the system. **/
 
@@ -296,7 +297,7 @@ app.post('/addGrad', function(req, res) {
                     res.send(err);
                 } else {
 
-                    console.log("Graduate was added!");
+                    //console.log("Graduate was added!");
 
                     req.session.user = {
                         'canContact': contact
@@ -313,15 +314,16 @@ app.post('/addGrad', function(req, res) {
 
 });
 
-
+//Show graduate view
 app.get('/delete', function(req, res) {
     res.render("graduate.ejs");
 
 });
 
+//Delete graduate from the database
 app.post('/delete', function(req, res) {
 
-    console.dir("delete this id: " + req.body.gradId);
+    //console.dir("delete this id: " + req.body.gradId);
 
     var gradId = req.body.gradId;
 
@@ -331,7 +333,7 @@ app.post('/delete', function(req, res) {
             if (err) {
                 console.log(err);
             } else {
-                console.log(gradId + " was deleted");
+                //console.log(gradId + " was deleted");
                 connection.release();
 
                 res.redirect('/graduates');
@@ -339,9 +341,7 @@ app.post('/delete', function(req, res) {
             }
 
         });
-
     });
-
 });
 /**
     Will update anything edited by faculty inside sql.
@@ -370,10 +370,10 @@ app.post('/editGrad', function(req, res) {
 
     UWemail = UWemail + "@uw.edu";
 
-    console.log(UWemail);
+    //console.log(UWemail);
 
-    console.log("edit {" + id + " " + firstName + " " + lastName + " " + UWemail + " " + gpa + " " + program + " " + gradYear + " " +
-        gradTerm + " " + ethnicity + " " + age + " " + degree + " " + generation + " " + contact);
+    // console.log("edit {" + id + " " + firstName + " " + lastName + " " + UWemail + " " + gpa + " " + program + " " + gradYear + " " +
+    //     gradTerm + " " + ethnicity + " " + age + " " + degree + " " + generation + " " + contact);
 
 
     pool.getConnection(function(error, connection) {
@@ -393,35 +393,14 @@ app.post('/editGrad', function(req, res) {
                     res.redirect('/graduates');
 
                 }
-
             });
-
     });
-
 });
 
-// 'SELECT graduate.studentId, graduate.firstName, graduate.lastName, job.employmentType, job.employerName, '+
-//                 'job.employerType, job.employerDesc, job.jobProgram,' +
-//                 'job.jobTitle, job.salary FROM graduate JOIN  graduate_has_job ON graduate_has_job.graduateId = graduate.id' + 
-//                 'JOIN job ON job.id = graduate_has_job.graduateId;'
-
+//Show job view
 app.get('/job', function(req, res) {
     if (req.session.user) {
         pool.getConnection(function(err, connection) {
-
-            // var query = "SELECT graduate.id AS graduateId, studentId, firstName, lastName, " +
-            //                 "graduate_has_job.id AS jobId, employmentType, employerName, " +
-            //                 "employerType, employerDesc, jobProgram, jobTitle, salary, jobCode " +
-            //             "FROM graduate " +
-            //             "JOIN  graduate_has_job ON graduate_has_job.graduateId = graduate.id " +
-            //             "JOIN job ON job.id = graduate_has_job.graduateId";
-
-            //console.log(query);
-
-            // var query = "SELECT graduate.id AS graduateId, studentId, firstName, lastName, graduate_has_job.id AS jobId," + 
-            //                 " employmentType, employerName, employerType, employerDesc, jobProgram, jobTitle, salary FROM graduate " + 
-            //             "LEFT JOIN graduate_has_job ON graduate_has_job.graduateId = graduate.id " +
-            //             "LEFT JOIN job ON job.id = graduate_has_job.graduateId";
 
             var query = "SELECT graduate.id AS graduateId, studentId, firstName, lastName, " +
                             "graduate_has_job.id AS jobId, employmentType, employerName, employerType," +
@@ -456,6 +435,7 @@ app.get('/job', function(req, res) {
     }
 });
 
+//Add job
 app.post('/addJob', function(req, res) {
     // console.dir(req.body);
 
@@ -470,7 +450,7 @@ app.post('/addJob', function(req, res) {
     var salary = req.body.salary;
     var program = req.body.program;
 
-    console.log("id: " + gradId);
+    //console.log("id: " + gradId);
 
     var id = req.session.user;
     if (req.session.user) {
@@ -488,7 +468,7 @@ app.post('/addJob', function(req, res) {
                         connection.query('INSERT INTO graduate_has_job (employmentId, graduateId) ' +
                             'VALUES( (SELECT id FROM job WHERE id = LAST_INSERT_ID()),' + "'" + gradId + "'" + ");",
                             function(err, rows) {
-                                console.log("Job was added!");
+                                //console.log("Job was added!");
 
                                 res.redirect("/job");
 
@@ -509,7 +489,7 @@ app.post('/addJob', function(req, res) {
 
 });
 
-
+//Edit job
 app.post('/editJob', function(req,res) {
     // console.dir(req.body);
 
@@ -521,8 +501,8 @@ app.post('/editJob', function(req,res) {
     var employerDesc = req.body.employerDesc;
     var employmentType = req.body.employmentType;
 
-    console.log(jobProgram);
-    console.log(employerDesc);
+    //console.log(jobProgram);
+    //console.log(employerDesc);
 
     if(req.session.user) {
 
@@ -555,6 +535,7 @@ app.post('/editJob', function(req,res) {
 
 });
 
+//Show the report page
 app.get('/report', function(req, res) {
     if (req.session.user) {
         pool.getConnection(function(err, connection) {
@@ -594,15 +575,11 @@ app.get('/report', function(req, res) {
     }
 });
 
-/**
- * Get the total number of graduates in the database
+/** Get the total number of jobs in the database
  *
- * To be called first in the async.waterfall function!
- *
- * @param connection is the mysql connection object for querying
- * @return callback function to be executed. On error: execute
- *         callback with error passed in. On success: execute 
- *         callback with null error, connection, and results of query
+ * @param {connection} connection  -   MySQL connection object
+ * @param {result} result          -   result object that contains the result of all the queries
+ * @param {function} calback       -   Callback function to be called after the query finishes execution
  */
 function getTotalGrads(connection) {
 
@@ -628,13 +605,11 @@ function getTotalGrads(connection) {
     }
 }
 
-/**
- * Get the job placement rate for all graduates at the institute of technoogy
+/** Get the job placement rate as a percentage
  *
- * @param connection is the mysql connection object for querying
- * @return callback function to be executed. On error: execute
- *         callback with error passed in. On success: execute 
- *         callback with null error, connection, and results of query
+ * @param {connection} connection  -   MySQL connection object
+ * @param {result} result          -   result object that contains the result of all the queries
+ * @param {function} calback       -   Callback function to be called after the query finishes execution
  */
 function getJobPlacementRate(connection, results, callback) {
     let query = "SELECT ROUND(COUNT(DISTINCT graduate.id, firstName, lastName) / " +
@@ -658,6 +633,12 @@ function getJobPlacementRate(connection, results, callback) {
 
 }
 
+/** Get the total number of graduates with jobs
+ *
+ * @param {connection} connection  -   MySQL connection object
+ * @param {result} result          -   result object that contains the result of all the queries
+ * @param {function} calback       -   Callback function to be called after the query finishes execution
+ */
 function getNumberOfGradsWithJobs(connection, results, callback) {
     let query = "SELECT COUNT(DISTINCT graduate.id) as gradsWithJobs FROM graduate " +
         "JOIN graduate_has_job ON graduate_has_job.graduateId = graduate.id " +
@@ -676,6 +657,12 @@ function getNumberOfGradsWithJobs(connection, results, callback) {
     });
 }
 
+/** Get the total number of graduates with internships
+ *
+ * @param {connection} connection  -   MySQL connection object
+ * @param {result} result          -   result object that contains the result of all the queries
+ * @param {function} calback       -   Callback function to be called after the query finishes execution
+ */
 function getNumberOfGradsWithInternships(connection, results, callback) {
     let query = "SELECT COUNT(DISTINCT graduate.id) AS gradsWithInternships FROM graduate " +
         "JOIN graduate_has_job ON graduate_has_job.graduateId = graduate.id " +
@@ -694,6 +681,13 @@ function getNumberOfGradsWithInternships(connection, results, callback) {
     });
 }
 
+/**
+ * Get the number of grads that interned and found a job
+ *
+ * @param {connection} connection  -   MySQL connection object
+ * @param {result} result          -   result object that contains the result of all the queries
+ * @param {function} calback       -   Callback function to be called after the query finishes execution
+ */
 function getGradsThatInternedAndFoundAJob(connection, results, callback) {
     let query = "SELECT COUNT(DISTINCT graduate.id) AS gradsThatInternedAndFoundAJob FROM graduate " +
         "JOIN graduate_has_job ON graduate_has_job.graduateId = graduate.id " +
@@ -725,8 +719,6 @@ function getGradsThatInternedAndFoundAJob(connection, results, callback) {
         });
     });
 }
-
-
 
 /**
  * Get the total number of graduates in the database
@@ -799,6 +791,13 @@ function getSurveysCompletedPercent(connection, results, callback) {
     });
 }
 
+/**
+ * Get the total graduates in each program
+ *
+ * @param {connection} connection  -   MySQL connection object
+ * @param {result} result          -   result object that contains the result of all the queries
+ * @param {function} calback      -   Callback function to be called after the query finishes execution
+ */
 function getGradsInPrograms(connection, results, callback) {
     let query = "SELECT COUNT(*) AS total, program, degree FROM graduate " +
         "WHERE (program = 'CSS' AND degree = 'BA') " +
@@ -828,6 +827,13 @@ function getGradsInPrograms(connection, results, callback) {
     });
 }
 
+/**
+ * Get skills used in the work place
+ *
+ * @param {connection} connection  -   MySQL connection object
+ * @param {result} result          -   result object that contains the result of all the queries
+ * @param {function} calback      -   Callback function to be called after the query finishes execution
+ */
 function getSkillsUsedInWorkPlace(connection, results, callback) {
     let query = "SELECT COUNT(*) AS total, skill FROM skill " +
         "JOIN skill_has_job ON skill_has_job.skillId = skill.id " +
@@ -853,7 +859,13 @@ function getSkillsUsedInWorkPlace(connection, results, callback) {
     });
 }
 
-
+/**
+ * Get undergraduate Degrees granted per year
+ *
+ * @param {connection} connection  -   MySQL connection object
+ * @param {result} result          -   result object that contains the result of all the queries
+ * @param {function} calback      -   Callback function to be called after the query finishes execution
+ */
 function getUndergradDegreesPerYear(connection, results, callback) {
     let query = "SELECT COUNT(*) AS total, gradYear FROM graduate " +
         "WHERE (degree = 'BA' OR degree = 'BS') " +
@@ -877,7 +889,13 @@ function getUndergradDegreesPerYear(connection, results, callback) {
     });
 }
 
-
+/**
+ * Get Graduate Degrees granted per year
+ *
+ * @param {connection} connection  -   MySQL connection object
+ * @param {result} result          -   result object that contains the result of all the queries
+ * @param {function} calback      -   Callback function to be called after the query finishes execution
+ */
 function getGradDegreesPerYear(connection, results, callback) {
     let query = "SELECT COUNT(*) AS total, gradYear FROM graduate " +
         "WHERE degree = 'MS' " +
