@@ -1220,7 +1220,7 @@ function randomlyGenerateGraduate() {
                         if (debug) console.log("job " + i++);
                         randomlyGenerateJob(gradYear, term[0], term[1], rank, err, connection, function(err, data) {
                             if (debug) console.log("JOB CALLBACK: " + data);
-                            jobCode = data;
+                            var jobCode = data;
                             if (jobCode != null && jobCode > 0) connectGradToJob(term, studentId, jobCode, err, connection, function(err, data2) {
                                 if (debug) console.log("HAS_JOB CALLBACK: " + data);
                                 term = data2;
@@ -1450,7 +1450,7 @@ function randomlyGenerateJob(grad, year, month, gpa, err, connection, callback) 
         } else {
             if (gpa > 4 || Math.random() > 0.9) {
                 salary += executiveBonus;
-                pay = gpa;
+                var pay = gpa;
                 while (Math.random() < 0.5 * Math.max(1, --pay)) salary += executiveBonus * randomInt(1, 10);
                 jobTitle = (gpa < randomInt(4, 16) && Math.random() < 0.5) ? "Chief Officer" : "Board Member";
                 if (Math.random() < 0.5) {
