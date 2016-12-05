@@ -104,16 +104,18 @@ describe('GradTrack', () => {
 	});
 
 	//Test the POST /dashboard route
-	describe('POST /graduates', () => {
+	describe('POST /addGrad', () => {
 		it('it should add the graduate to the database', () => {		
 			chai.request(server)
-				.post('/graduates')
+				.post('/addGrad')
 				.end((err, res) => {
 					res.should.have.status(200);
 					done();
 				});
 		});
 	});
+
+	
 
 	//Test the GET /delete route
 	describe('GET /delete', () => {
@@ -127,7 +129,7 @@ describe('GradTrack', () => {
 		});
 	});
 
-	//Test the GET /delete route
+	//Test the POST /delete route
 	describe('POST /delete', () => {
 		it('it should POST and delete a graduate from the database', () => {		
 			chai.request(server)
@@ -138,6 +140,44 @@ describe('GradTrack', () => {
 				});
 		});
 	});
+
+	//Test the POST /editGrad route
+	describe('POST /editGrad', () => {
+		it('it should POST and edit a graduate from the database', () => {		
+			chai.request(server)
+				.post('/editGrad')
+				.end((err, res) => {
+					res.should.have.status(200);
+					done();
+				});
+		});
+	});
+
+	//Test the GET /job route
+	describe('GET /job', () => {
+		it('it should GET the job view', () => {		
+			chai.request(server)
+				.post('/editGrad')
+				.end((err, res) => {
+					res.should.have.status(200);
+					done();
+				});
+		});
+	});
+
+	//Test the GET /delete route
+	describe('POST /addJob', () => {
+		it('it should POST and add a job to the database', () => {		
+			chai.request(server)
+				.post('/addJob')
+				.end((err, res) => {
+					res.should.have.status(200);
+					done();
+				});
+		});
+	});
+
+
 
 	//Test the GET /dashboard route
 	describe('GET /report', () => {
@@ -150,8 +190,4 @@ describe('GradTrack', () => {
 				});
 		});
 	});
-
-
-	
-
 });
