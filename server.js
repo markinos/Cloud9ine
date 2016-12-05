@@ -211,39 +211,44 @@ app.get('/survey', function(req, res) {
 
 //graduates page
 app.get('/graduates', function(req, res) {
-    //connect to database
-    pool.getConnection(function(error, connection) {
-        //query database
-        connection.query('SELECT * FROM graduate', function(err, rows) {
+    if (req.session.user) {
 
-            //error querying
-            try {
-                if (err) {
-                    console.log(err);
-                    res.send(err);
-                } else {
-                    var data = {
-                        'graduates': rows,
-                        'user': req.session.user
-                    };
+        //connect to database
+        pool.getConnection(function(error, connection) {
+            //query database
+            connection.query('SELECT * FROM graduate', function(err, rows) {
+
+                //error querying
+                try {
+                    if (err) {
+                        console.log(err);
+                        res.send(err);
+                    } else {
+                        var data = {
+                            'graduates': rows,
+                            'user': req.session.user
+                        };
 
 
-                    console.log(data.user);
+                        console.log(data.user);
 
-                    //release connection to db
-                    connection.release();
+                        //release connection to db
+                        connection.release();
 
-                    //pass graduates object to graduate view
-                    res.render('graduate.ejs', data);
+                        //pass graduates object to graduate view
+                        res.render('graduate.ejs', data);
+                    }
+
+                } catch (err) {
+
+                    res.redirect('/');
+
                 }
-
-            } catch (err) {
-
-                res.redirect('/');
-
-            }
+            });
         });
-    });
+    } else {
+        res.redirect('/login');
+    }
 });
 
 
@@ -277,39 +282,43 @@ app.post('/addGrad', function(req, res) {
     UWemail = UWemail + "@uw.edu";
 
     console.log(UWemail);
+    if (req.session.user) {
 
-    /** This will insert a new graduate into the system. **/
+        /** This will insert a new graduate into the system. **/
 
-    pool.getConnection(function(error, connection) {
-        //query database
-        connection.query("INSERT INTO graduate (studentId, firstName, lastName, gender, UWemail, email, gpa, program, gradTerm, gradYear," +
-            " ethnicity, age, degree, generation, canContact)" +
-            "VALUES ('" + id + "'" + "," + "'" + firstName + "'" + "," + "'" + lastName + "'" + "," + "'" + gender + "'" + "," + "'" + UWemail + "'" +
-            "," + "'" + email + "'" + "," + "'" + GPA + "'" + "," + "'" + program + "'" + "," + "'" + gradTerm + "'" + "," + "'" + gradYear + "'" +
-            "," + "'" + ethnicity + "'" + "," + "'" + age + "'" + "," + "'" + degree + "'" + "," + "'" + generation + "'" + "," +
-            "'" + contact + "'" + ")",
-            function(err, rows) {
+        pool.getConnection(function(error, connection) {
+            //query database
+            connection.query("INSERT INTO graduate (studentId, firstName, lastName, gender, UWemail, email, gpa, program, gradTerm, gradYear," +
+                " ethnicity, age, degree, generation, canContact)" +
+                "VALUES ('" + id + "'" + "," + "'" + firstName + "'" + "," + "'" + lastName + "'" + "," + "'" + gender + "'" + "," + "'" + UWemail + "'" +
+                "," + "'" + email + "'" + "," + "'" + GPA + "'" + "," + "'" + program + "'" + "," + "'" + gradTerm + "'" + "," + "'" + gradYear + "'" +
+                "," + "'" + ethnicity + "'" + "," + "'" + age + "'" + "," + "'" + degree + "'" + "," + "'" + generation + "'" + "," +
+                "'" + contact + "'" + ")",
+                function(err, rows) {
 
-                //error querying
-                if (err) {
-                    console.log(err);
-                    res.send(err);
-                } else {
+                    //error querying
+                    if (err) {
+                        console.log(err);
+                        res.send(err);
+                    } else {
 
-                    console.log("Graduate was added!");
+                        console.log("Graduate was added!");
 
-                    req.session.user = {
-                        'canContact': contact
+                        req.session.user = {
+                            'canContact': contact
+                        }
+
+                        //release connection to db
+                        connection.release();
+                        res.redirect('/graduates');
+                        //pass graduates object to graduate view
+                        // res.render('graduate.ejs', graduates);
                     }
-
-                    //release connection to db
-                    connection.release();
-                    res.redirect('/graduates');
-                    //pass graduates object to graduate view
-                    // res.render('graduate.ejs', graduates);
-                }
-            });
-    });
+                });
+        });
+    } else {
+        res.redirect('login');
+    }
 
 });
 
@@ -324,23 +333,28 @@ app.post('/delete', function(req, res) {
     console.dir("delete this id: " + req.body.gradId);
 
     var gradId = req.body.gradId;
+    if (req.session.user) {
 
-    pool.getConnection(function(error, connection) {
-        connection.query("DELETE FROM graduate WHERE studentId =" + "'" + gradId + "'" + ";", function(err, rows) {
 
-            if (err) {
-                console.log(err);
-            } else {
-                console.log(gradId + " was deleted");
-                connection.release();
+        pool.getConnection(function(error, connection) {
+            connection.query("DELETE FROM graduate WHERE studentId =" + "'" + gradId + "'" + ";", function(err, rows) {
 
-                res.redirect('/graduates');
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log(gradId + " was deleted");
+                    connection.release();
 
-            }
+                    res.redirect('/graduates');
+
+                }
+
+            });
 
         });
-
-    });
+    } else {
+        res.redirect('/login');
+    }
 
 });
 /**
@@ -375,28 +389,32 @@ app.post('/editGrad', function(req, res) {
     console.log("edit {" + id + " " + firstName + " " + lastName + " " + UWemail + " " + gpa + " " + program + " " + gradYear + " " +
         gradTerm + " " + ethnicity + " " + age + " " + degree + " " + generation + " " + contact);
 
+    if (req.session.user) {
 
-    pool.getConnection(function(error, connection) {
-        connection.query("UPDATE graduate SET firstName =" + "'" + firstName + "'" + ", lastName=" + "'" + lastName + "'" +
-            ", UWemail=" + "'" + UWemail + "'" + ", gpa=" + "'" + gpa + "'" + ", program=" + "'" + program + "'" + ", gradYear=" +
-            "'" + gradYear + "'" + ", gradTerm= " + "'" + gradTerm + "'" + ", ethnicity=" + "'" + ethnicity + "'" + ", age=" + "'" + age + "'" +
-            ", degree=" + "'" + degree + "'" + ", generation= " + "'" + generation + "'" + ", canContact= " + "'" + contact + "'" +
-            "WHERE studentId =" + "'" + id + "'" + ";",
-            function(err, rows) {
+        pool.getConnection(function(error, connection) {
+            connection.query("UPDATE graduate SET firstName =" + "'" + firstName + "'" + ", lastName=" + "'" + lastName + "'" +
+                ", UWemail=" + "'" + UWemail + "'" + ", gpa=" + "'" + gpa + "'" + ", program=" + "'" + program + "'" + ", gradYear=" +
+                "'" + gradYear + "'" + ", gradTerm= " + "'" + gradTerm + "'" + ", ethnicity=" + "'" + ethnicity + "'" + ", age=" + "'" + age + "'" +
+                ", degree=" + "'" + degree + "'" + ", generation= " + "'" + generation + "'" + ", canContact= " + "'" + contact + "'" +
+                "WHERE studentId =" + "'" + id + "'" + ";",
+                function(err, rows) {
 
-                if (err) {
-                    console.log(err);
-                } else {
-                    console.log(id + " was edited");
-                    connection.release();
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        console.log(id + " was edited");
+                        connection.release();
 
-                    res.redirect('/graduates');
+                        res.redirect('/graduates');
 
-                }
+                    }
 
-            });
+                });
 
-    });
+        });
+    } else {
+        res.redirect('/login');
+    }
 
 });
 
@@ -424,31 +442,31 @@ app.get('/job', function(req, res) {
             //             "LEFT JOIN job ON job.id = graduate_has_job.graduateId";
 
             var query = "SELECT graduate.id AS graduateId, studentId, firstName, lastName, " +
-                            "graduate_has_job.id AS jobId, employmentType, employerName, employerType," +
-                            " employerDesc, jobProgram, jobTitle, salary, jobCode " +
-                        "FROM graduate " +
-                        "LEFT JOIN graduate_has_job ON graduate_has_job.graduateId = graduate.id " +
-                        "LEFT JOIN job ON job.id = graduate_has_job.employmentId";
+                "graduate_has_job.id AS jobId, employmentType, employerName, employerType," +
+                " employerDesc, jobProgram, jobTitle, salary, jobCode " +
+                "FROM graduate " +
+                "LEFT JOIN graduate_has_job ON graduate_has_job.graduateId = graduate.id " +
+                "LEFT JOIN job ON job.id = graduate_has_job.employmentId";
 
             // console.log(query);
 
             connection.query(query, function(err, rows) {
 
-                    if (err) {
-                        console.log(err);
-                    } else {
-                        var data = {
-                            'graduates': rows,
-                            'user': req.session.user
-                        };
+                if (err) {
+                    console.log(err);
+                } else {
+                    var data = {
+                        'graduates': rows,
+                        'user': req.session.user
+                    };
 
-                        console.log(data.graduates);
+                    console.log(data.graduates);
 
-                        res.render('jobs.ejs', data);
+                    res.render('jobs.ejs', data);
 
-                        connection.release();
-                    }
-                });
+                    connection.release();
+                }
+            });
         });
 
     } else {
@@ -477,7 +495,7 @@ app.post('/addJob', function(req, res) {
         pool.getConnection(function(err, connection) {
 
             connection.query('INSERT INTO job (jobCode,employmentType,employerName,employerType,jobProgram,jobTitle,employerDesc,salary) ' +
-               'VALUES(' + "'" + jobCode + "'" + "," + "'" + employmentType + "'" + "," + "'" + employerName + "'" +
+                'VALUES(' + "'" + jobCode + "'" + "," + "'" + employmentType + "'" + "," + "'" + employerName + "'" +
                 "," + "'" + employerType + "'" + "," + "'" + program + "'" + "," + "'" + jobTitle + "'" + "," + "'" + description + "'" +
                 "," + "'" + salary + "'" + ")",
                 function(err, rows) {
@@ -510,7 +528,7 @@ app.post('/addJob', function(req, res) {
 });
 
 
-app.post('/editJob', function(req,res) {
+app.post('/editJob', function(req, res) {
     // console.dir(req.body);
 
     var jobId = req.body.jobId;
@@ -524,27 +542,26 @@ app.post('/editJob', function(req,res) {
     console.log(jobProgram);
     console.log(employerDesc);
 
-    if(req.session.user) {
+    if (req.session.user) {
 
         var query = "UPDATE job " +
-                    "JOIN graduate_has_job ON graduate_has_job.employmentId = job.id " +
-                    "SET salary= " + salary + "," + "jobProgram= " + "'" + jobProgram + "'" + ", jobTitle= " + "'" + jobTitle + "'" + ", employerName= " + "'" + employerName + "'" + ", "
-                        + "employerDesc= " + "'" + employerDesc + "', employmentType= " + "'" + employmentType +"' "  +
-                    "WHERE graduate_has_job.id = " + jobId;
+            "JOIN graduate_has_job ON graduate_has_job.employmentId = job.id " +
+            "SET salary= " + salary + "," + "jobProgram= " + "'" + jobProgram + "'" + ", jobTitle= " + "'" + jobTitle + "'" + ", employerName= " + "'" + employerName + "'" + ", " + "employerDesc= " + "'" + employerDesc + "', employmentType= " + "'" + employmentType + "' " +
+            "WHERE graduate_has_job.id = " + jobId;
 
         console.log(query);
-       
+
         pool.getConnection(function(err, connection) {
             connection.query(query, function(err, rows) {
 
-                    if(err) {
-                        console.log(err);
-                    } else {
-                        console.log("Job Edited!");
-                        res.redirect('/job');
-                    }
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log("Job Edited!");
+                    res.redirect('/job');
+                }
 
-                });
+            });
 
         });
 
