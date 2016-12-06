@@ -49,13 +49,13 @@
                         <!-- User Account: style can be found in dropdown.less -->
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <img src="/img/user-icon1.svg" class="user-image" alt="User Image">
+                                <img src="<%= user.profileImgPath %>" class="user-image" alt="User Image">
                                 <span class="hidden-xs"><%=user.firstName %> <%= user.lastName%></span>
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- User image -->
                                 <li class="user-header">
-                                    <img src="/img/user-icon1.svg" class="img-circle" alt="User Image">
+                                    <img src="<%= user.profileImgPath %>" class="img-circle" alt="User Image">
                                     <p>
                                         <%=user.firstName %>
                                             <%= user.lastName%> - Faculty Advisor
@@ -88,7 +88,7 @@
                 <!-- Sidebar user panel -->
                 <div class="user-panel">
                     <div class="pull-left image">
-                        <img src="/img/user-icon1.svg" class="img-circle" alt="User Image">
+                        <img src="<%= user.profileImgPath %>" class="img-circle" alt="User Image">
                     </div>
                     <div class="pull-left info">
                         <p>
@@ -112,7 +112,7 @@
                 <!-- sidebar menu: : style can be found in sidebar.less -->
                 <ul class="sidebar-menu">
                     <li class="header">MAIN NAVIGATION</li>
-                    <li><a href="/dashboard"><i class="fa fa-tachometer"></i> Dashboard </a></li>
+                    <li><a href="/dashboard"><i class="fa fa-tachometer"></i> Profile </a></li>
                     <li><a href="/report"><i class="fa fa-pie-chart"></i> Report </a></li>
                     <li class="active treeview">
                         <a href="#"><i class="fa fa-th"></i> <span>Jobs</span>
