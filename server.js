@@ -119,7 +119,8 @@ app.post('/login', function(req, res) {
                                     'id': rows[0].id,
                                     'email': rows[0].email,
                                     'firstName': rows[0].firstName,
-                                    'lastName': rows[0].lastName
+                                    'lastName': rows[0].lastName,
+                                    'profileImgPath': rows[0].profileImgPath
                                 }
 
                                 res.redirect('/dashboard');
